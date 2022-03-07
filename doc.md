@@ -1,11 +1,11 @@
-emmylua¿ªÔ´µØÖ· https://github.com/EmmyLua/VSCode-EmmyLua
+ï»¿emmyluaå¼€æºåœ°å€ https://github.com/EmmyLua/VSCode-EmmyLua
 
 # emmylua_new
-**1.°²×°EmmyLua for VSCode***
+**1.å®‰è£…EmmyLua for VSCode***
 
 https://emmylua.github.io/
 
-(1).create a launch.json ---> EmmyLua New Debugger ---> ´´½¨jsonÎÄ¼ş
+(1).create a launch.json ---> EmmyLua New Debugger ---> åˆ›å»ºjsonæ–‡ä»¶
 ```
 {
     // Use IntelliSense to learn about possible attributes.
@@ -30,31 +30,31 @@ https://emmylua.github.io/
 }
 ```
 
-**2.´úÂëÖĞÆô¶¯µ÷ÊÔÆ÷**  
-(1)ÏÈÆô¶¯test.exeËŞÖ÷½ø³Ì  
+**2.ä»£ç ä¸­å¯åŠ¨è°ƒè¯•å™¨**  
+(1)å…ˆå¯åŠ¨test.exeå®¿ä¸»è¿›ç¨‹(å¦‚D:\github\3dgame_ev_1_0_0\debug\test.exe)  
 (2)
 ``` 
---½«emmyÄ£¿édll¼ÓÔØµ½½ø³Ì  
+--å°†emmyæ¨¡å—dllåŠ è½½åˆ°è¿›ç¨‹  
 package.cpath = package.cpath .. ";c:/Users/TR/.vscode/extensions/tangzx.emmylua-0.3.49/debugger/emmy/windows/x86/?.dll"  
---Ò²¿ÉÒÔ×Ô¶¨ÒådllÂ·¾¶ package.cpath = package.cpath .. ";c:/3dgame_lua/emmy/emmy_core.dll";
+--ä¹Ÿå¯ä»¥è‡ªå®šä¹‰dllè·¯å¾„ package.cpath = package.cpath .. ";c:/3dgame_lua/emmy/emmy_core.dll";
 
---¼ÓÔØÄ£¿éemmy_core  
+--åŠ è½½æ¨¡å—emmy_core  
 dbg = require("emmy_core");  
 
---tcp¼àÌı¶Ë¿Ú9966,¸Ã¶Ë¿Ú¶ÔÓ¦launch.jsonµÄport²ÎÊı  
+--tcpç›‘å¬ç«¯å£9966,è¯¥ç«¯å£å¯¹åº”launch.jsonçš„portå‚æ•°  
 dbg.tcpListen("localhost", 9966);  
 
---emmy°æ±¾  
+--emmyç‰ˆæœ¬  
 print(dbg);--[EMMY]lua version: 51
 
 ```
 
-**¶Ïµã**  
+**æ–­ç‚¹**  
 > dbg.breakHere()  
-ÔÚĞèÒªÏÂ¶ÏµãµÄµØ·½µ÷ÓÃ´Ë½Ó¿Ú
+åœ¨éœ€è¦ä¸‹æ–­ç‚¹çš„åœ°æ–¹è°ƒç”¨æ­¤æ¥å£
 
 > dbg.waitIDE();  
-ÔÚĞèÒªµÈ´ıideÆôÓÃµÄÊ±ºò¿ªÆô,ÆäÊµÔ­Àí¾ÍÊÇÓÃsocket×èÈûµôËŞÖ÷½ø³Ì,µÈµ÷ÊÔÆ÷½øÈëºó»»ĞÑ½ø³Ì¡£
+åœ¨éœ€è¦ç­‰å¾…ideå¯ç”¨çš„æ—¶å€™å¼€å¯,å…¶å®åŸç†å°±æ˜¯ç”¨socketé˜»å¡æ‰å®¿ä¸»è¿›ç¨‹,ç­‰è°ƒè¯•å™¨è¿›å…¥åæ¢é†’è¿›ç¨‹ã€‚
 
 # emmylua_attach
 ```
@@ -65,5 +65,5 @@ print(dbg);--[EMMY]lua version: 51
     "pid": 0
 },
 ```
-°ó¶¨½ø³Ìidµ÷ÊÔ  
-> test.c½Ó¿ÚGetCurrentProcessId();
+ç»‘å®šè¿›ç¨‹idè°ƒè¯•  
+> test.cæ¥å£GetCurrentProcessId();
