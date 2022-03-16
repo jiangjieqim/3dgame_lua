@@ -1,6 +1,6 @@
---¶¯×÷¹ÜÀíÆ÷
+--åŠ¨ä½œç®¡ç†å™¨
 Animator = {
-	p,--	TYPE_OBJ_VBO_FILEÒıÓÃ
+	p,--	TYPE_OBJ_VBO_FILEå¼•ç”¨
 };
 Animator.__index = Animator;
 function Animator:new(p)
@@ -14,7 +14,7 @@ function Animator:dispose()
 	func_clearTableItem(self);
 end
 
---- »ñÈ¡¶¯×÷×ÜÊı
+--- è·å–åŠ¨ä½œæ€»æ•°
 function Animator:total()
 	return change_attr(self.p,"animtor_total");
 end
@@ -23,21 +23,21 @@ function Animator:cur_frame()
 	return change_attr(self.p,"animtor_curFrame");
 end
 
---ÊÇ·ñÔÚ²¥·Å
+--æ˜¯å¦åœ¨æ’­æ”¾
 function Animator:isPlaying()
 	if(change_attr(self.p,"animtor_isPlaying") == 1) then
 		return true;
 	end
 end
---ÉèÖÃfbs
+--è®¾ç½®fbs
 function Animator:set_fps(v)
 	change_attr(self.p,"fps",tostring(v))
 end
 
 --[[
-	³õÊ¼»¯¶¯×÷(´¦Àí³É¶¯Ì¬¼ÓÔØÅäÖÃÎÄ¼ş,¿ÉÒÔ×öÒ»¸ö±à¼­Æ÷±à¼­ÕâĞ©Ëõ·ÅºÍÆ«ÒÆÓĞÎÊÌâµÄmd2ÎÄ¼ş)
-	²¥·ÅÖ¸¶¨µÄ¶¯»­
-	"¿É²âÊÔ¶¯×÷Ä£ĞÍ \\resource\\material\\bauul.mat"
+	åˆå§‹åŒ–åŠ¨ä½œ(å¤„ç†æˆåŠ¨æ€åŠ è½½é…ç½®æ–‡ä»¶,å¯ä»¥åšä¸€ä¸ªç¼–è¾‘å™¨ç¼–è¾‘è¿™äº›ç¼©æ”¾å’Œåç§»æœ‰é—®é¢˜çš„md2æ–‡ä»¶)
+	æ’­æ”¾æŒ‡å®šçš„åŠ¨ç”»
+	"å¯æµ‹è¯•åŠ¨ä½œæ¨¡å‹ \\resource\\material\\bauul.mat"
 	"stand",0,39
 	"run",40,45
 	"jump",66,71
@@ -46,23 +46,23 @@ function Animator:play(anim)
 	local o = self.p;
 	--self:pause();
 	if(anim) then
-		change_attr(o,"animtor_setcur",anim);--Ö¸¶¨µ±Ç°µÄ¶¯×÷
+		change_attr(o,"animtor_setcur",anim);--æŒ‡å®šå½“å‰çš„åŠ¨ä½œ
 	end
 	change_attr(o,"animtor_play");
 end
 
---·Ö¸î¶¯»­
+--åˆ†å‰²åŠ¨ç”»
 function Animator:push(animname,s,e)
 	change_attr(self.p,"animtor_push",animname,string.format('%s,%s',s,e));
 end
 
---¸ù¾İÇø¼ä²¥·Å¶¯»­
+--æ ¹æ®åŒºé—´æ’­æ”¾åŠ¨ç”»
 function Animator:play_to(s,e)
 	change_attr(self.p,"animtor_play_start_end",string.format('%d,%d',s,e));
 	self:play();
 end
 
---ÔİÍ£²¥·Å¶¯»­
+--æš‚åœæ’­æ”¾åŠ¨ç”»
 function Animator:pause()
 	change_attr(self.p,"animtor_pause");
 end
