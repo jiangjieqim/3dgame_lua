@@ -53,13 +53,19 @@ end
 core.cam:set_pos(0,-4,-15);
 
 local avatar = UnitBase:new();
-avatar:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat",0.1); avatar:iAxis(math.pi/2,1,0,0);
---avatar:get_anim():pause();
+
+-- avatar:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat",0.1); avatar:iAxis(math.pi/2,1,0,0);
+-- --avatar:get_anim():pause();
+-- local anim = avatar:get_anim();
+-- anim:push("stand",0,39);
+-- anim:push("run",40,45);
+-- anim:push("jump",66,71);
+avatar:loadvbo("\\resource\\md2\\triangle.md2","\\resource\\material\\bauul.mat",1.0); 
+avatar:iAxis(math.pi/2,1,0,0);
 local anim = avatar:get_anim();
-anim:push("stand",0,39);
-anim:push("run",40,45);
-anim:push("jump",66,71);
-anim:play("run");
+print("total:"..anim:total());
+anim:push("stand",1,4);
+anim:play("stand");
 -- anim:set_fps(3);
 
 -- avatar:loadvbo("\\resource\\obj\\arrow.obj","\\resource\\material\\bauul.mat",2); 
