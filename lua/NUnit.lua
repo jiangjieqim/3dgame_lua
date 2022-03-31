@@ -81,6 +81,13 @@ function NUnit:get_p()
 	end
     return self.p;
 end
+---p是否为nil
+function NUnit:p_isNil()
+	if(self.p == nil)then
+		return true;
+	end
+	return false;
+end
 
 function NUnit:visible(v)
 	if(v) then
