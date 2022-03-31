@@ -76,6 +76,9 @@ end
 
 --获取句柄
 function NUnit:get_p()
+	if(self.p == nil) then
+		func_error("self.p is not initialise!");--未初始化
+	end
     return self.p;
 end
 

@@ -148,7 +148,7 @@ end
 
 ---设置多边形的渲染模式
 ---@param m "Matereal"
----@param v "GL.GL_FILL,GL.GL_LINE"
+---@param v "GL.GL_FILL,GL.GL_LINE,GL_POINT"
 function material.setPolyMode(m,v)
 	tmat_setPolyMode(m,v);
 end
