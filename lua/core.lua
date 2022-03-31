@@ -704,6 +704,14 @@ function m.setTimeout(ms,callback,param,repeat1)
 	end
 	return o;
 end
+---间隔循环 返回一个time的table
+---清理使用core.clearTimeout(table);
+---@param ms 间隔毫秒
+---@param func 回调函数
+function m.frameloop(ms,func)
+	return core.setTimeout(ms,func,nil,true);
+end
+
 ---返回当前的FPS  
 ---radix(默认1) 0:去小数点 1:保留1位 2:保留2位  
 function m.fps(radix)
@@ -715,12 +723,23 @@ function m.clearTimeout(o)
 	if(o == nil) then
 		func_error('o is nil');
 	end
+
+	if(next(o) == nil) then
+		return;--表已经清空了
+	end
+
 	--evt_off(o.t,EVENT_TIMER,o.c);
-	timelater_remove(o.t);
-	evt_off(o.t,core.ex_event.TIMER,o.c);
-	o.c = nil;
-	o.t = nil;
-	o._repeat=nil;
+	if(o.t~=nil) then
+		timelater_remove(o.t);
+		o.t = nil;
+	end
+	if(o.c~=nil) then
+		evt_off(o.t,core.ex_event.TIMER,o.c);
+		o.c = nil;
+	end
+	if(o._repeat~=nil) then
+		o._repeat=nil;
+	end
 end
 
 ---获取当前进程运行时间
