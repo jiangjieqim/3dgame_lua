@@ -3,6 +3,12 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-
+        {
+            "label": "执行text.exe",
+            "type": "shell",
+            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "problemMatcher": [
+            ],
+        },
     ]
 }
