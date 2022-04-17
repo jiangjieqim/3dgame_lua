@@ -67,3 +67,18 @@ print(dbg);--[EMMY]lua version: 51
 ```
 绑定进程id调试  
 > test.c接口GetCurrentProcessId();
+
+# lua-debug调试Lua插件 
+插件地址[https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug]
+```
+{
+    "name": "launch",
+    "type": "lua",
+    "request": "launch",
+    "stopOnEntry": false,//是否在入口断点
+
+    "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+    "runtimeArgs": "-lua test1.lua",
+    "consoleCoding": "utf8"
+},
+```
