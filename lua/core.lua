@@ -1,13 +1,13 @@
-local DEBUG = 0;--é»˜è®¤çš„æ¨¡å¼0:å¼€å¯,1å…³é—­
+local DEBUG = 0;--Ä¬ÈÏµÄÄ£Ê½0:¿ªÆô,1¹Ø±Õ
 core = {};
 local core = core;
 local m = core;
 
----uiç»„ä»¶ç±»
+---ui×é¼şÀà
 core.ui = {};
 
 local FUNC_KEY = {
-	---ç§»é™¤å¯¹è±¡
+	---ÒÆ³ı¶ÔÏó
 	FUNC_PTR_REMOVE = 1,
 
 	FUNC_SETV = 2,
@@ -26,38 +26,38 @@ local FUNC_KEY = {
 }
 
 FLAGS_RENDER_BOUND_BOX	=	0x01;
-FLAGS_DRAW_RAY_COLLISION	=	0x02;	--ç»˜åˆ¶å°„çº¿ç›’å­	(æ˜¯å¦ç»˜åˆ¶å°„çº¿é™æ€åŒ…å›´ç›’,ç”¨äºæµ‹è¯• æŸ¥çœ‹å°„çº¿åŒ…å›´ç›’),å³ä½¿æ²¡æœ‰è®¾ç½®FLAGS_RAY,é‚£ä¹ˆä¹Ÿæ˜¯å¯ä»¥ç»˜åˆ¶å°„çº¿ç›’å­çš„,è¿™æ ·å¯ä»¥ç”¨æ¥æŸ¥çœ‹
--- FLAGS_LINE_RENDER			=	0x04;	--æ˜¯å¦æ˜¾ç¤ºæ¸²æŸ“çº¿æ¡†
--- FLAGS_OUTLINE				=	0x08;	--æ˜¯å¦æ˜¾ç¤ºè¾¹ç¼˜è½®å»“
-FLAGS_RAY					=	0x10;	--16æ˜¯å¦å…·æœ‰å°„çº¿æ‹¾å–åŠŸèƒ½(æ­¤åªç”¨äº3dæ‹¾å–,2dæ‹¾å–ä¸ç”¨è¿™ä¸ªæ ‡è®°)
-FLAGS_VISIBLE				=	0x20;	--32æ˜¾ç¤ºæˆ–è€…éšè—æ¨¡å‹,(æ˜¯å¦åŠ å…¥æ¸²æŸ“é˜Ÿåˆ—ä¸­)
-FLAGS_RENDER_DRAWSKELETON	=	64;		--æ¸²æŸ“éª¨éª¼èŠ‚ç‚¹(md5æ¨¡å‹æ‰ä¼šæ˜¾ç¤º)
-FLAGS_ANIM_ADAPTIVE		=	128;		--æ˜¯å¦æ ¹æ®å…³é”®å¸§çš„å¸§ç‡é€‚é…å…³é”®å¸§çš„åŠ¨ç”»(æ˜¯å¦é€‚é…fps 1,é€‚é…  0,ä¸é€‚é…)
-FLAGS_GLSL_OUTLINE		=	256;		--ç”¨GLSLå®ç°çš„è½®å»“çº¿
--- FLAGS_DRAW_PLOYGON_LINE	=	512;		--åœ¨ç¬¬ä¸€ä¸ªåŸºæœ¬æè´¨ä¸Šç”¨çº¿æ¡†æ¸²æŸ“(å›ºå®šç®¡çº¿æ¨¡å¼è®¾ç½®GL_LINE)
-FLAGS_BUTTON_EFFECT		=	1024;	--è®¾ç½®æŒ‰é’®ç‰¹æ•ˆ(åœ¨æœ‰ç‚¹å‡»äº‹ä»¶çš„å‰æä¸‹æ‰ä¼šæœ‰è¯¥ç‰¹æ•ˆ)
-FLAGS_DRAW_NORMAL 		= 	2048;	--æ³•çº¿
-FLAGS_DRAG				=	4096;	--æ˜¯å¦å¯æ‹–æ‹½
--- FLAGS_DRAW_PLOYGON_POINT = 	8192;	--ç‚¹æ¨¡å¼
--- FLAGS_DISABLE_CULL_FACE	=	16384;	--è®¾ç½®æ˜¾ç¤ºåŒé¢
--- FLAGS_REVERSE_FACE		=	32768;	--åè½¬æ¸²æŸ“é¢,åªæœ‰è®¾ç½®äº†åŒé¢æ¸²æŸ“æ‰æœ‰æ•ˆ
+FLAGS_DRAW_RAY_COLLISION	=	0x02;	--»æÖÆÉäÏßºĞ×Ó	(ÊÇ·ñ»æÖÆÉäÏß¾²Ì¬°üÎ§ºĞ,ÓÃÓÚ²âÊÔ ²é¿´ÉäÏß°üÎ§ºĞ),¼´Ê¹Ã»ÓĞÉèÖÃFLAGS_RAY,ÄÇÃ´Ò²ÊÇ¿ÉÒÔ»æÖÆÉäÏßºĞ×ÓµÄ,ÕâÑù¿ÉÒÔÓÃÀ´²é¿´
+-- FLAGS_LINE_RENDER			=	0x04;	--ÊÇ·ñÏÔÊ¾äÖÈ¾Ïß¿ò
+-- FLAGS_OUTLINE				=	0x08;	--ÊÇ·ñÏÔÊ¾±ßÔµÂÖÀª
+FLAGS_RAY					=	0x10;	--16ÊÇ·ñ¾ßÓĞÉäÏßÊ°È¡¹¦ÄÜ(´ËÖ»ÓÃÓÚ3dÊ°È¡,2dÊ°È¡²»ÓÃÕâ¸ö±ê¼Ç)
+FLAGS_VISIBLE				=	0x20;	--32ÏÔÊ¾»òÕßÒş²ØÄ£ĞÍ,(ÊÇ·ñ¼ÓÈëäÖÈ¾¶ÓÁĞÖĞ)
+FLAGS_RENDER_DRAWSKELETON	=	64;		--äÖÈ¾¹Ç÷À½Úµã(md5Ä£ĞÍ²Å»áÏÔÊ¾)
+FLAGS_ANIM_ADAPTIVE		=	128;		--ÊÇ·ñ¸ù¾İ¹Ø¼üÖ¡µÄÖ¡ÂÊÊÊÅä¹Ø¼üÖ¡µÄ¶¯»­(ÊÇ·ñÊÊÅäfps 1,ÊÊÅä  0,²»ÊÊÅä)
+FLAGS_GLSL_OUTLINE		=	256;		--ÓÃGLSLÊµÏÖµÄÂÖÀªÏß
+-- FLAGS_DRAW_PLOYGON_LINE	=	512;		--ÔÚµÚÒ»¸ö»ù±¾²ÄÖÊÉÏÓÃÏß¿òäÖÈ¾(¹Ì¶¨¹ÜÏßÄ£Ê½ÉèÖÃGL_LINE)
+FLAGS_BUTTON_EFFECT		=	1024;	--ÉèÖÃ°´Å¥ÌØĞ§(ÔÚÓĞµã»÷ÊÂ¼şµÄÇ°ÌáÏÂ²Å»áÓĞ¸ÃÌØĞ§)
+FLAGS_DRAW_NORMAL 		= 	2048;	--·¨Ïß
+FLAGS_DRAG				=	4096;	--ÊÇ·ñ¿ÉÍÏ×§
+-- FLAGS_DRAW_PLOYGON_POINT = 	8192;	--µãÄ£Ê½
+-- FLAGS_DISABLE_CULL_FACE	=	16384;	--ÉèÖÃÏÔÊ¾Ë«Ãæ
+-- FLAGS_REVERSE_FACE		=	32768;	--·´×ªäÖÈ¾Ãæ,Ö»ÓĞÉèÖÃÁËË«ÃæäÖÈ¾²ÅÓĞĞ§
 GL = {};
 GL.GL_POINT=0x1B00;
 GL.GL_LINE =0x1B01;
 GL.GL_FILL =0x1B02;
----å–æ¶ˆå‰”é™¤èƒŒé¢
+---È¡ÏûÌŞ³ı±³Ãæ
 GL.CULL_FACE_DISABLE = 1;
 GL.CULL_FACE_FRONT = 2;
 GL.CULL_FACE_BACK = 3;
 
 --[[
---//æ–‡ä»¶ç±»å‹å®šä¹‰
-TYPE_OBJ_FILE = 0--	//objç±»å‹
-TYPE_MD5_FILE =1 --//md5ç±»å‹
-TYPE_MD2_FILE =2 --//md2ç±»å‹
-TYPE_SPRITE_FLIE =3--//UIç•Œé¢ç±»å‹ä¸­çš„sprite
---TYPE_TEXT_FILE	=4	--//æ–‡æœ¬ç±»å‹
-TYPE_OBJ_VBO_FILE=	5--//VBOæ–‡ä»¶æ•°æ®
+--//ÎÄ¼şÀàĞÍ¶¨Òå
+TYPE_OBJ_FILE = 0--	//objÀàĞÍ
+TYPE_MD5_FILE =1 --//md5ÀàĞÍ
+TYPE_MD2_FILE =2 --//md2ÀàĞÍ
+TYPE_SPRITE_FLIE =3--//UI½çÃæÀàĞÍÖĞµÄsprite
+--TYPE_TEXT_FILE	=4	--//ÎÄ±¾ÀàĞÍ
+TYPE_OBJ_VBO_FILE=	5--//VBOÎÄ¼şÊı¾İ
 
 SUFFIX_OBJ ="obj"
 SUFFIX_MD5MESH ="md5mesh"
@@ -66,61 +66,61 @@ SUFFIX_MD2 ="md2"
 --]]
 
 ------------------------------------------------------------
-LUA_EVENT_RAY_PICK = 1						--æ‹¾å–ç‚¹å‡»å›è°ƒ
+LUA_EVENT_RAY_PICK = 1						--Ê°È¡µã»÷»Øµ÷
 
-EVENT_ENGINE_RESIZE	   =102				--resizeäº‹ä»¶
+EVENT_ENGINE_RESIZE	   =102				--resizeÊÂ¼ş
 
--- EVENT_ENGINE_BASE_UPDATE	 =  102		--baseæ›´æ–°äº‹ä»¶
+-- EVENT_ENGINE_BASE_UPDATE	 =  102		--base¸üĞÂÊÂ¼ş
 EVENT_ENGINE_SPRITE_CLICK = 104
 EVENT_ENGINE_SPRITE_CLICK_DOWN = 105
 EVENT_ENGINE_SPRITE_CLICK_MOVE = 106    --click move
--- EVENT_ENGINE_TEX_LOAD_COMPLETE = 108	--çº¹ç†åŠ è½½ç»“æŸ
-EVENT_ENGINE_COMPLETE		   = 109	--å®Œæˆäº‹ä»¶
+-- EVENT_ENGINE_TEX_LOAD_COMPLETE = 108	--ÎÆÀí¼ÓÔØ½áÊø
+EVENT_ENGINE_COMPLETE		   = 109	--Íê³ÉÊÂ¼ş
 
-CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE =110 --å‘luaå±‚å‘é€ç„¦ç‚¹å˜åŒ–
-CUST_LUA_EVENT_INPUT_CHANGE = 111		--inputè¾“å…¥å†…å®¹å‘ç”Ÿå˜åŒ–
+CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE =110 --Ïòlua²ã·¢ËÍ½¹µã±ä»¯
+CUST_LUA_EVENT_INPUT_CHANGE = 111		--inputÊäÈëÄÚÈİ·¢Éú±ä»¯
 
-ENGINE_EVENT_COMPLETE = 1000;	--ç»“æŸäº‹ä»¶
+ENGINE_EVENT_COMPLETE = 1000;	--½áÊøÊÂ¼ş
 
 local event = {
-	DISPLAY = 10001,--æ˜¾ç¤º
-    UNDISPLAY = 10002,--éšè—
-    COMPLETE = 10003,--å®Œæˆäº‹ä»¶
+	DISPLAY = 10001,--ÏÔÊ¾
+    UNDISPLAY = 10002,--Òş²Ø
+    COMPLETE = 10003,--Íê³ÉÊÂ¼ş
 
-    -- ---* è®¡æ—¶å™¨evtid=21
-    -- ---* è¯¥è®¡æ—¶å™¨ä»Cå†…æ ¸å±‚evt_dispatchè¿‡æ¥çš„äº‹ä»¶,æˆ‘ä»¬åªåœ¨Luaæ¨¡å—è¿™è¾¹åšç›‘å¬.
+    -- ---* ¼ÆÊ±Æ÷evtid=21
+    -- ---* ¸Ã¼ÆÊ±Æ÷´ÓCÄÚºË²ãevt_dispatch¹ıÀ´µÄÊÂ¼ş,ÎÒÃÇÖ»ÔÚLuaÄ£¿éÕâ±ß×ö¼àÌı.
 
 }
 --[[
 @api ex_event
 @apiGroup core
-@apiDescription ç”±Cå†…æ ¸çš„äº‹ä»¶å®šä¹‰
+@apiDescription ÓÉCÄÚºËµÄÊÂ¼ş¶¨Òå
 
 
 ]]
 local ex_event = {
-	--- æ‹¾å–ç‚¹å‡»å›è°ƒ,ä¼šç»™Luaå±‚æ´¾å‘
+	--- Ê°È¡µã»÷»Øµ÷,»á¸øLua²ãÅÉ·¢
 	--- data 0:x 1:y 2:z 3:distance  
-	--- distance:å°„çº¿ä¸ä¸‰è§’å½¢çš„äº¤ç‚¹ è·ç¦» å°„çº¿èµ·ç‚¹çš„è·ç¦»
+	--- distance:ÉäÏßÓëÈı½ÇĞÎµÄ½»µã ¾àÀë ÉäÏßÆğµãµÄ¾àÀë
 	LUA_EVENT_RAY_PICK = 1,
 
-	---* è®¡æ—¶å™¨evtid=21
-    ---* è¯¥è®¡æ—¶å™¨ä»Cå†…æ ¸å±‚evt_dispatchè¿‡æ¥çš„äº‹ä»¶,æˆ‘ä»¬åªåœ¨Luaæ¨¡å—è¿™è¾¹åšç›‘å¬.
+	---* ¼ÆÊ±Æ÷evtid=21
+    ---* ¸Ã¼ÆÊ±Æ÷´ÓCÄÚºË²ãevt_dispatch¹ıÀ´µÄÊÂ¼ş,ÎÒÃÇÖ»ÔÚLuaÄ£¿éÕâ±ß×ö¼àÌı.
 	TIMER = 201,
 
-	---å¼•æ“æ¸²æŸ“å›è°ƒ,æ¯ä¸€å¸§è°ƒç”¨ä¸€æ¬¡
+	---ÒıÇæäÖÈ¾»Øµ÷,Ã¿Ò»Ö¡µ÷ÓÃÒ»´Î
 	EVENT_ENGINE_RENDER_3D =100,
-	EVENT_ENGINE_KEYBOARD  =101,				--å…¨å±€é”®ç›˜äº‹ä»¶
+	EVENT_ENGINE_KEYBOARD  =101,				--È«¾Ö¼üÅÌÊÂ¼ş
 	
-	---ç»“æŸäº‹ä»¶
+	---½áÊøÊÂ¼ş
 	EVENT_ENGINE_COMPLETE		 =  103,	
 
-	---é¼ æ ‡ä¸­é”®æ»šåŠ¨äº‹ä»¶
+	---Êó±êÖĞ¼ü¹ö¶¯ÊÂ¼ş
 	MOUSE_MID_EVENT = 112,
-	---é¼ æ ‡å·¦é”®æŒ‰ä¸‹
+	---Êó±ê×ó¼ü°´ÏÂ
 	MOUSE_LEFT_DOWN_EVENT = 113,
 
-	---åˆ·æ–°cam
+	---Ë¢ĞÂcam
 	EVENT_CAM_REFRESH = 114,
 };
 core.KeyEvent = {
@@ -137,32 +137,32 @@ core.KeyEvent = {
 	KEY_I = 105,
 }
 
----æè´¨æ¥å£
+---²ÄÖÊ½Ó¿Ú
 local material = {}
 core.meterial = material;
 
----ä¸ºå¯¹è±¡pè®¾ç½®mæè´¨
+---Îª¶ÔÏópÉèÖÃm²ÄÖÊ
 function material.set(p,m)
 	setMaterial(p,m);
 end
 
----è®¾ç½®å¤šè¾¹å½¢çš„æ¸²æŸ“æ¨¡å¼
+---ÉèÖÃ¶à±ßĞÎµÄäÖÈ¾Ä£Ê½
 ---@param m "Matereal"
 ---@param v "GL.GL_FILL,GL.GL_LINE,GL_POINT"
 function material.setPolyMode(m,v)
 	tmat_setPolyMode(m,v);
 end
 
----è®¾ç½®èƒŒé¢å‰”é™¤
+---ÉèÖÃ±³ÃæÌŞ³ı
 function material.setCullface(m,v)
 	tmat_cullface(m,v);
 end
----è®¾ç½®Materialçš„æ¸²æŸ“çŠ¶æ€
----@param v "1:å–æ¶ˆæ¸²æŸ“,0å¼€å¯æ¸²æŸ“"
+---ÉèÖÃMaterialµÄäÖÈ¾×´Ì¬
+---@param v "1:È¡ÏûäÖÈ¾,0¿ªÆôäÖÈ¾"
 function material.disable(m,v)
 	tmat_disable(m,v);
 end
---æ ¹æ®idè½¬åŒ–ä¸ºäº‹ä»¶å
+--¸ù¾İid×ª»¯ÎªÊÂ¼şÃû
 function m.get_event_str(id)
 	return id;
 end
@@ -192,40 +192,40 @@ function core.get_drawcall()
 	return set_attr(FUNC_KEY.FUNC_GET_DRAW_CALL);
 end
 
----è·å–å¯¹è±¡çš„VBOé¡¶ç‚¹æ•°
+---»ñÈ¡¶ÔÏóµÄVBO¶¥µãÊı
 function core.get_vert_cnt(p)
 	return set_attr(FUNC_KEY.FUNC_GET_VERT_COUNT,p);
 end
 
----å½“å‰å¼•æ“æ‰§è¡Œçš„æ—¶é—´
+---µ±Ç°ÒıÇæÖ´ĞĞµÄÊ±¼ä
 function core.get_time()
 	return set_attr(FUNC_KEY.FUNC_GET_TIME);
 end
 --return event;
 
 
---é”®å€¼æšä¸¾P
+--¼üÖµÃ¶¾ÙP
 
---ç•Œé¢ç±»å‹
+--½çÃæÀàĞÍ
 UI_TYPE = {
 	Label = 1,
 	Button =2,
 	ScrollBar = 3,
 	Panel = 4,
 	Skin = 5,
-	---6 é€‰é¡¹å¡ç±»å‹
+	---6 Ñ¡Ïî¿¨ÀàĞÍ
 	CheckBox = 6,
-	ProgressBar = 7,--è¿›åº¦æ¡
-	ListBox = 8,--ä¸‹æ‹‰åˆ—è¡¨
-	Input = 9,--è¾“å…¥ç»„ä»¶
+	ProgressBar = 7,--½ø¶ÈÌõ
+	ListBox = 8,--ÏÂÀ­ÁĞ±í
+	Input = 9,--ÊäÈë×é¼ş
 
-	---10 imageç»„ä»¶
+	---10 image×é¼ş
 	Image = 10,
 
-	---11 shapeç»„ä»¶
+	---11 shape×é¼ş
 	Shape = 11,
-	NScrollBar = 12,--æ»šåŠ¨æ¡ç»„ä»¶
-	NListBox = 13,--åˆ—è¡¨
+	NScrollBar = 12,--¹ö¶¯Ìõ×é¼ş
+	NListBox = 13,--ÁĞ±í
 	NLabel = 14,--Label
 	NPanel = 15,
 	---16
@@ -233,17 +233,17 @@ UI_TYPE = {
 };
 
 
---æ ¹æ®ç±»å‹è·å–å…¶ç±»å‹å
+--¸ù¾İÀàĞÍ»ñÈ¡ÆäÀàĞÍÃû
 
 --[[
 @api 	funcgetNameByUIType
 @apiPermission admin
 @apiVersion 0.3.0
-@apiParam {Number} t ç±»å‹
-@apiSuccess {string} name è·å–å…¶ç±»å‹å
+@apiParam {Number} t ÀàĞÍ
+@apiSuccess {string} name »ñÈ¡ÆäÀàĞÍÃû
 @apiExample {lua} Example usage:
 	func_getNameByUIType(UI_TYPE.Label);
-	--è¿”å›ä¸€ä¸ªæ–‡æœ¬"Label"
+	--·µ»ØÒ»¸öÎÄ±¾"Label"
 ]]
 function func_getNameByUIType(t)
 	local u = UI_TYPE;
@@ -270,14 +270,14 @@ end
 
 
 require("stack")
-require("xml")	--xmlç»„ä»¶
-require("vec3")	--è‡ªå®šä¹‰æ•°å­¦åº“
-require("nstack");--é“¾æ ˆ
+require("xml")	--xml×é¼ş
+require("vec3")	--×Ô¶¨ÒåÊıÑ§¿â
+require("nstack");--Á´Õ»
 
-require("evt")	--äº‹ä»¶ç®¡ç†å™¨
+require("evt")	--ÊÂ¼ş¹ÜÀíÆ÷
 
 
---è½¬åŒ–å‡ºä¸€ä¸ªåœ°å€
+--×ª»¯³öÒ»¸öµØÖ·
 --"=table: 0082E758"  ===>8578904
 local function getDddress(value)
 	local len = string.len("table:  ")
@@ -287,12 +287,12 @@ local function getDddress(value)
 	return s;
 end
 
---å°†"table: ff"è½¬åŒ–ä¸ºnumber
+--½«"table: ff"×ª»¯Îªnumber
 local function f_get_address(value)
 	return getDddress(value);
 end
 
----ç”Ÿæˆä¸€ä¸ªåå­—,local nameKey = -1;
+---Éú³ÉÒ»¸öÃû×Ö,local nameKey = -1;
 m.getName = function(suffix)
 	local id = get_nameId();
 	if(suffix==nil)then
@@ -317,7 +317,7 @@ local function f_split(input,delmiter)
 end
 
 --[[
-	æ ¹æ®ä¸€ä¸ªé…ç½®åŠ è½½ç”Ÿæˆä¸€ä¸ªæ•°æ®å¯¹è±¡
+	¸ù¾İÒ»¸öÅäÖÃ¼ÓÔØÉú³ÉÒ»¸öÊı¾İ¶ÔÏó
 --]]
 function func_load_material(url)
 	
@@ -328,10 +328,10 @@ function func_load_material(url)
 	xml:load(url);
 	if(suffix == "mat") then
 
-		--å–ç¬¬ä¸€ä¸ªç´¢å¼•ä¸­çš„æè´¨é…ç½®
+		--È¡µÚÒ»¸öË÷ÒıÖĞµÄ²ÄÖÊÅäÖÃ
 		local node = xml:get_index(0);--xml_get_node_by_index(xml,0);
 		local shader = xml_get_str(node,"shader");
-		func_print("è§£ææè´¨:"..url..':'..shader);
+		func_print("½âÎö²ÄÖÊ:"..url..':'..shader);
 
 		if(shader == nil) then
 			func_error("shader is nil,"..url);
@@ -342,7 +342,7 @@ function func_load_material(url)
 			
 			_material = tmat_create_empty(shader);
 
-			--æ·»åŠ è´´å›¾åˆ°æè´¨å¯¹è±¡	tex0~~tex7
+			--Ìí¼ÓÌùÍ¼µ½²ÄÖÊ¶ÔÏó	tex0~~tex7
 			for i = 0,7,1 do
 				local texName = "tex"..(i);	
 				local _url = xml_get_str(node,texName);
@@ -358,18 +358,18 @@ function func_load_material(url)
 	return _material;
 end
 
---åˆ é™¤tableä¸‹é¢çš„å…ƒç´ (éå†æ‰€æœ‰çš„è¡¨å…ƒç´ å¼•ç”¨)
+--É¾³ıtableÏÂÃæµÄÔªËØ(±éÀúËùÓĞµÄ±íÔªËØÒıÓÃ)
 function func_clearTableItem(point)
 	for k, v in pairs(point) do
 		point[k] = nil
 	end
 	-- if(getmetatable(point)) then
-	setmetatable(point,nil); --å°†å¯¹è±¡çš„å…ƒè¡¨è®¾ç½®ä¸ºnil
+	setmetatable(point,nil); --½«¶ÔÏóµÄÔª±íÉèÖÃÎªnil
 		-- print('find del reset metatabe!');
 		-- print(getmetatable(point));
 	-- end
 end
----éå†æ‰“å°è¡¨
+---±éÀú´òÓ¡±í
 function func_printTable(t)
 	func_print(">>>>> start print table: "..tostring(t),0xff00ff)
 	--print("start print table: "..tostring(t))
@@ -381,7 +381,7 @@ function func_printTable(t)
 		local s = tostring(value)
 		if(tonumber(value)) then
 			
-			--è½¬åŒ–ä¸º16è¿›åˆ¶æ•°æ®
+			--×ª»¯Îª16½øÖÆÊı¾İ
 			s =  string.format("%#x",tonumber(value)).."\t("..value..")"
 		end
 		
@@ -392,17 +392,17 @@ function func_printTable(t)
 	func_print(">>>>> end print table:   ["..tostring(t).."] cnt = "..cnt,0xff00ff)
 end
 
---æ‰“å°ä¸€ä¸ªæœ‰é¢œè‰²çš„æ—¥å¿—åˆ°æ§åˆ¶å°
+--´òÓ¡Ò»¸öÓĞÑÕÉ«µÄÈÕÖ¾µ½¿ØÖÆÌ¨
 function func_print(s,c)
 	if(DEBUG == 1)then
 		c = c or 0xffff00
 		--c = c or 0;
 		
-		--å‘æ§åˆ¶å°è¾“å‡ºæœ‰é¢œè‰²çš„æ–‡æœ¬æ—¥å¿—
+		--Ïò¿ØÖÆÌ¨Êä³öÓĞÑÕÉ«µÄÎÄ±¾ÈÕÖ¾
 		log_print(string.format("%c%c%c%clua: %s\n",0xa8,0x84,0xa8,0x84,s),c);
 	end
 end
----ç¨‹åºå¼‚å¸¸çš„æ—¶å€™åšä¸€æ¬¡è¾“å‡º,æˆ–è€…æ‰“å°å †æ ˆ
+---³ÌĞòÒì³£µÄÊ±ºò×öÒ»´ÎÊä³ö,»òÕß´òÓ¡¶ÑÕ»
 function func_error(msg,func,noAssert)
 	msg = msg or "";
 	local s = ''
@@ -419,7 +419,7 @@ function func_error(msg,func,noAssert)
 		local info = debug.getinfo(func)
 		for k,v in pairs(info) do
 			
-				--å…¨éƒ¨æ‰“å°
+				--È«²¿´òÓ¡
 				--print(k, ':', info[k])
 				
 				--linedefined				
@@ -441,7 +441,7 @@ function func_error(msg,func,noAssert)
 	
 	-- func_print(debug.traceback(),0xff0000);
 	-- if(DEBUG == 0) then
-	-- 	print(debug.traceback());--å½“æ²¡æœ‰è®¾ç½®è¾“å‡ºæ—¥å¿—çš„æ—¶å€™,æ§åˆ¶å°é»˜è®¤è¾“å‡ºæ—¥å¿—.
+	-- 	print(debug.traceback());--µ±Ã»ÓĞÉèÖÃÊä³öÈÕÖ¾µÄÊ±ºò,¿ØÖÆÌ¨Ä¬ÈÏÊä³öÈÕÖ¾.
 	-- end
 	print(msg..s);
 	print(debug.traceback());
@@ -456,7 +456,7 @@ function func_error(msg,func,noAssert)
 end
 
 --[[
-	è®¾ç½®spriteå¯¹è±¡çš„ç›¸å¯¹äºçˆ¶å¯¹è±¡çš„åæ ‡
+	ÉèÖÃsprite¶ÔÏóµÄÏà¶ÔÓÚ¸¸¶ÔÏóµÄ×ø±ê
 --]]
 function func_set_local_pos(p,x,y)
 	local pos = x..","..y;
@@ -464,7 +464,7 @@ function func_set_local_pos(p,x,y)
 end
 
 --[[
-	å°†childæ·»åŠ åˆ°parentä¸­
+	½«childÌí¼Óµ½parentÖĞ
 --]]
 function func_addchild(parent,child,x,y)
 	if(type(parent)~="number" or type(child)~="number") then
@@ -481,24 +481,24 @@ function func_addchild(parent,child,x,y)
 	func_set_local_pos(child,x,y);
 end
 
---å†…å­˜å›æ”¶Cæ¨¡å—çš„
+--ÄÚ´æ»ØÊÕCÄ£¿éµÄ
 function func_gc()
 	change_attr(nil,"gc");
 	--print('gc')
 end
 
---luaçš„GC
+--luaµÄGC
 function func_lua_gc(key)
 	local old =  collectgarbage("count");
-	--func_print("==> GCä¹‹å‰ LUA VMä½¿ç”¨çš„æ€»å†…å­˜æ•°:"..(collectgarbage("count")*1024).." bytes");
+	--func_print("==> GCÖ®Ç° LUA VMÊ¹ÓÃµÄ×ÜÄÚ´æÊı:"..(collectgarbage("count")*1024).." bytes");
 	collectgarbage("collect");
 	local n = collectgarbage("count");
-	func_print((key or "").."GCå®Œæˆ LUA VMä½¿ç”¨çš„æ€»å†…å­˜æ•°:"..n.."kb,gcäº†["..((old - n)*1024).."]bytes");
+	func_print((key or "").."GCÍê³É LUA VMÊ¹ÓÃµÄ×ÜÄÚ´æÊı:"..n.."kb,gcÁË["..((old - n)*1024).."]bytes");
 end
 
---ä¸ºspriteè®¾ç½®è´´å›¾
+--ÎªspriteÉèÖÃÌùÍ¼
 function func_setIcon(sprite,url)
-	--è·å–ä¸€ä¸ªatalså›¾é›†,æ²¡æœ‰å›¾é›†çš„ç•Œé¢æ˜¯é»‘è‰²çš„
+	--»ñÈ¡Ò»¸öatalsÍ¼¼¯,Ã»ÓĞÍ¼¼¯µÄ½çÃæÊÇºÚÉ«µÄ
 	local atals = core.atals;
 	if(atals) then
 		--sprite_bindAtals(sprite,atals);
@@ -507,29 +507,29 @@ function func_setIcon(sprite,url)
 	end
 end
 
---è·å–spriteçš„å®½é«˜
+--»ñÈ¡spriteµÄ¿í¸ß
 function func_get_sprite_size(o)
 	return get_attr(o,"spriteSize")	
 end
 
---é‡ç½®spriteçš„å®½é«˜
+--ÖØÖÃspriteµÄ¿í¸ß
 function func_set_sprite_size(o,w,h)
 	change_attr(o,"sprite_resize",string.format('%d,%d',w,h));
 end
 
---è·å–é¼ æ ‡æ‹¾å–çš„spriteç›¸å¯¹åæ ‡
+--»ñÈ¡Êó±êÊ°È¡µÄspriteÏà¶Ô×ø±ê
 function func_get_sprite_mouse_xy(o)
 	local x , y=get_attr(o,"spriteLocalXY");
 	return x,y
 end
 
---åŠ è½½æ–‡ä»¶è¿”å›ä¸€ä¸ªå­—ç¬¦ä¸²
+--¼ÓÔØÎÄ¼ş·µ»ØÒ»¸ö×Ö·û´®
 function func_loadfile(url)
     return change_attr(nil,"loadfile",url);
 end
 
 
---å­—ç¬¦ä¸²åˆ†å‰²æˆtable
+--×Ö·û´®·Ö¸î³Étable
 function func_split(str, delimiter)
     delimiter = delimiter or ","
     if str==nil or string.len(str)==0 or delimiter==nil then
@@ -544,7 +544,7 @@ function func_split(str, delimiter)
 end
 
 
---ç›¸å½“äºaddchild
+--Ïàµ±ÓÚaddchild
 function func_addnode(parent,n,x,y)
 	x = x or 0;
 	y = y or 0;
@@ -578,37 +578,37 @@ function func_addnode(parent,n,x,y)
 		--print(c);
 		func_addchild(parent,c,x,y);	
 	else
-		func_error(string.format("type = %sæœªå®ç°",tostring(_type)));
+		func_error(string.format("type = %sÎ´ÊµÏÖ",tostring(_type)));
 	end
 end
 
----è®¾ç½®childçš„çˆ¶ç±»å¯¹è±¡
+---ÉèÖÃchildµÄ¸¸Àà¶ÔÏó
 -- function set_parent(child,parent)
 -- 	setmetatable(child, parent);
 -- 	child.superClass = parent;
 -- end
 
----æ‰§è¡Œobjçˆ¶ç±»çš„æ–¹æ³•  
----objå¯¹è±¡å¼•ç”¨  
----funcnameå‡½æ•°å
+---Ö´ĞĞobj¸¸ÀàµÄ·½·¨  
+---obj¶ÔÏóÒıÓÃ  
+---funcnameº¯ÊıÃû
 core.super=function(obj,funcname,...)
 	-- if(self.superClass) then
-	--print("selfå¯¹è±¡å…ƒè¡¨:",getmetatable(self),NLabel);
+	--print("self¶ÔÏóÔª±í:",getmetatable(self),NLabel);
 	
-	local old_mtb = getmetatable(obj);--å°†å¯¹è±¡çš„å…ƒè¡¨å…ˆå­˜èµ·æ¥,ä¹‹åæ¢å¤ç”¨
+	local old_mtb = getmetatable(obj);--½«¶ÔÏóµÄÔª±íÏÈ´æÆğÀ´,Ö®ºó»Ö¸´ÓÃ
 	
 	--print("getmetatable(NLabel)==Base",getmetatable(NLabel)==Base)
 	-- 	print("new:",self.superClass);
 		 
 	-- end
 
-	local p1 = getmetatable(obj);--è·å–å¯¹è±¡obj(self)çš„å…ƒè¡¨
+	local p1 = getmetatable(obj);--»ñÈ¡¶ÔÏóobj(self)µÄÔª±í
 	if(p1 == nil) then
 		func_error('p1 is nil');
 		return;
 	end
 	
-	local p2 = getmetatable(p1);--è·å–selfå…ƒè¡¨çš„å…ƒè¡¨,å³çˆ¶å¯¹è±¡
+	local p2 = getmetatable(p1);--»ñÈ¡selfÔª±íµÄÔª±í,¼´¸¸¶ÔÏó
 	if(p2 == nil) then
 		func_error('p2 is nil');
 		return;
@@ -621,16 +621,16 @@ core.super=function(obj,funcname,...)
 	setmetatable(obj,old_mtb);
 end
 
---åŸºç¡€æ¸²æŸ“ç»„ä»¶
+--»ù´¡äÖÈ¾×é¼ş
 require("NUnit");
 
---å¯¹è±¡çš„å˜æ¢ç»„ä»¶
+--¶ÔÏóµÄ±ä»»×é¼ş
 require("Transform");
 
 require("base");
 require("linenode");
 
-require("label");--labelæ˜¯å¯¹ftextè¿›è¡Œçš„ä¸€æ¬¡å°è£…
+require("label");--labelÊÇ¶Ôftext½øĞĞµÄÒ»´Î·â×°
 
 require("input");
 
@@ -639,23 +639,23 @@ require("cam");
 require("fbo")	--fbo
 
 
-require("shape")	--shapeç»„ä»¶
+require("shape")	--shape×é¼ş
 require("NPanel");
 
 require("NListbox")
 
-require("NScrollBar")	--æ»‘åŠ¨æ¡ç»„ä»¶
+require("NScrollBar")	--»¬¶¯Ìõ×é¼ş
 
-require("button");		--æŒ‰é’®ç»„ä»¶
+require("button");		--°´Å¥×é¼ş
 
-require("image")	--imageç»„ä»¶
+require("image")	--image×é¼ş
 
-require("checkbox")	--checkboxç»„ä»¶
+require("checkbox")	--checkbox×é¼ş
 require("progrossbar")
-require("NSkin");--NSkinçš®è‚¤ç»„ä»¶
+require("NSkin");--NSkinÆ¤·ô×é¼ş
 
-require("UnitBase");		--è§’è‰²å•ä½
-require("md5unit");		--md5å¯¹è±¡
+require("UnitBase");		--½ÇÉ«µ¥Î»
+require("md5unit");		--md5¶ÔÏó
 
 require("scrollview");	--scrollview
 require("LineBox");
@@ -666,11 +666,11 @@ local function f_time(data,o)
 	end
 	
 	if(o._repeat == nil) then
-		m.clearTimeout(o);--å›æ”¶setTimeoutç›¸å…³çš„èµ„æº
+		m.clearTimeout(o);--»ØÊÕsetTimeoutÏà¹ØµÄ×ÊÔ´
 	end
 end
 
----è·å–Tabelçš„é•¿åº¦,ä¼šè®¡ç®—Tabelä¸­çš„æ‰€æœ‰é”®å€¼æ•°æ®
+---»ñÈ¡TabelµÄ³¤¶È,»á¼ÆËãTabelÖĞµÄËùÓĞ¼üÖµÊı¾İ
 ---@param tb Tabel
 function m.getLen(tb)
 	local n = 0;
@@ -679,21 +679,21 @@ function m.getLen(tb)
 	end
 	return n;
 end
----åˆ›å»ºç€è‰²å™¨å¯¹è±¡
+---´´½¨×ÅÉ«Æ÷¶ÔÏó
 function m.p3d_create(vs,ps)
 	return progrom3d(0,vs,ps);
 end
----åˆ é™¤ç€è‰²å™¨å¯¹è±¡
+---É¾³ı×ÅÉ«Æ÷¶ÔÏó
 function m.p3d_del(p)
 	progrom3d(1,p);
 end
----ä¸ºæè´¨å¯¹è±¡è®¾ç½®ç€è‰²å™¨å¯¹è±¡
+---Îª²ÄÖÊ¶ÔÏóÉèÖÃ×ÅÉ«Æ÷¶ÔÏó
 function m.p3d_set(mat,p)
 	progrom3d(2,mat,p);
 end
----@param ms å»¶è¿Ÿmsæ¯«ç§’æ‰§è¡Œcallback
+---@param ms ÑÓ³ÙmsºÁÃëÖ´ĞĞcallback
 ---@param repeat1 "if repeat1 is true,function will be repeate running every frame."
----repeat1 trueæ ‡è¯†é‡å¤ é»˜è®¤ä¸é‡å¤
+---repeat1 true±êÊ¶ÖØ¸´ Ä¬ÈÏ²»ÖØ¸´
 function m.setTimeout(ms,callback,param,repeat1)
 	local timer = timelater_new(ms);
 	local o = {t=timer,c=callback,p=param,_repeat=repeat1};
@@ -704,16 +704,13 @@ function m.setTimeout(ms,callback,param,repeat1)
 	end
 	return o;
 end
----é—´éš”å¾ªç¯ è¿”å›ä¸€ä¸ªtimeçš„table
----æ¸…ç†ä½¿ç”¨core.clearTimeout(table);
----@param ms é—´éš”æ¯«ç§’
----@param func å›è°ƒå‡½æ•°
+
 function m.frameloop(ms,func)
 	return core.setTimeout(ms,func,nil,true);
 end
 
----è¿”å›å½“å‰çš„FPS  
----radix(é»˜è®¤1) 0:å»å°æ•°ç‚¹ 1:ä¿ç•™1ä½ 2:ä¿ç•™2ä½  
+---·µ»Øµ±Ç°µÄFPS  
+---radix(Ä¬ÈÏ1) 0:È¥Ğ¡Êıµã 1:±£Áô1Î» 2:±£Áô2Î»  
 function m.fps(radix)
 	radix=radix or 1;
 	local v = math.pow(10,radix);
@@ -725,7 +722,7 @@ function m.clearTimeout(o)
 	end
 
 	if(next(o) == nil) then
-		return;--è¡¨å·²ç»æ¸…ç©ºäº†
+		return;--±íÒÑ¾­Çå¿ÕÁË
 	end
 
 	--evt_off(o.t,EVENT_TIMER,o.c);
@@ -742,11 +739,11 @@ function m.clearTimeout(o)
 	end
 end
 
----è·å–å½“å‰è¿›ç¨‹è¿è¡Œæ—¶é—´
+---»ñÈ¡µ±Ç°½ø³ÌÔËĞĞÊ±¼ä
 function m.now()
 	return get_attr(nil,"get_longTime");
 end
----è¾“å‡ºè­¦å‘Šä¿¡æ¯
+---Êä³ö¾¯¸æĞÅÏ¢
 ---@param str string
 function m.warning(str)
 	str = string.format("warning >>>>>>>>>>>>>>> [%s] %s",str or "",debug.traceback());
@@ -757,7 +754,7 @@ function m.warning(str)
 	end
 end
 
----ptr tabelä¸­çš„æ•°æ®è½¬åŒ–ä¸ºnumberå¥æŸ„,number is like (Node Sprite...)
+---ptr tabelÖĞµÄÊı¾İ×ª»¯Îªnumber¾ä±ú,number is like (Node Sprite...)
 local function f_get_ptr(ptr)
 	if(ptr == nil) then
 		func_error('ptr = nil');
@@ -782,7 +779,7 @@ local function f_get_ptr(ptr)
 		elseif tb == FboRender then
 			ptr = ptr.spr;
 		else
-			func_error("æœªå®ç°è¯¥tableçš„è½¬æ¢!");
+			func_error("Î´ÊµÏÖ¸ÃtableµÄ×ª»»!");
 		end
 	end
 
@@ -793,7 +790,7 @@ local function f_get_ptr(ptr)
 	return ptr;
 end
 
----æ·»åŠ ä¸€ä¸ªæ¸²æŸ“èŠ‚ç‚¹åˆ°æ¸²æŸ“åˆ—è¡¨
+---Ìí¼ÓÒ»¸öäÖÈ¾½Úµãµ½äÖÈ¾ÁĞ±í
 --[[
 local obj = MapEditor:LoadModel();
 core.add(obj,core.renderlist);
@@ -807,15 +804,15 @@ local btn = Button:new();
 core.del(btn);
 btn:dispose();
 ]]
----@param r æ¸²æŸ“åˆ—è¡¨list
----@param p "æ¸²æŸ“èŠ‚ç‚¹LineNode,UnitBase"
+---@param r äÖÈ¾ÁĞ±ílist
+---@param p "äÖÈ¾½ÚµãLineNode,UnitBase"
 function m.add(p,r)
 	local _type = type(p);
 	
 	if(_type == "table") then
 		--print(r or core.renderlist,f_get_ptr(p),1);
 		local _list = r;
-		--or core.renderlist;--è®¾ç½®åœ¨å“ªä¸ªæ¸²æŸ“åˆ—è¡¨
+		--or core.renderlist;--ÉèÖÃÔÚÄÄ¸öäÖÈ¾ÁĞ±í
 
 		local _funcName = "setRenderList";
 		
@@ -834,9 +831,9 @@ function m.add(p,r)
 	end
 end
 
----ä»æ¸²æŸ“åˆ—è¡¨ä¸­ç§»é™¤ä¸€ä¸ªèŠ‚ç‚¹
+---´ÓäÖÈ¾ÁĞ±íÖĞÒÆ³ıÒ»¸ö½Úµã
 ---```
----   core.del(n);--åœ¨å¯¹è±¡disposeä¹‹å‰ä»æ¸²æŸ“åˆ—è¡¨ä¸­åˆ é™¤
+---   core.del(n);--ÔÚ¶ÔÏódisposeÖ®Ç°´ÓäÖÈ¾ÁĞ±íÖĞÉ¾³ı
 ---   n:dispose();
 ---```
 function m.del(_node,_renderlist)
@@ -849,7 +846,7 @@ function m.gc()
 	func_lua_gc();
 end
 
---ç§»é™¤æ¨¡å—,å¦‚æœæœ‰çš„æ¨¡å—éœ€è¦é‡æ–°åŠ è½½çš„åˆå§‹åŒ–çš„,å¯ä»¥ä½¿ç”¨è¯¥æ¥å£
+--ÒÆ³ıÄ£¿é,Èç¹ûÓĞµÄÄ£¿éĞèÒªÖØĞÂ¼ÓÔØµÄ³õÊ¼»¯µÄ,¿ÉÒÔÊ¹ÓÃ¸Ã½Ó¿Ú
 function m.removeRequire( preName )
     for key, _ in pairs(package.preload) do
         if string.find(tostring(key), preName) == 1 then
@@ -864,7 +861,7 @@ function m.removeRequire( preName )
         end
     end
 end
----æ˜¯å¦å¼€å¯debugæ¨¡å¼
+---ÊÇ·ñ¿ªÆôdebugÄ£Ê½
 function m.debug(v)
 	if(v == true or v == 1)then
 		DEBUG=1;
@@ -873,9 +870,9 @@ function m.debug(v)
 		DEBUG=0;
 		--log_enable(0);
 	end
-	func_print(string.format("è®¾ç½®äº†debugå¼€å¯çŠ¶æ€:%s",v));
+	func_print(string.format("ÉèÖÃÁËdebug¿ªÆô×´Ì¬:%s",v));
 end;
----è·å–æ¨¡å‹çš„ç±»å‹
+---»ñÈ¡Ä£ĞÍµÄÀàĞÍ
 function m.get_type(p)
 	return	get_attr(p,"type");
 end
@@ -897,14 +894,14 @@ end
 	end
 end
 
---è®¾ç½®æ¯ä¸€å¸§éœ€è¦çš„é—´éš”æ—¶é—´
+--ÉèÖÃÃ¿Ò»Ö¡ĞèÒªµÄ¼ä¸ôÊ±¼ä
 local function setDelayMs(ms)
     change_attr(nil,"custDelayMs",ms);
 end
----è®¾ç½®FPS
+---ÉèÖÃFPS
 ---@param v frame percent second
 function m.setfps(v)
-	func_print(string.format("è®¾ç½®fps=%d",v));
+	func_print(string.format("ÉèÖÃfps=%d",v));
 	local a = math.ceil(1000/v);
 	-- print("a = "..a);
 	setDelayMs(a);
@@ -917,52 +914,52 @@ end
 @apiGroup core 
 @apiDescription 
 
-è®¾ç½®å¼•æ“çš„èƒŒæ™¯è‰²	<br>
-r g bå€¼åœ¨0~1ä¹‹é—´	<br>
+ÉèÖÃÒıÇæµÄ±³¾°É«	<br>
+r g bÖµÔÚ0~1Ö®¼ä	<br>
 
 @apiParam {number} r Red Color
 @apiExample {lua} Example usage:
-	setBackgroundColor(0,0,1);--è®¾ç½®èƒŒæ™¯ä¸ºè“è‰²
+	setBackgroundColor(0,0,1);--ÉèÖÃ±³¾°ÎªÀ¶É«
 
 @apiExample {c} Example usage:
 	setBackgroundColor(0,0,10);
 ]]
----è®¾ç½®å¼•æ“çš„èƒŒæ™¯è‰²
+---ÉèÖÃÒıÇæµÄ±³¾°É«
 function m.setBackgroundColor(r,g,b)
     change_attr(nil,"setBgColor",string.format("%s,%s,%s",r or 0,g or 0,b or 0));
-	func_print(string.format("è®¾ç½®èƒŒæ™¯è‰²%s %s %s",r,g,b));
+	func_print(string.format("ÉèÖÃ±³¾°É«%s %s %s",r,g,b));
 end
 
----é€€å‡ºè¿›ç¨‹
+---ÍË³ö½ø³Ì
 function m.exit()
 	change_attr(nil,"exit");
 end
----æ¯ä¸€å¸§é—´éš”çš„æ¯«ç§’
+---Ã¿Ò»Ö¡¼ä¸ôµÄºÁÃë
 function m.delayTime()
 	return get_attr(nil,"delayTime");
 end
 
----å°†å¯¹è±¡é‡å‘½å
+---½«¶ÔÏóÖØÃüÃû
 function m.rename(o,value)
 	change_attr(o,"rename",tostring(value));
 end
 
----è·å–å±å¹•çš„å°ºå¯¸
+---»ñÈ¡ÆÁÄ»µÄ³ß´ç
 function m.screen_size()
 	return get_attr(nil,"screenSize");
 end
 
----ä»å¼•æ“å±‚è·å–å¯¹è±¡
+---´ÓÒıÇæ²ã»ñÈ¡¶ÔÏó
 function m.find_name(name)
 	return find_name(name);
 end
 
----åŠ è½½ä¸€ä¸ªèµ„æº,åªæ˜¯åŠ è½½,å¹¶ä¸ä¼šåŠ è½½åˆ°æ¸²æŸ“åˆ—è¡¨
----é»˜è®¤éƒ½æ˜¯åŠ è½½vboç±»å‹çš„æ•°æ®
+---¼ÓÔØÒ»¸ö×ÊÔ´,Ö»ÊÇ¼ÓÔØ,²¢²»»á¼ÓÔØµ½äÖÈ¾ÁĞ±í
+---Ä¬ÈÏ¶¼ÊÇ¼ÓÔØvboÀàĞÍµÄÊı¾İ
 function m.load(url,name)
 	name = name or m.getName();
 	local o = change_attr(nil,"ex_loadVBO",name,url);
-	func_print('åŠ è½½VBO:'..url);
+	func_print('¼ÓÔØVBO:'..url);
 	return o;
 end
 
@@ -981,7 +978,7 @@ m.UI_TYPE = UI_TYPE;
 
 -- print("core init!!!");
 
----ä¸ºTabelè®¾ç½®å…¶åœ°å€
+---ÎªTabelÉèÖÃÆäµØÖ·
 ---@param o Tabel
 function m.bindAddress(o)
 	o.address=f_get_address(o);
@@ -989,12 +986,12 @@ end
 
 ---@type PluginMan
 
----æ‰“å°ä¿¡æ¯
+---´òÓ¡ĞÅÏ¢
 function m.print_info()
 	get_attr(nil,"ex_info");
 	core.texCache:info();
 end
----è·å–é¼ æ ‡xMouse,yMouse,midDirection
+---»ñÈ¡Êó±êxMouse,yMouse,midDirection
 function m.get_mouse_status()
 	return get_mouse_status();
 end
@@ -1002,30 +999,30 @@ end
 m.ex_event = ex_event;
 m.EVENT = event;--require("event");
 ---@type Camera
-m.cam = nil;--å½“å‰çš„è§†å›¾camera
+m.cam = nil;--µ±Ç°µÄÊÓÍ¼camera
 ---@type Camera
 m.cam2d = nil;
 m.texCache = nil;
----å¼•æ“é»˜è®¤çš„æ¸²æŸ“åˆ—è¡¨
+---ÒıÇæÄ¬ÈÏµÄäÖÈ¾ÁĞ±í
 m.renderlist = nil;
 m.atals = nil;
----å¼•æ“å¥æŸ„å¼•ç”¨
+---ÒıÇæ¾ä±úÒıÓÃ
 m.engine = nil;
----è·å–æ’ä»¶ç®¡ç†å™¨çš„å¥æŸ„
+---»ñÈ¡²å¼ş¹ÜÀíÆ÷µÄ¾ä±ú
 ---@type PluginMan
 m.plugin = nil;
----éœ€è¦æ›´æ–°çš„åˆ—è¡¨
+---ĞèÒª¸üĞÂµÄÁĞ±í
 m.frameUpdateList = {};
 ---@type NStack
 local _calllist;
 ---@type NStack
 local _tempList;
 
---				æ’ä»¶ç®¡ç†å™¨
---è´Ÿè´£åŠ è½½å„ç§å¤–ç½®æ’ä»¶,ä¾‹å¦‚fpsViewè¿™ç§æŒ‚è½½å¼å°å·¥å…·
---è¿™æ˜¯ä¸€ç§æç«¯æ¾æ•£è€¦åˆçš„æ¨¡å¼,è¿™æ ·èƒ½ä½¿ç”¨æ¡†æ¶å±‚è¶³å¤Ÿå°å·§,
---æ‰©å±•åŠŸèƒ½éƒ½æ˜¯ä¾èµ–æ’ä»¶æ¨¡å¼,æ¯”è¾ƒé€‚åˆéœ€æ±‚ç»å¸¸å‘ç”Ÿå˜åŠ¨çš„æƒ…å†µ,
---æˆ‘ä»¬å¯ä»¥å°†è¿™ç§å¤šå˜çš„éƒ¨åˆ†å°è£…æˆä¸€ä¸ªæ’ä»¶è¿›è¡ŒæŒ‚è½½å¼çš„åº”ç”¨
+--				²å¼ş¹ÜÀíÆ÷
+--¸ºÔğ¼ÓÔØ¸÷ÖÖÍâÖÃ²å¼ş,ÀıÈçfpsViewÕâÖÖ¹ÒÔØÊ½Ğ¡¹¤¾ß
+--ÕâÊÇÒ»ÖÖ¼«¶ËËÉÉ¢ñîºÏµÄÄ£Ê½,ÕâÑùÄÜÊ¹ÓÃ¿ò¼Ü²ã×ã¹»Ğ¡ÇÉ,
+--À©Õ¹¹¦ÄÜ¶¼ÊÇÒÀÀµ²å¼şÄ£Ê½,±È½ÏÊÊºÏĞèÇó¾­³£·¢Éú±ä¶¯µÄÇé¿ö,
+--ÎÒÃÇ¿ÉÒÔ½«ÕâÖÖ¶à±äµÄ²¿·Ö·â×°³ÉÒ»¸ö²å¼ş½øĞĞ¹ÒÔØÊ½µÄÓ¦ÓÃ
 require("plugin_man");
 require("texcache");
 
@@ -1045,12 +1042,30 @@ end
 	-- func_print(string.format("LUA_EVENT_RAY_PICK %#x %s %s %s %s",ptr,x,y,z,dis));
 -- end
 
----åˆå§‹åŒ–
-local function game_init()
-	core.debug(1);
+---¼ÓÔØÍ¼¼¯url.xml url.tga
+function atals_load_file(url)
+	local arr =f_split(url,"//");
+	local cnt = #arr;
+	local p1 = "";
+	for n = 1, #arr-1 do 
+		p1 = p1..arr[n].."//";
+	end 
+	return atals_load(p1,arr[cnt]);
+end
 
-	--æ„é€ ä¸€ä¸ªå›¾é›†
-    core.atals = atals_load("//resource//texture//","1");
+---³õÊ¼»¯
+--- @param atals_url Ö÷Í¼¼¯
+---game_init("//resource//texture//1");
+function core.init(atals_url)
+	core.debug(1);
+	--¹¹ÔìÒ»¸öÍ¼¼¯
+    -- core.atals = atals_load("//resource//texture//","1");
+	if(atals_url == nil) then
+		func_error("there no default atals!");--Ã»ÓĞÉèÖÃÄ¬ÈÏÍ¼¼¯×ÊÔ´
+		return;
+	end
+	core.atals = atals_load_file(atals_url);
+
 	local engine,cam2d,cam3d,renderlist = getEngine();
 	core.engine = engine;
 	--core.renderlist = renderlist;
@@ -1073,13 +1088,12 @@ function core.game_dispose()
 end
 
 function func_get_tex_cache(atals,icon)
-
 	---@type TexCache
 	local tc = core.texCache;
 
-	local tex = tc:get_tex(atals,icon);--ä»texCacheçº¹ç†ç¼“å­˜åˆ—è¡¨ä¸­è·å–
+	local tex = tc:get_tex(atals,icon);--´ÓtexCacheÎÆÀí»º´æÁĞ±íÖĞ»ñÈ¡
 	if(tex == 0) then
-		--ä»å›¾é›†ä¸­åˆ›å»ºä¸€å—çº¹ç†æ•°æ®,å¹¶è¿”å›,å¦‚æœæœ‰æ•°æ®åˆ™ä»mapé‡Œè·å–
+		--´ÓÍ¼¼¯ÖĞ´´½¨Ò»¿éÎÆÀíÊı¾İ,²¢·µ»Ø,Èç¹ûÓĞÊı¾İÔò´ÓmapÀï»ñÈ¡
 		tex = atals_new_tex(atals,icon);
 	end
 	tc:add_tex(atals,icon,tex);
@@ -1090,17 +1104,17 @@ function func_del_tex_cache(tex)
 	return cnt;
 end
 
----å½“å‰çš„æ¸¸æˆå¸§
+---µ±Ç°µÄÓÎÏ·Ö¡
 function core.getframe()
 	return getframe() or 0;
 end
----å†…å­˜æ± ä¸­æœªä½¿ç”¨çš„å­—èŠ‚æ•°,æ€»çš„å­—èŠ‚æ•°
+---ÄÚ´æ³ØÖĞÎ´Ê¹ÓÃµÄ×Ö½ÚÊı,×ÜµÄ×Ö½ÚÊı
 function core.memory_info()
 	local disableBytes,totalBytes = memory_info();
 	return disableBytes,totalBytes;
 end
 
----è·å–ç‚¹å‡»åˆ°çš„3då¯¹è±¡çš„å°„çº¿äº¤ç‚¹åæ ‡å’Œè¯¥3då¯¹è±¡çš„å¥æŸ„å€¼
+---»ñÈ¡µã»÷µ½µÄ3d¶ÔÏóµÄÉäÏß½»µã×ø±êºÍ¸Ã3d¶ÔÏóµÄ¾ä±úÖµ
 function core.get_hit()
 	-- local ptr,x,y,z,dis = get_hit();
 	-- x = math.floor(x * 100)/100;
@@ -1108,11 +1122,11 @@ function core.get_hit()
 	-- z = math.floor(z * 100)/100;
 	-- dis = math.floor(dis * 100)/100;
 	-- return ptr,x,y,z,dis;
-	func_error("æœªå®ç°!");
+	func_error("Î´ÊµÏÖ!");
 end
 
----ä¸‹ä¸€å¸§æ‰§è¡Œ,åœ¨ç¬¬nå¸§æ·»åŠ callLaterå›è°ƒä¹‹å  
----ä¼šåœ¨n+1å¸§æ—¶é—´çº¿å›è°ƒfuncæ–¹æ³•
+---ÏÂÒ»Ö¡Ö´ĞĞ,ÔÚµÚnÖ¡Ìí¼ÓcallLater»Øµ÷Ö®ºó  
+---»áÔÚn+1Ö¡Ê±¼äÏß»Øµ÷func·½·¨
 function core.callLater(func,param)
 	-- func_print('callLater:'..tostring(func));
 	-- core.setTimeout(1,func,param);
@@ -1120,14 +1134,14 @@ function core.callLater(func,param)
 		func = func,
 		param = param,
 
-		---å½“å‰çš„å…³é”®å¸§
+		---µ±Ç°µÄ¹Ø¼üÖ¡
 		frame = 0,
 	};
 	obj.frame = core.getframe();
 	_calllist:push(obj);
 	-- stack_push(_calllist,obj);
 end
----è·å–åç¼€
+---»ñÈ¡ºó×º
 function m.get_suffix(url)
 	local arr = f_split(url,"//");
 	local str = arr[table.getn(arr)];
@@ -1135,8 +1149,8 @@ function m.get_suffix(url)
 	return a[table.getn(a)];
 end
 
----timeç§’
----è¿”å›day,hour,minutes,seconds;
+---timeÃë
+---·µ»Øday,hour,minutes,seconds;
 function m.time2str(i)
 	local day = math.floor(i / (3600* 24));
 	local hour = math.floor(i/3600);
@@ -1172,7 +1186,7 @@ function func_pre_callLater()
 end
 
 local tablePrinted = {}
----æ‰“å°Tabelæ•°æ®
+---´òÓ¡TabelÊı¾İ
 ---printTableItem("_G", _G, 0)
 function printTableItem(k, v, level)
     for i = 1, level do
@@ -1190,13 +1204,11 @@ function printTableItem(k, v, level)
     end
 end 
 
-game_init();
-
 function load_model(name,url)
-	func_error("æœªå®ç°æ¥å£load_model");
+	func_error("Î´ÊµÏÖ½Ó¿Úload_model");
 end
 
----@param n nNumåé¢çš„nä½å°æ•°
+---@param n nNumºóÃæµÄnÎ»Ğ¡Êı
 function core.getPreciseDecimal(nNum, n)
     if type(nNum) ~= "number" then
         return nNum;

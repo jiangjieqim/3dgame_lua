@@ -225,7 +225,7 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 --			btn_label(btn,str);
 --		end
 --		child = btn;
-	    func_error("不实现!");
+	    func_error("is not unrealized!");--未实现
 	
 	elseif(_type == "NButton") then
 		local w = xml_get_float(node,"w");
