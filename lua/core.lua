@@ -187,7 +187,7 @@ end
 function load_collide(p,url,scale)
 	return set_attr(FUNC_KEY.FUNC_LOAD_COLLIDE,p, url,scale or 1.0);
 end
-
+---获取drawCall数量
 function core.get_drawcall()
 	return set_attr(FUNC_KEY.FUNC_GET_DRAW_CALL);
 end
@@ -369,6 +369,7 @@ function func_clearTableItem(point)
 		-- print(getmetatable(point));
 	-- end
 end
+
 ---遍历打印表
 function func_printTable(t)
 	func_print(">>>>> start print table: "..tostring(t),0xff00ff)
@@ -376,9 +377,9 @@ function func_printTable(t)
 	local cnt = 0;
 	func_print("value\t\t  key",0xff00ff);
 
-	for key, value in pairs(t) do      
+	for key, value in pairs(t) do 
 		--print('key=['..key..']'..'value['..value..']')
-		local s = tostring(value)
+		local s = 'type:'..type(value)..'\t'..tostring(value)
 		if(tonumber(value)) then
 			
 			--转化为16进制数据
@@ -638,27 +639,16 @@ require("cam");
 
 require("fbo")	--fbo
 
-
 require("shape")	--shape组件
-require("NPanel");
-
-require("NListbox")
-
-require("NScrollBar")	--滑动条组件
-
-require("button");		--按钮组件
-
 require("image")	--image组件
 
-require("checkbox")	--checkbox组件
-require("progrossbar")
-require("NSkin");--NSkin皮肤组件
+
+
 
 require("UnitBase");		--角色单位
 require("md5unit");		--md5对象
 
-require("scrollview");	--scrollview
-require("LineBox");
+
 local function f_time(data,o)
 	if(o.c) then
 		-- func_print(tostring(o.c)..' is call');
@@ -711,7 +701,7 @@ end
 
 ---返回当前的FPS  
 ---radix(默认1) 0:去小数点 1:保留1位 2:保留2位  
-function m.fps(radix)
+function m.get_fps(radix)
 	radix=radix or 1;
 	local v = math.pow(10,radix);
 	return math.floor(1000 / core.delayTime() * v) / v;
@@ -998,10 +988,11 @@ end
 --------------------------------------------------------------
 m.ex_event = ex_event;
 m.EVENT = event;--require("event");
+
 ---@type Camera
 m.cam = nil;--当前的视图camera
 ---@type Camera
-m.cam2d = nil;
+-- m.cam2d = nil;
 m.texCache = nil;
 ---引擎默认的渲染列表
 m.renderlist = nil;
@@ -1013,6 +1004,8 @@ m.engine = nil;
 m.plugin = nil;
 ---需要更新的列表
 m.frameUpdateList = {};
+
+
 ---@type NStack
 local _calllist;
 ---@type NStack
@@ -1070,7 +1063,7 @@ function core.init(atals_url)
 	core.engine = engine;
 	--core.renderlist = renderlist;
 	core.cam = Camera:new(cam3d);
-	core.cam2d = Camera:new(cam2d);
+	local cam2d = Camera:new(cam2d);
 	core.plugin = PluginMan:new();
 	core.texCache = TexCache:new();
 
@@ -1081,6 +1074,12 @@ function core.init(atals_url)
 
 	-- evt_on(core.engine,core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
 	core.setBackgroundColor(0.1,0.1,0.1);
+
+
+	local function getCam2d()
+		return cam2d;
+	end
+	core.getCam2d = cam2d;
 end
 
 function core.game_dispose()
@@ -1122,7 +1121,7 @@ function core.get_hit()
 	-- z = math.floor(z * 100)/100;
 	-- dis = math.floor(dis * 100)/100;
 	-- return ptr,x,y,z,dis;
-	func_error("未实现!");
+	func_error("has not actualize!");--未实现
 end
 
 ---下一帧执行,在第n帧添加callLater回调之后  

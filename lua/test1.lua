@@ -1,14 +1,25 @@
 -- package.cpath = package.cpath .. ";c:/Users/TR/.vscode/extensions/tangzx.emmylua-0.3.49/debugger/emmy/windows/x86/?.dll"
-package.cpath = package.cpath .. ";"..getenv().."/emmy/emmy_core.dll";
--- 'emmy/emmy_core.dll'
 
-dbg = require("emmy_core");
-print(dbg);--[EMMY]lua version: 51
-dbg.tcpListen("localhost", 9966);  
--- dbg.waitIDE();
+local function debugEmmy()
+    package.cpath = package.cpath .. ";"..getenv().."/emmy/emmy_core.dll";
+    dbg = require("emmy_core");
 
+    -- print(dbg);--[EMMY]lua version: 51
+    dbg.tcpListen("localhost", 9966);
+    -- dbg.waitIDE();--等待EmmyLua New Debug�??动执行ide
+end
+
+-- debugEmmy();
+
+------------------------------------------------------
 require("core");
+require("ui")
 local core = core;
+core.init("//resource//texture//1"); 
+
+
+--print(string.format("version = [%s]",_VERSION));
+
 
 require("utils/kittools");
 
@@ -17,11 +28,13 @@ kit.keyLis();
 kit.showAxis(5);
 
 --添加一个FPS显示
-local fps = require("view/FpsView");
-fps:show(nil,nil,nil,"FPS:%s");
+
+-- local fps = require("view/FpsView");
+-- fps:show(nil,nil,nil,"FPS:%s");
+
 core.setfps(20);
 --############################################################
---场景中间添加一个box
+--场景�??间添加一个box
 local box = UnitBase:new();
 box:loadvbo("\\resource\\obj\\box.obj","\\resource\\material\\bauul2.mat");
 core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
@@ -33,11 +46,14 @@ local p1;
 -- local p2 = 1;
 local function frender2()
     --旋转
-    v=v + core.delayTime()/256;
-    -- print(p1);
+    v=v + core.delayTime()/2048;
     box:rotate_vec(v,0,1,0);
+    -- print(v);
+    if(v >= 8) then
+        core.clearTimeout(p1);
+    end
 end
--- core.clearTimeout(p1);
+-- 
 p1 = core.frameloop(1,frender2);
 --############################################################
 
@@ -80,7 +96,9 @@ local avatar = UnitBase:new();
 --     func_error("1");
 -- end
 
---[[
+---��ɫ
+---[[
+
 avatar:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat",0.1); avatar:iAxis(math.pi/2,1,0,0);
 --avatar:get_anim():pause();
 local anim = avatar:get_anim();
@@ -105,12 +123,16 @@ core.add(avatar);
 -- print("get_pos:",avatar:get_pos());
 --]]
 
+-- dbg.breakHere();
 
 local curR = 0;
 local function onTouchClick(data)
     -- dbg.breakHere();
     -- p2 = p2*-1;
+    -- print("dasdahdjkashkj");
+
     if(avatar:p_isNil())then
+        print("avatar is not initialized!");
         return;
     end
 
@@ -123,7 +145,6 @@ local function onTouchClick(data)
     if(avatar) then
         avatar:move(x,y,z,0,10);
     end
-   
 
     -- dbg.waitIDE();
 
@@ -135,3 +156,17 @@ local function onTouchClick(data)
 end
 
 evt_on(_plane:get_p(),core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
+
+
+
+
+
+
+
+local nskin = NSkin:new();
+nskin:load("\\resource\\ui\\crl.xml");
+local btn =nskin:find("infoBtn");
+btn:bind_click(function()
+    print("fps:"..core.get_fps()..core.get_drawcall());
+end);
+-- func_printTable(core);

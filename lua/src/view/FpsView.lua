@@ -1,12 +1,12 @@
----Fpsè§†å›¾ç±»
+---FpsÊÓÍ¼Àà
 local FpsView = {
 	
 };
 
 FpsView.__index = FpsView;
-setmetatable(FpsView, IPlugin);--ç»§æ‰¿è‡ªæ’ä»¶æ¥å£
+setmetatable(FpsView, IPlugin);--¼Ì³Ğ×Ô²å¼ş½Ó¿Ú
 
---æ’ä»¶åŠ è½½
+--²å¼ş¼ÓÔØ
 function FpsView:new()
 	local self = {
 		label,
@@ -18,7 +18,7 @@ function FpsView:new()
 	return self;
 end
 
----è¿”å›å½“å‰çš„FPS
+---·µ»Øµ±Ç°µÄFPS
 local function fps()
 	return math.floor(1000 / core.delayTime() * 10) / 10;
 end
@@ -41,7 +41,7 @@ local function f_fps_timer(data,param)
 	end
 end
 
---å¸è½½æ’ä»¶,å³é”€æ¯æ’ä»¶
+--Ğ¶ÔØ²å¼ş,¼´Ïú»Ù²å¼ş
 function FpsView:dispose()
 	if(self.timer) then
 		timelater_remove(self.timer);
@@ -55,8 +55,8 @@ function FpsView:dispose()
 	func_clearTableItem(self);
 end
 
----æ˜¾ç¤º
----@param cam Cameraå¼•ç”¨
+---ÏÔÊ¾
+---@param cam CameraÒıÓÃ
 function FpsView:show(cam,x,y,formatstr)
 ----[[
 	if(self.label==nil) then
@@ -66,7 +66,7 @@ function FpsView:show(cam,x,y,formatstr)
 --]]
 	
 	if(self.label) then
-		--åˆ›å»ºlabel
+		--´´½¨label
 		self.label:set_pos(x or 0,y or 0);
 		self.label:visible(true);
 	end
@@ -75,7 +75,7 @@ function FpsView:show(cam,x,y,formatstr)
 	
 ----[[
 
-	--å¢åŠ è®¡æ—¶å™¨
+	--Ôö¼Ó¼ÆÊ±Æ÷
 	if(self.timer==nil) then
 		self.timer = timelater_new(250);
 		evt_on(self.timer,core.ex_event.TIMER,f_fps_timer,self);
