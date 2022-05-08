@@ -23,7 +23,6 @@ core.init("//resource//texture//1");
 
 require("utils/kittools");
 
-kit.keyLis();
 
 kit.showAxis(5);
 
@@ -88,7 +87,8 @@ end
 -- local DebugView = require("view/DebugView");
 -- local panel = DebugView:new();
 
-core.cam:set_pos(0,-4,-15);
+core.cam:set_pos(0,-31.5,-41);
+core.cam:set_rotate(-math.pi/8,0,0);
 
 local avatar = UnitBase:new();
 
@@ -158,15 +158,38 @@ end
 evt_on(_plane:get_p(),core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
 
 
-
-
-
-
+----------------------------------------------------------------------
 
 local nskin = NSkin:new();
 nskin:load("\\resource\\ui\\crl.xml");
 local btn =nskin:find("infoBtn");
+local label1 =nskin:find("label1");
 btn:bind_click(function()
-    print("fps:"..core.get_fps()..core.get_drawcall());
+    -- print("fps:"..core.get_fps()..core.get_drawcall());
+    local x,y,z = core.cam:get_rotate();
+    print(math.random().." fps:"..core.get_fps()..core.get_drawcall()..">"..string.format("%s,%s,%s",x,y,z));
+    
 end);
 -- func_printTable(core);
+
+local function frenderUi()
+    local x,y,z = core.cam:get_pos();
+    local rx,ry,rz = core.cam:get_rotate();
+    -- print();
+    label1:set_text(">"..string.format("t %s,%s,%s r %s,%s,%s",x,y,z,rx,ry,rz));
+    print(1);
+end
+-- 
+core.frameloop(1000/18,frenderUi);
+local p1 = 0;
+kit.keyLis(function (key) 
+    print("***********"..key);
+    if(key == core.KeyEvent.KEY_Q) then
+        p1 = p1 +  math.pi/8;
+        core.cam:rz(p1);
+    elseif(key == core.KeyEvent.KEY_W) then
+        p1 = p1 -  math.pi/8;
+        core.cam:rz(p1);
+    end
+
+end);

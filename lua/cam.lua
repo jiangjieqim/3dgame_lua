@@ -40,6 +40,10 @@ end
 function Camera:get_pos()
 	return cam(self.p,"get_xyz");
 end
+---获取角位移
+function Camera:get_rotate()
+	return cam(self.p,"get_rotate");
+end
 
 --重置camera
 function Camera:reset()
@@ -70,6 +74,13 @@ end
 
 function Camera:rz(v)
 	cam(self.p,"rx",v);
+	self:refresh();
+end
+
+function Camera:set_rotate(rx,ry,rz)
+	cam(self.p,"rx",rx);
+	cam(self.p,"ry",ry);
+	cam(self.p,"rz",rz);
 	self:refresh();
 end
 

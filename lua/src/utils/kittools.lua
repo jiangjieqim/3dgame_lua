@@ -116,7 +116,7 @@ end
 
 
 local n;
-kit.keyLis = function()
+kit.keyLis = function(call)
     local function f_onkey(data)
         local key = tonumber(data);
         func_print(string.format(">>>>>>>>>>>>>>>>>>>>> key = %s", key));
@@ -138,6 +138,9 @@ kit.keyLis = function()
             core.print_info();
         elseif(key == core.KeyEvent.KEY_ESC)then
             core.exit();
+        end
+        if(call~=nil) then
+            call(key);
         end
     end
     evt_on(core.engine,core.ex_event.EVENT_ENGINE_KEYBOARD,f_onkey);

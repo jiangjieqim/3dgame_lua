@@ -134,7 +134,10 @@ core.KeyEvent = {
 	KEY_B = 98,
 	KEY_C = 99,
 	KEY_D = 100,
+	KEY_E = 101,
 	KEY_I = 105,
+	KEY_Q = 113,
+	KEY_W = 119,
 }
 
 ---²ÄÖÊ½Ó¿Ú
