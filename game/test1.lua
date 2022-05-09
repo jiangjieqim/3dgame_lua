@@ -17,7 +17,7 @@ require("ui")
 local core = core;
 core.init("//resource//texture//1"); 
 
-
+require("BauulAvatar");
 --print(string.format("version = [%s]",_VERSION));
 
 
@@ -111,45 +111,8 @@ function Main:init()
     core.cam:set_pos(0,-31.5,-41);
     core.cam:set_rotate(-math.pi/8,0,0);
 
-    local avatar = UnitBase:new();
-
-    -- if(avatar:get_p()==nil) then
-    --     func_error("1");
-    -- end
-
-    ---��ɫ
-    ---[[
-
-    avatar:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat",0.1); avatar:iAxis(math.pi/2,1,0,0);
-    --avatar:get_anim():pause();
-    local anim = avatar:get_anim();
-    -- print(">>>"..avatar:get_name());
-
-
-    anim:push("stand",0,39);
-    anim:push("run",40,45);
-    anim:push("jump",66,71);
-    anim:play("stand");
-
-
-    -- avatar:loadvbo("\\resource\\md2\\triangle.md2","\\resource\\material\\bauul2.mat",1.0); 
-    -- avatar:iAxis(math.pi/2,1,0,0);
-    -- local anim = avatar:get_anim();
-    -- print("total:"..anim:total());
-    -- anim:push("stand",1,4);
-    -- anim:play("stand");
-    -- anim:set_fps(3);
-
-    -- avatar:loadvbo("\\resource\\obj\\arrow.obj","\\resource\\material\\bauul.mat",2); 
-    core.meterial.setCullface(avatar:getMaterial(),GL.CULL_FACE_DISABLE);
-    -- print("total:",avatar:get_anim():total());
-    core.add(avatar);
-    -- print("get_pos:",avatar:get_pos());
-    --]]
-
-    -- dbg.breakHere();
-
-    local curR = 0;
+    local avatar = BauulAvatar:new();
+    
     local function onTouchClick(data)
         -- dbg.breakHere();
         -- p2 = p2*-1;
@@ -224,6 +187,9 @@ function Main:init()
             if(avatar:isMoving()) then
                 core.cam:refresh();
                 -- print("update...");
+                avatar:setStatus(BauulAvatar.EStatus.Run);
+            else
+                avatar:setStatus(BauulAvatar.EStatus.Stand);
             end
         end
 
@@ -244,7 +210,7 @@ function Main:init()
 
     local p1 = 0;
     local function bkey(key) 
-        -- print("***********"..key);
+        print("***********"..key);
         if(key == core.KeyEvent.KEY_Q) then
             -- p1 = p1 +  math.pi/8;
             -- core.cam:rz(p1);
@@ -255,13 +221,16 @@ function Main:init()
             -- core.cam:rz(p1);
         end
     end
-    kit.keyLis(bkey);
+    local function speckey(key)
+        print("speckey",key);
+        if(key == core.KeyEvent.GLUT_KEY_LEFT) then
+
+        elseif(key == core.KeyEvent.GLUT_KEY_RIGHT) then
+
+        end
+    end
+    kit.keyLis(bkey,speckey);
 end
 
 local main = Main:new();
 main:init();
-
---require("hey");
-
---main:print();
--- print(    main.nskin);

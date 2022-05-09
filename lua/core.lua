@@ -122,6 +122,9 @@ local ex_event = {
 
 	---刷新cam
 	EVENT_CAM_REFRESH = 114,
+
+	EVENT_ENGINE_SPEC_KEYBOARD = 115,--特殊键盘事件
+
 };
 core.KeyEvent = {
 	KEY_ESC = 27,
@@ -138,6 +141,16 @@ core.KeyEvent = {
 	KEY_I = 105,
 	KEY_Q = 113,
 	KEY_W = 119,
+
+	GLUT_KEY_LEFT		=	100,
+	GLUT_KEY_UP		=	101,
+	GLUT_KEY_RIGHT	=		102,
+	GLUT_KEY_DOWN	=		103,
+	GLUT_KEY_PAGE_UP=		104,
+	GLUT_KEY_PAGE_DOWN=		105,
+	GLUT_KEY_HOME		=	106,
+	GLUT_KEY_END		=	107,
+	GLUT_KEY_INSERT		=	108,
 }
 
 ---材质接口
@@ -758,9 +771,9 @@ local function f_get_ptr(ptr)
 	if(_type == "table") then
 		local tb = getmetatable(ptr);
 		
-		if(	tb == UnitBase or 
-			tb == NUnit	or
-			tb == LineNode
+		if(	
+			--tb == UnitBase or tb == NUnit	or tb == LineNode
+			ptr.p ~= nil
 		) then
 			ptr = ptr.p;
 		elseif tb == Button then

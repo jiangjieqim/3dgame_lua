@@ -116,7 +116,7 @@ end
 
 
 local n;
-kit.keyLis = function(call)
+kit.keyLis = function(call,f_onSpecKey)
     local function f_onkey(data)
         local key = tonumber(data);
         func_print(string.format(">>>>>>>>>>>>>>>>>>>>> key = %s", key));
@@ -145,9 +145,13 @@ kit.keyLis = function(call)
             print("call is nil!");
         end
     end
-    evt_on(core.engine,core.ex_event.EVENT_ENGINE_KEYBOARD,f_onkey);
+    local ex = core.engine;
+    evt_on(ex,core.ex_event.EVENT_ENGINE_KEYBOARD,f_onkey);
+    if(f_onSpecKey~=nil)then
+        evt_on(ex,core.ex_event.EVENT_ENGINE_SPEC_KEYBOARD,f_onSpecKey);
+    end
+    
 end
-
 
 --创建箭头
 local function f_craeteAxis(x,y,z)
