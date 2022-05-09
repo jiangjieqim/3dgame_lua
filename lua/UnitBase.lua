@@ -21,6 +21,7 @@ function UnitBase:new()
     local s = NUnit:new();
     setmetatable(s,UnitBase);
     print("UnitBase",s);
+    s._ismoving = false;
     return s;
 end
 
@@ -232,7 +233,7 @@ local function f_endCall(data,_self)
     -- self:get_anim():play("stand");
 
     evt_off(self:get_p(),core.ex_event.EVENT_ENGINE_COMPLETE,f_endCall);
-
+    self._ismoving = false;
     -- evt_dispatch(p,UnitBaseEvent,UnitBaseEndMsg);
    -- print("f_endCall::",data);
 end
@@ -258,10 +259,14 @@ function UnitBase:move(x,y,z,lookatTime,moveSpeed)
 	-- func_set_anim(self.p,"run");
     
     -- self:get_anim():play("run");
-    
+    self._ismoving = true; 
     evt_on(o,core.ex_event.EVENT_ENGINE_COMPLETE,f_endCall,self);
     
     print(core.get_time(),'distance*useTime:',distance,moveSpeed,self:get_p(),"cur x y z",px,py,pz);
     --- 移动到目标坐标
 	self:move_to(distance / moveSpeed*1000,x,y,z);
+end
+--是否在移动
+function UnitBase:isMoving()
+    return self._ismoving;
 end

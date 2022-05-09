@@ -4,9 +4,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "执行text.exe",
+            "label": "启动test.exe",
             "type": "shell",
-            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe -lua 1.lua",
+            // "command":"../3dgame_ev_1_0_0/debug/test.exe",
+            // "command":"echo ${env:path}",
+            // "command":"node buildlaunch.js",
             "problemMatcher": [
             ],
         },

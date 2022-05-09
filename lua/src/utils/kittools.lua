@@ -141,6 +141,8 @@ kit.keyLis = function(call)
         end
         if(call~=nil) then
             call(key);
+        else
+            print("call is nil!");
         end
     end
     evt_on(core.engine,core.ex_event.EVENT_ENGINE_KEYBOARD,f_onkey);

@@ -4,13 +4,27 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "type": "emmylua_attach",
-        //     "request": "attach",
-        //     "name": "Attach by process id",
-        //     "pid": 151744,
-        // },
-        
+        {
+            "name": "launch",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": false,//是否在入口断点
+
+            "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "runtimeArgs": "-lua game/test1.lua",
+            "consoleCoding": "utf8"
+        },
+    
+/*
+        {
+            "type": "emmylua_attach",
+            "request": "attach",
+            "name": "Attach by process id",
+            // "pid": "${env:EX_PID}",
+            "pid": 9796,
+            // "preLaunchTask": "启动test.exe"
+        },
+    
         {
             "type": "emmylua_new",
             "request": "launch",
@@ -22,7 +36,11 @@
                 ".lua.txt",
                 ".lua.bytes"
             ],
-            "ideConnectDebugger": true
-        }
+            "ideConnectDebugger": true,
+            // "preLaunchTask": "启动test.exe" 
+            
+            
+        },
+  */  
     ]
 }
