@@ -5,7 +5,7 @@
 --]]
 
 
---Ä£ÐÍÔ¤ÀÀ
+--Ä£ï¿½ï¿½Ô¤ï¿½ï¿½
 ModleShow = {
 	nskin,
 	fbo,
@@ -19,7 +19,7 @@ ModleShow = {
 ModleShow.__index = ModleShow;
 
 
---Ôö¼ÓÒ»¸ömd2äÖÈ¾¶ÔÏóµ½fbo¶ÔÏóÒýÓÃÖÐ
+--ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½md2ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½fboï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 local function addmd2_fbo(fbo)
 	local cam = fbo:get_cam3d();
 	-- cam = nil;
@@ -28,7 +28,7 @@ local function addmd2_fbo(fbo)
 
 	
 --[[
-	local n = UnitBase:new();--md2¼òÄ£
+	local n = UnitBase:new();--md2ï¿½ï¿½Ä£
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
 	local anim = n:get_anim();
@@ -57,7 +57,7 @@ local function addmd2_fbo(fbo)
 	--n:set_fps(30);
 	
 --[[
-	--¼ÓÔØÒ»¸övboÀàÐÍµÄOBJ
+	--ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½vboï¿½ï¿½ï¿½Íµï¿½OBJ
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\obj\\arrow.obj",
 	"//resource//material//horse.mat",cam);
@@ -109,7 +109,7 @@ local function btnClick(self)
 		print(
 			"type:"..n:get_type(),
 			anim:cur_frame().."/"..anim:total(),
-			"lua×ÜÄÚ´æÊý: "..collectgarbage("count").." kb"
+			"luaï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½: "..collectgarbage("count").." kb"
 			
 		);
 		
@@ -146,7 +146,7 @@ end
 local function f_set_rotate(progress,self)
 ----[[
 	if(self.u)then
-		self.u:rx(PI * progress);
+		self.u:rx(math.pi * progress);
 	end
 --]]
 
@@ -182,7 +182,7 @@ local function f_cpmlete(self)
 	
 	self.fbo = fbo;
 	
-	self.u = addmd2_fbo(fbo);--Ôö¼ÓÒ»¸övboÄ£ÐÍ
+	self.u = addmd2_fbo(fbo);--ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½vboÄ£ï¿½ï¿½
 	
 	local btn0 =skin:find("btn0");
 	btn0:bind_click(btnClick,self);
@@ -214,7 +214,7 @@ local function f_cpmlete(self)
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
-	--¹¹½¨Ò»¸ö²âÊÔÊ¹ÓÃµÄÏß¶Î
+	--ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½ß¶ï¿½
 	-- local line = LineNode:new(2);
 	-- line:push(0,0,0);
 	-- line:push(0,0,3);
@@ -222,7 +222,7 @@ local function f_cpmlete(self)
 	-- line:graphics_end();
 
 	local function f_bindRayClick(p)
-		local ptr,x,y,z = core.get_hit();--»ñÈ¡ÉäÏßµÄ½»µã×ø±ê
+		local ptr,x,y,z = core.get_hit();--ï¿½ï¿½È¡ï¿½ï¿½ï¿½ßµÄ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 		print('you call function: f_bindRayClick:',x,y,z);
 		
@@ -267,7 +267,7 @@ function ModleShow:new(editor)
 	f_cpmlete(self);
 	return self;
 end
---Ïú»ÙModelShow
+--ï¿½ï¿½ï¿½ï¿½ModelShow
 function ModleShow:dispose()
 	--print("ModleShow:show");
 	if(self.fbo) then

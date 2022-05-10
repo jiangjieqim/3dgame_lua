@@ -18,6 +18,7 @@ local core = core;
 core.init("//resource//texture//1"); 
 
 require("BauulAvatar");
+require("QuatDev");
 --print(string.format("version = [%s]",_VERSION));
 
 
@@ -35,6 +36,10 @@ function Main:new()
 
     -- obj.name = "This is myName";
     -- local mt = {init=obj.init,name = obj.name};
+    core.cam:set_pos(0,-31.5,-41);
+    core.cam:set_rotate(-math.pi/8,0,0);
+
+    
     return obj;
 end
 
@@ -53,27 +58,26 @@ function Main:init()
 
     core.setfps(20);
     --############################################################
-    --场景�??间添加一个box
     local box = UnitBase:new();
     box:loadvbo("\\resource\\obj\\box.obj","\\resource\\material\\bauul2.mat");
     core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
     core.meterial.setCullface(box:getMaterial(),GL.CULL_FACE_DISABLE);
     core.add(box);
 
-    local v = 0;
-    local p1;
-    -- local p2 = 1;
-    local function frender2()
-        --旋转
-        v=v + core.delayTime()/2048;
-        box:rotate_vec(v,0,1,0);
-        -- print(v);
-        if(v >= 8) then
-            core.clearTimeout(p1);
-        end
-    end
-    -- 
-    p1 = core.frameloop(1,frender2);
+    -- local v = 0;
+    -- local p1;
+    -- -- local p2 = 1;
+    -- local function frender2()
+    --     --旋转
+    --     v=v + core.delayTime()/2048;
+    --     box:rotate_vec(v,0,1,0);
+    --     -- print(v);
+    --     if(v >= 8) then
+    --         core.clearTimeout(p1);
+    --     end
+    -- end
+    -- -- 
+    -- p1 = core.frameloop(1,frender2);
     --############################################################
 
 
@@ -82,17 +86,31 @@ function Main:init()
     -- n:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat");
     -- core.add(n);
 
-    --horse  ?
+   
+
+
+
+
+
+
+
 
     local _plane = UnitBase:new();
     _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\horse.mat",100);
-    -- core.meterial.setCullface(_plane:getMaterial(),GL.CULL_FACE_DISABLE);
+    --_plane:disable_cullface();
+    -- _plane:drawPloygonLine(true);
     _plane:load_collide("\\resource\\obj\\plane.obj",true);
     -- n:reverse_face(true);
     -- n:load_collide("\\resource\\obj\\plane.obj",true);
     -- n:bindRayPick(f_bindRayClick);
-
     core.add(_plane);
+
+
+
+
+
+
+
     local v = 0;
     local dir = Vec3:new(1,1,0);
 
@@ -108,10 +126,10 @@ function Main:init()
     -- local DebugView = require("view/DebugView");
     -- local panel = DebugView:new();
 
-    core.cam:set_pos(0,-31.5,-41);
-    core.cam:set_rotate(-math.pi/8,0,0);
+    
 
-    local avatar = BauulAvatar:new();
+    local avatar = BauulAvatar:new(BauulAvatar.Res.Bauul);
+    avatar:addRotateBox();
     
     local function onTouchClick(data)
         -- dbg.breakHere();
@@ -147,10 +165,10 @@ function Main:init()
         --print("aaaaaaaaaa!!!!!");
     end
 
-    evt_on(_plane:get_p(),core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
+   evt_on(_plane:get_p(),core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
 
 
-
+    -- self:addPlane();
 
     -- print("init");
     -- print(self['init']);
@@ -162,8 +180,18 @@ function Main:init()
     local label1 =nskin:find("label1");
     btn:bind_click(function()
         -- print("fps:"..core.get_fps()..core.get_drawcall());
-        local x,y,z = core.cam:get_rotate();
-        print(math.random().." fps:"..core.get_fps()..core.get_drawcall()..">"..string.format("%s,%s,%s",x,y,z));
+        -- local x,y,z = core.cam:get_rotate();
+        -- print(math.random().." fps:"..core.get_fps()..core.get_drawcall()..">"..string.format("%s,%s,%s",x,y,z));
+        
+        -- _plane:disable_cullface();
+        -- if(_plane:is_visible()) then
+            -- _plane:visible(false);
+        -- else
+            -- _plane:visible(true);
+        -- end
+        -- core.cam:refresh();
+
+
         
     end);
     -- func_printTable(core);
@@ -197,18 +225,40 @@ function Main:init()
         label1:set_text(">"..string.format("fps:%s camPos %.2f,%.2f,%.2f camRotate %.2f,%.2f,%.2f %s",fps,
                         x,y,z,rx,ry,rz,s1));
         -- core.cam:refresh();
-
     end
+
+
     -- 
     core.frameloop(16.6,frenderUi);
+    local eg = self:quat();
+    local function scHandler(v)
+        --print(v);
+        -- v = v * 0.5;
+        local x, y, z,w=self:quat_slerp(0,1,0,	 0,0,1, v);
+        -- print(x, y, z,w);
+        
+        eg:mod(1,vec3_mult(x,y,z,20));
+    end
+    -- print("aa:",vec3_between(0,1,0  ,0,-0.6,1));
+    --求两个向量的叉乘
+    --切割向量
+    local qua = quatDev(0,1,0,0,0,1);
+    -- local qua = QuatDev:new(0,0,1,0,1,0);
 
+    -- qua:print();6
+
+
+
+    local sc=nskin:find('sc1');
+    sc:bindCallback(scHandler);
 
     -- local function frender3()
     --     core.cam:refresh();
     -- end
     -- core.frameloop(100,frender3);
 
-    local p1 = 0;
+
+    local curTheta = 0;
     local function bkey(key) 
         print("***********"..key);
         if(key == core.KeyEvent.KEY_Q) then
@@ -221,16 +271,82 @@ function Main:init()
             -- core.cam:rz(p1);
         end
     end
+
+
     local function speckey(key)
-        print("speckey",key);
-        if(key == core.KeyEvent.GLUT_KEY_LEFT) then
-
-        elseif(key == core.KeyEvent.GLUT_KEY_RIGHT) then
-
+        -- print("speckey",key);
+        
+        local ax = 0;
+        local ay = 1;
+        local az = 0;
+        local sx = 1;
+        local sy = 0;
+        local sz = 1;
+        local speed = math.pi/45;
+        local function update()
+            local x,y,z=vec3RotatePoint3d(curTheta,ax,ay,az,sx,sy,sz);
+            x,y,z = vec3_mult(x,y,z,10);
+            print(x,y,z);
+            box:set_position(x,y,z);
         end
+
+        if(key == core.KeyEvent.GLUT_KEY_LEFT) then
+            curTheta = curTheta +speed;
+            update();
+        elseif(key == core.KeyEvent.GLUT_KEY_RIGHT) then
+            curTheta = curTheta -speed;
+            update();
+        end
+        -- print('curTheta',curTheta);
     end
+
     kit.keyLis(bkey,speckey);
+    
+end
+
+function Main:quat()
+    local size = 20;
+    -- 	--旋转的向量
+	-- local tg = LineNode:new(2);
+	-- tg:setcolor(0,1,0);
+	-- tg:push(0,0,0);
+	-- tg:push(0,size,0);
+	-- tg:graphics_end();
+    -- core.add(tg);
+
+    --目标向量
+	local eg = LineNode:new(2);
+	eg:setcolor(0,1,1);
+	eg:push(0,0,0);
+	eg:push(0,size,0);
+	eg:graphics_end();
+    core.add(eg);
+    return eg;
+end
+
+function Main:quat_slerp(x0, y0, z0, x1, y1,z1, v)
+        local x2,y2,z2 =vec3_normal(x1,y1,z1);
+        -- eg:mod(1,x2,y2,z2);
+        
+--		mid:mod(1,0.707,-0.707,0);
+        -- local x3,y3,z3 = getMid(x0, y0, z0, x1, y1,z1);
+        -- x3,y3,z3=vec3_normal(x3,y3,z3);
+        
+        -- mid:mod(1,x3,y3,z3);--设置重点的坐标
+    return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
+end
+---地板
+function Main:addPlane()
+    local p = UnitBase:new();
+    local scale = 100;
+    p:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\bauul2.mat",scale);
+    p:set_position(0,-1,0);
+    -- core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
+    core.meterial.setCullface(p:getMaterial(),GL.CULL_FACE_DISABLE);
+    core.add(p);
+    -- core.cam:refresh();
 end
 
 local main = Main:new();
 main:init();
+-- main:quat();

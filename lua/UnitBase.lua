@@ -55,12 +55,13 @@ function UnitBase:get_anim()
     end
     return self.anim;
 end
---获取其材质句柄
-function UnitBase:getMaterial()
-    if(self.material == nil) then
-        func_error("self.material=nil!");
+
+---是否有动画
+function UnitBase:has_anim()
+    if(self.anim==nil) then
+        return false;
     end
-    return self.material;
+    return true;
 end
 
 -- --加载材质
@@ -224,7 +225,7 @@ end
 local function f_endCall(data,_self)
     --- @type UnitBase
     local self = _self;
-    print(core.get_time(),"f_endCall",self:get_p(),"name:",data);
+    -- print(core.get_time(),"f_endCall",self:get_p(),"name:",data);
 
     -- local p = core.find_name(self:get_p());
 --    local u = allUnits[data];
@@ -247,10 +248,12 @@ function UnitBase:move(x,y,z,lookatTime,moveSpeed)
     local o = self:get_p();
 
 	local px,py,pz = self:get_pos();--func_get_xyz(o);
-	
+
+    -- print(self:get_name());
+
 	y = py;
 	--print(self.offset_y);
-	local distance = vec_distance(px,py,pz,x,y,z);--求其平面距离
+	local distance = vec3_distance(px,py,pz,x,y,z);--求其平面距离
 	-- print('distance:',distance);
     
     self:look_at(x,y,z,lookatTime);--转向目标坐标
@@ -262,7 +265,7 @@ function UnitBase:move(x,y,z,lookatTime,moveSpeed)
     self._ismoving = true; 
     evt_on(o,core.ex_event.EVENT_ENGINE_COMPLETE,f_endCall,self);
     
-    print(core.get_time(),'distance*useTime:',distance,moveSpeed,self:get_p(),"cur x y z",px,py,pz);
+--    print(core.get_time(),'distance*useTime:',distance,moveSpeed,self:get_p(),"cur x y z",px,py,pz);
     --- 移动到目标坐标
 	self:move_to(distance / moveSpeed*1000,x,y,z);
 end

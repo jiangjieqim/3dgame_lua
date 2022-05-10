@@ -110,6 +110,30 @@ end
 function NUnit:reverse_face(v)
 	self:f_set_flag(FLAGS_REVERSE_FACE,v);
 end
+--获取其材质句柄
+function NUnit:getMaterial()
+    if(self.material == nil) then
+        func_error("self.material=nil!");
+    end
+    return self.material;
+end
+---取消剔除背面
+function NUnit:disable_cullface()
+	core.meterial.setCullface(self:getMaterial(),GL.CULL_FACE_DISABLE);
+end
+
+---设置为线框渲染
+function NUnit:drawPloygonLine(v)
+	local m = self:getMaterial();
+	local value;
+	if(v == true) then
+		value = GL.GL_LINE;
+	else
+		value = GL.GL_FILL;
+	end
+	core.meterial.setPolyMode(self:getMaterial(),value);
+end
+
 
 --背面剔除
 -- function NUnit:cullFace(v)
@@ -153,7 +177,8 @@ end
 
 --获取其x,y,z坐标
 function NUnit:get_pos()
-	return get_attr(self.p,"xyz");
+	local x,y,z =  get_attr(self.p,"xyz");
+	return x,y,z;
 end
 
 --绕自定义轴旋转r欧拉角
