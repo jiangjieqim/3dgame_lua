@@ -106,7 +106,7 @@ local ex_event = {
 
 	---* 计时器evtid=21
     ---* 该计时器从C内核层evt_dispatch过来的事件,我们只在Lua模块这边做监听.
-	TIMER = 201,
+	EVENT_TIMER = 201,
 
 	---引擎渲染回调,每一帧调用一次
 	EVENT_ENGINE_RENDER_3D =100,
@@ -704,9 +704,9 @@ function m.setTimeout(ms,callback,param,repeat1)
 	local timer = timelater_new(ms);
 	local o = {t=timer,c=callback,p=param,_repeat=repeat1};
 	if(repeat1 == true) then
-		evt_on(timer,core.ex_event.TIMER,f_time,o);
+		evt_on(timer,core.ex_event.EVENT_TIMER,f_time,o);
 	else
-		evt_once(timer,core.ex_event.TIMER,f_time,o);
+		evt_once(timer,core.ex_event.EVENT_TIMER,f_time,o);
 	end
 	return o;
 end
@@ -737,7 +737,7 @@ function m.clearTimeout(o)
 		o.t = nil;
 	end
 	if(o.c~=nil) then
-		evt_off(o.t,core.ex_event.TIMER,o.c);
+		evt_off(o.t,core.ex_event.EVENT_TIMER,o.c);
 		o.c = nil;
 	end
 	if(o._repeat~=nil) then

@@ -15,7 +15,10 @@ end
 require("core");
 require("ui")
 local core = core;
+
 core.init("//resource//texture//1"); 
+
+local cam = core.cam;
 
 require("BauulAvatar");
 require("QuatDev");
@@ -36,8 +39,8 @@ function Main:new()
 
     -- obj.name = "This is myName";
     -- local mt = {init=obj.init,name = obj.name};
-    core.cam:set_pos(0,-31.5,-41);
-    core.cam:set_rotate(-math.pi/8,0,0);
+    cam:set_pos(0,-31.5,-41);
+    cam:set_rotate(-math.pi/8,0,0);
 
     
     return obj;
@@ -81,7 +84,7 @@ function Main:init()
     --############################################################
 
 
-    -- core.cam:rx(math.pi/2);
+    -- cam:rx(math.pi/2);
     -- local n = UnitBase:new();
     -- n:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat");
     -- core.add(n);
@@ -131,6 +134,8 @@ function Main:init()
     local avatar = BauulAvatar:new(BauulAvatar.Res.Bauul);
     avatar:addRotateBox();
     
+    cam:setParent(avatar);
+
     local function onTouchClick(data)
         -- dbg.breakHere();
         -- p2 = p2*-1;
@@ -149,10 +154,10 @@ function Main:init()
         
         if(avatar) then
             avatar:move(x,y,z,0,10);
-            -- core.cam:set_pos(0-x,-31.5-y,-41-z);
+            -- cam:set_pos(0-x,-31.5-y,-41-z);
             
             -- core.setTimeout(1000,function ()
-            --     core.cam:refresh();
+            --     cam:refresh();
             --     end)
         end
 
@@ -180,7 +185,7 @@ function Main:init()
     local label1 =nskin:find("label1");
     btn:bind_click(function()
         -- print("fps:"..core.get_fps()..core.get_drawcall());
-        -- local x,y,z = core.cam:get_rotate();
+        -- local x,y,z = cam:get_rotate();
         -- print(math.random().." fps:"..core.get_fps()..core.get_drawcall()..">"..string.format("%s,%s,%s",x,y,z));
         
         -- _plane:disable_cullface();
@@ -189,7 +194,7 @@ function Main:init()
         -- else
             -- _plane:visible(true);
         -- end
-        -- core.cam:refresh();
+        -- cam:refresh();
 
 
         
@@ -197,23 +202,23 @@ function Main:init()
     -- func_printTable(core);
 
     local function frenderUi()
-        local x,y,z = core.cam:get_pos();
-        local rx,ry,rz = core.cam:get_rotate();
+        local x,y,z = cam:get_pos();
+        local rx,ry,rz = cam:get_rotate();
         local s1 = "";
         local fps = core.get_fps();
         if(avatar) then
             local px,py,pz = avatar:get_pos();
             s1 = string.format("avatarPos %.2f,%.2f,%.2f",px,py,pz);
-            -- core.cam:set_pos(0-px,-31.5-py,-41-pz);
+            -- cam:set_pos(0-px,-31.5-py,-41-pz);
         -- core.setTimeout(1000,function ()
-        --     core.cam:refresh();
+        --     cam:refresh();
         -- end)
             -- setv(avatar.p,FLAGS_BASE_IS_MOVEING);
             -- print(avatar.p);
             -- print(avatar:is_moving());
             -- print(avatar:isMoving());
             if(avatar:isMoving()) then
-                core.cam:refresh();
+                cam:refresh();
                 -- print("update...");
                 avatar:setStatus(BauulAvatar.EStatus.Run);
             else
@@ -224,7 +229,7 @@ function Main:init()
         -- print();
         label1:set_text(">"..string.format("fps:%s camPos %.2f,%.2f,%.2f camRotate %.2f,%.2f,%.2f %s",fps,
                         x,y,z,rx,ry,rz,s1));
-        -- core.cam:refresh();
+        -- cam:refresh();
     end
 
 
@@ -253,7 +258,7 @@ function Main:init()
     sc:bindCallback(scHandler);
 
     -- local function frender3()
-    --     core.cam:refresh();
+    --     cam:refresh();
     -- end
     -- core.frameloop(100,frender3);
 
@@ -263,12 +268,12 @@ function Main:init()
         print("***********"..key);
         if(key == core.KeyEvent.KEY_Q) then
             -- p1 = p1 +  math.pi/8;
-            -- core.cam:rz(p1);
-            -- core.cam:refresh();
+            -- cam:rz(p1);
+            -- cam:refresh();
 
         elseif(key == core.KeyEvent.KEY_W) then
             -- p1 = p1 -  math.pi/8;
-            -- core.cam:rz(p1);
+            -- cam:rz(p1);
         end
     end
 
@@ -344,7 +349,7 @@ function Main:addPlane()
     -- core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
     core.meterial.setCullface(p:getMaterial(),GL.CULL_FACE_DISABLE);
     core.add(p);
-    -- core.cam:refresh();
+    -- cam:refresh();
 end
 
 local main = Main:new();

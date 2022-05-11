@@ -78,7 +78,7 @@ function FpsView:show(cam,x,y,formatstr)
 	--增加计时器
 	if(self.timer==nil) then
 		self.timer = timelater_new(250);
-		evt_on(self.timer,core.ex_event.TIMER,f_fps_timer,self);
+		evt_on(self.timer,core.ex_event.EVENT_TIMER,f_fps_timer,self);
 	end	
 --]]
 end
@@ -92,7 +92,7 @@ function FpsView:hide()
 		self.label:visible(false);
 	end
 	if(self.timer) then
-		evt_off(self.timer,core.ex_event.TIMER,f_fps_timer);
+		evt_off(self.timer,core.ex_event.EVENT_TIMER,f_fps_timer);
 		self.timer = nil;
 	end
 end

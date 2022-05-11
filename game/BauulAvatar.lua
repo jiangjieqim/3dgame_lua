@@ -1,4 +1,4 @@
-
+---@class BauulAvatar : UnitBase
 BauulAvatar = {
 
 }
@@ -123,13 +123,14 @@ function BauulAvatar:addRotateBox()
     local distance = 2.5;--距离圆心的距离
     local speed = math.pi/45;
     local curTheta = 0;
-
+    box:setParent(self);
+    
     local function loopfrender()
         curTheta = curTheta +speed;
         local x,y,z=vec3RotatePoint3d(curTheta,ax,ay,az,sx,sy,sz);
         x,y,z = vec3_mult(x,y,z,distance);
-        local tx,ty,tz = self:get_pos();
-        box:set_position(tx+x,ty+y,tz+z);
+        -- local tx,ty,tz = self:get_pos();
+        box:set_position(x,y,z);
     end
     p1 = core.frameloop(1000/30,loopfrender);
     -- core.clearTimeout(p1);

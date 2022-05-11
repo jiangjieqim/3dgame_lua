@@ -239,3 +239,7 @@ end
 function NUnit:changeFlag(flag)
 	f_changeFlags(self.p,flag);
 end
+
+function NUnit:setParent(v)
+	setParent(self.p,v.p);
+end

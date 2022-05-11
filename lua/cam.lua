@@ -93,3 +93,12 @@ end
 function Camera:bind(o)
 	func_error("未实现!Camera:bind(o)");
 end
+
+---设置父对象  
+---v:继承自struct HeadInfo*的对象
+function Camera:setParent(v)
+	if(v.p == nil)then
+		func_error("check v.p!");
+	end
+	cam(self.p,"cam_setParent",v.p);
+end
