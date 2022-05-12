@@ -1248,3 +1248,12 @@ function core.parse9GridTex(_tmat,sw,sh,icon,left,right,top,bottom)
 	shader_updateVal(_tmat,"sx",sw/w);
     shader_updateVal(_tmat,"sy",sh/h);
 end
+
+---上传shader数据
+function core.shaderUpdateParam(m,...)
+	local arr = {...};
+	local n = #arr;
+	for i = 1,n,2 do
+		shader_updateVal(m,arr[i],arr[i+1]);
+	end
+end
