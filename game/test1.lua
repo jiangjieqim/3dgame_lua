@@ -33,14 +33,14 @@ local Main = {
 Main.__index = Main;
 function Main:new()
     local obj = {
-        
+        box,
     };
     setmetatable(obj, Main);
 
     -- obj.name = "This is myName";
     -- local mt = {init=obj.init,name = obj.name};
-    cam:set_pos(0,-31.5,-41);
-    cam:set_rotate(-math.pi/8,0,0);
+    -- cam:set_pos(0,-31.5,-41);
+    -- cam:set_rotate(-math.pi/8,0,0);
 
     
     return obj;
@@ -61,11 +61,39 @@ function Main:init()
 
     core.setfps(20);
     --############################################################
-    local box = UnitBase:new();
-    box:loadvbo("\\resource\\obj\\box.obj","\\resource\\material\\bauul2.mat");
-    core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
-    core.meterial.setCullface(box:getMaterial(),GL.CULL_FACE_DISABLE);
-    core.add(box);
+    -- local box = UnitBase:new();
+    -- box:loadvbo("\\resource\\obj\\teapot.obj","\\resource\\material\\bauul2.mat");
+    -- core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
+    -- core.meterial.setCullface(box:getMaterial(),GL.CULL_FACE_DISABLE);
+    -- core.add(box);
+    local box = BauulAvatar:new();
+    box:init(BauulAvatar.Res.Teapot,{x=3,z=0,y=0,scale=2.0})
+    box:setColor(1);
+    print("box.p",box.p,tostring(box));
+
+    local avatar= BauulAvatar:new();
+    avatar:init(BauulAvatar.Res.Box);
+    print("box.p",box.p,tostring(box));
+    cam:setTarget(box);
+
+
+--[[
+    local mat = "\\resource\\material\\shape.mat";
+    local n = UnitBase:new();
+    n:loadvbo("\\resource\\obj\\torus1.obj",mat);--teapot   torus
+    print("n.p",n.p,tostring(n));
+    local n1 = UnitBase:new();
+    n1:loadvbo("\\resource\\obj\\torus1.obj",mat);--teapot   torus
+    -- line = true;
+    print("n1.p",n1.p,tostring(n1));
+    print("n.p",n.p,tostring(n));
+    core.add(n);
+    core.add(n1);
+]]
+
+    -- self.box:setColor(1,0,0);
+    -- local boxName = self.box:get_name();
+    -- print("name:",boxName);-- 3茶壶
 
     -- local v = 0;
     -- local p1;
@@ -100,7 +128,7 @@ function Main:init()
 
     local _plane = UnitBase:new();
     _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\horse.mat",100);
-    --_plane:disable_cullface();
+    -- _plane:double_face();
     -- _plane:drawPloygonLine(true);
     _plane:load_collide("\\resource\\obj\\plane.obj",true);
     -- n:reverse_face(true);
@@ -131,17 +159,21 @@ function Main:init()
 
     
 
-    local avatar = BauulAvatar:new(BauulAvatar.Res.Bauul);
-    avatar:addRotateBox();
+    -- local config = avatar:addRotateBox();
     
-    cam:setParent(avatar);
+    -- box:setParent(avatar);
+    -- cam:setParent(avatar);
+
+    -- local target = BauulAvatar:new(BauulAvatar.Res.Box,{x=5,y=0,z=5});
+    -- local name = target:get_name();
+    -- print(name);
 
     local function onTouchClick(data)
         -- dbg.breakHere();
         -- p2 = p2*-1;
         -- print("dasdahdjkashkj");
 
-        if(avatar:p_isNil())then
+        if(avatar~=nil and avatar:p_isNil())then
             print("avatar is not initialized!");
             return;
         end
@@ -153,7 +185,8 @@ function Main:init()
     --    print(x,y,z);
         
         if(avatar) then
-            avatar:move(x,y,z,0,10);
+            -- avatar:move(x,y,z,0,10);
+
             -- cam:set_pos(0-x,-31.5-y,-41-z);
             
             -- core.setTimeout(1000,function ()
@@ -188,7 +221,6 @@ function Main:init()
         -- local x,y,z = cam:get_rotate();
         -- print(math.random().." fps:"..core.get_fps()..core.get_drawcall()..">"..string.format("%s,%s,%s",x,y,z));
         
-        -- _plane:disable_cullface();
         -- if(_plane:is_visible()) then
             -- _plane:visible(false);
         -- else
@@ -227,7 +259,7 @@ function Main:init()
         end
 
         -- print();
-        label1:set_text(">"..string.format("fps:%s camPos %.2f,%.2f,%.2f camRotate %.2f,%.2f,%.2f %s",fps,
+        label1:set_text(">"..string.format("fps:%scamPos %.2f,%.2f,%.2f camRotate %.2f,%.2f,%.2f %s",fps,
                         x,y,z,rx,ry,rz,s1));
         -- cam:refresh();
     end
@@ -239,10 +271,12 @@ function Main:init()
     local function scHandler(v)
         --print(v);
         -- v = v * 0.5;
-        local x, y, z,w=self:quat_slerp(0,1,0,	 0,0,1, v);
+        -- local x, y, z,w=self:quat_slerp(0,1,0,	 0,0,1, v);
         -- print(x, y, z,w);
         
-        eg:mod(1,vec3_mult(x,y,z,20));
+        -- eg:mod(1,vec3_mult(x,y,z,20));
+
+        -- cam:set_rotate(0,math.pi  * v * 2,0);
     end
     -- print("aa:",vec3_between(0,1,0  ,0,-0.6,1));
     --求两个向量的叉乘
@@ -277,33 +311,68 @@ function Main:init()
         end
     end
 
-
-    local function speckey(key)
-        -- print("speckey",key);
-        
+    cam:set_rotate(-math.pi/8,0,0);
+    cam:set_pos(0,-40,-40);
+    local speed = math.pi/180;
+    local function update()
         local ax = 0;
         local ay = 1;
         local az = 0;
         local sx = 1;
         local sy = 0;
         local sz = 1;
-        local speed = math.pi/45;
-        local function update()
-            local x,y,z=vec3RotatePoint3d(curTheta,ax,ay,az,sx,sy,sz);
-            x,y,z = vec3_mult(x,y,z,10);
-            print(x,y,z);
-            box:set_position(x,y,z);
-        end
+        local x,y,z=vec3RotatePoint3d(curTheta,ax,ay,az,sx,sy,sz);            
+        x,y,z = vec3_mult(x,y,z,5);
+
+        -- x =  0 ;y = 0;z =0;
+        -- x = math.sin(curTheta) * 5;
+        -- y = x;
+
+
+
+        -- -- y = y+5;
+        -- -- cam:set_pos(0,-31.5,-41);
+        -- cam:set_pos(x,y-10,z);
+        
+        box:set_position(x,0,z);
+
+        -- -- local cx,cy,cz = avatar:get_pos();
+        -- box:look_at(0,0,0);
+        -- -- box:rz(math.pi/4);
+        -- print(x,y,z,string.format("%.2f",box:get_angle()/math.pi));
+
+        -- -math.pi/8
+        -- cam:set_rotate(0,-box:get_angle(),0);
+        --   x,y,z = vec3_mult(x,y,z,10);
+
+        -- print(x,y,z);
+        -- cam:set_pos(0,-31.5,-41);
+        -- cam:set_pos(x,y-10,z);
+        -- cam:set_rotate(-math.pi/8,0,0);
+        cam:refresh();
+    end
+    local function speckey(key)
+        -- print("speckey",key);
+        
+   
+     
 
         if(key == core.KeyEvent.GLUT_KEY_LEFT) then
             curTheta = curTheta +speed;
             update();
+
         elseif(key == core.KeyEvent.GLUT_KEY_RIGHT) then
             curTheta = curTheta -speed;
             update();
         end
-        -- print('curTheta',curTheta);
+        
     end
+    -- local function onLookAtEvt()
+    --     curTheta = curTheta +speed;
+    --     update();
+    -- end
+    -- core.frameloop(16.6,onLookAtEvt);
+
 
     kit.keyLis(bkey,speckey);
     

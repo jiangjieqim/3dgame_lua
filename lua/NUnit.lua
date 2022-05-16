@@ -47,12 +47,13 @@ NUnit = {
 };
 NUnit.__index = NUnit;
 
+--- s.p 节点引用地址
 function NUnit:new()
-	local self = {p=nil};
-	setmetatable(self, NUnit);
-	print("NUnit",self);
+	local s = {};
+	setmetatable(s, NUnit);
+	print("NUnit",s);
 
-	return self;
+	return s;
 end
 function NUnit:setRenderList(_list)
 	--func_error("未实现setRenderList()接口.");
@@ -117,8 +118,8 @@ function NUnit:getMaterial()
     end
     return self.material;
 end
----取消剔除背面
-function NUnit:disable_cullface()
+---双面显示(取消剔除背面)
+function NUnit:double_face()
 	core.meterial.setCullface(self:getMaterial(),GL.CULL_FACE_DISABLE);
 end
 

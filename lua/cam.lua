@@ -102,3 +102,10 @@ function Camera:setParent(v)
 	end
 	cam(self.p,"cam_setParent",v.p);
 end
+---设置target对象
+function Camera:setTarget(v)
+	if(v.p == nil)then
+		func_error("check v.p!");
+	end
+	cam(self.p,"cam_setTarget",v.p);
+end
