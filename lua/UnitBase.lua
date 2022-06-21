@@ -11,7 +11,9 @@ UnitBase = {
     -- anim,--动作管理器句柄
     -- material,--材质句柄
     -- ptrCollide,--碰撞盒对象引用,struct CollideBox* ptrCollide
- 
+    --**********************************************************
+    -- moveEnd 移动结束回调
+    -- moveX,moveY,moveZ :move目的坐标
     };
 UnitBase.__index = UnitBase;
 
@@ -42,10 +44,10 @@ local function f_setCam(self)
     self:setCam(core.cam:get_p());
 end
 
-local function loadmat(_self,url)
-    _self.material = func_load_material(url);
-	return _self.material;
-end
+-- local function loadmat(_self,url)
+--     _self.material = func_load_material(url);
+-- 	return _self.material;
+-- end
 
 --动作管理器句柄
 ---@type Animator
@@ -114,12 +116,23 @@ function UnitBase:push_material(material)
 end
 
 --加载VBO模型,会赋值材质
+--如果maturl是string就是一个链接
+--如果maturl是number就是一个材质句柄
 function UnitBase:loadvbo(url,maturl,_scale)
     local m = core.load(url);
-    if(maturl)then
-        local material = loadmat(self,maturl); --self:load_material(maturl);
-        core.meterial.set(m,material);
+    local ctype = type(maturl);
+    if(ctype == "string")then
+        self.material = func_load_material(maturl);
+        --local material = loadmat(self,maturl); --self:load_material(maturl);
+        --core.meterial.set(m,material);
+    elseif(ctype == "number") then
+        self.material = maturl;
     end
+    
+    if(self.material~=nil)then
+        core.meterial.set(m,self.material);
+    end
+
     self.p = m;
     self:visible(true);
     local suffix = core.get_suffix(url);
@@ -174,7 +187,6 @@ end
 --     -- _line:dispose();
 --     return _line;
 -- end
-
 
 local function drawByVertex(p,x,y,z,scale)
     local ver,len = get_collideVer(p);
@@ -236,19 +248,27 @@ local function f_endCall(data,_self)
     evt_off(self:get_p(),core.ex_event.EVENT_ENGINE_COMPLETE,f_endCall);
     self._ismoving = false;
     -- evt_dispatch(p,UnitBaseEvent,UnitBaseEndMsg);
-   -- print("f_endCall::",data);
+    self:set_position(self.moveX,self.moveY,self.moveZ);
+
+    -- print("f_endCall::",self:get_pos());
+    
+    if(self.moveEnd~=nil) then
+        self.moveEnd();
+    end
 end
 ---@param lookatTime lookat需要的时间毫秒  
 ---@param moveSpeed 移动的速度.1秒移动的像素距离
-function UnitBase:move(x,y,z,lookatTime,moveSpeed)
+function UnitBase:move(x,y,z,lookatTime,moveSpeed,moveEnd)
     --print(x,y,z);
     x = tonumber(x);
     y = tonumber(y);
     z = tonumber(z);
     local o = self:get_p();
-
+    self.moveEnd = moveEnd;
 	local px,py,pz = self:get_pos();--func_get_xyz(o);
-
+    self.moveX = x;
+    self.moveY = y;
+    self.moveZ = z;
     -- print(self:get_name());
 
 	y = py;

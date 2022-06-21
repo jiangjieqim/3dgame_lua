@@ -28,10 +28,10 @@ function BauulAvatar:new()
 end
 --- 注意:在new里面不要使用self对象
 --- 用外部对象调用init对象
-function BauulAvatar:init(res,p)
-    self:create(res or BauulAvatar.Res.Box);
+function BauulAvatar:init(p)
     -- self:addRotateBox();
     if(p~=nil) then
+        self:create(p.res or BauulAvatar.Res.Box);
         self:set_position(p.x or 0,p.y or 0,p.z or 0);
         self:scale(p.scale or 1);
     end

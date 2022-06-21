@@ -5,7 +5,7 @@
 --]]
 
 
---ģ��Ԥ��
+--??????
 ModleShow = {
 	nskin,
 	fbo,
@@ -19,7 +19,7 @@ ModleShow = {
 ModleShow.__index = ModleShow;
 
 
---����һ��md2��Ⱦ����fbo����������
+--???????md2???????fbo??????????
 local function addmd2_fbo(fbo)
 	local cam = fbo:get_cam3d();
 	-- cam = nil;
@@ -28,7 +28,7 @@ local function addmd2_fbo(fbo)
 
 	
 --[[
-	local n = UnitBase:new();--md2��ģ
+	local n = UnitBase:new();--md2???
 	n:loadvbo("\\resource\\md2\\triangle.md2","//resource//material//bauul.mat",cam);
 	n:set_position(0,0,-2);
 	local anim = n:get_anim();
@@ -57,7 +57,7 @@ local function addmd2_fbo(fbo)
 	--n:set_fps(30);
 	
 --[[
-	--����һ��vbo���͵�OBJ
+	--???????vbo?????OBJ
 	local n = UnitBase:new();
 	n:loadvbo("\\resource\\obj\\arrow.obj",
 	"//resource//material//horse.mat",cam);
@@ -109,7 +109,7 @@ local function btnClick(self)
 		print(
 			"type:"..n:get_type(),
 			anim:cur_frame().."/"..anim:total(),
-			"lua���ڴ���: "..collectgarbage("count").." kb"
+			"lua???????: "..collectgarbage("count").." kb"
 			
 		);
 		
@@ -182,7 +182,7 @@ local function f_cpmlete(self)
 	
 	self.fbo = fbo;
 	
-	self.u = addmd2_fbo(fbo);--����һ��vboģ��
+	self.u = addmd2_fbo(fbo);--???????vbo???
 	
 	local btn0 =skin:find("btn0");
 	btn0:bind_click(btnClick,self);
@@ -214,7 +214,7 @@ local function f_cpmlete(self)
 	local rotate = skin:find("rotate");
 	rotate:bindCallback(f_set_rotate,self);
 
-	--����һ������ʹ�õ��߶�
+	--??????????????????
 	-- local line = LineNode:new(2);
 	-- line:push(0,0,0);
 	-- line:push(0,0,3);
@@ -222,7 +222,7 @@ local function f_cpmlete(self)
 	-- line:graphics_end();
 
 	local function f_bindRayClick(p)
-		local ptr,x,y,z = core.get_hit();--��ȡ���ߵĽ�������
+		local ptr,x,y,z = core.get_hit();--???????????????
 
 		print('you call function: f_bindRayClick:',x,y,z);
 		
@@ -267,7 +267,7 @@ function ModleShow:new(editor)
 	f_cpmlete(self);
 	return self;
 end
---����ModelShow
+--????ModelShow
 function ModleShow:dispose()
 	--print("ModleShow:show");
 	if(self.fbo) then

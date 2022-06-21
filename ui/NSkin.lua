@@ -345,7 +345,19 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		nb:setname(name);
 		child = nb;
 	elseif(_type == "NListBox")then
-		local nb = NListBox:new();	
+		local nb = NListBox:new();
+		local v =  xml_get_str(node,"value");
+		-- print(v);
+		local ls = func_split(tostring(v),",");
+		--print("["..tostring(v).."]"..#ls);
+		local _len = #ls;
+		local n;
+		for n = 0,_len-1 do
+			-- print(ls[n+1].."**");
+			-- listbox_add(lb,ls[n+1]);
+			nb:addItem(ls[n+1]);
+		end
+
 		nb:setname(name);
 		child = nb;
 	end

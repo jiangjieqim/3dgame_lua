@@ -1,3 +1,4 @@
+local core = core;
 ------------------------------------------------------
 --切换状态
 --返回true or false
@@ -108,8 +109,16 @@ function NUnit:f_set_flag(flag,v)
 end
 
 --反转面渲染
-function NUnit:reverse_face(v)
-	self:f_set_flag(FLAGS_REVERSE_FACE,v);
+function NUnit:reverse_face()
+	local m = self:getMaterial();
+	local type = core.meterial.tmat_get_cullface(m);
+	if(type == GL.CULL_FACE_DISABLE) then
+		func_error("type = " .. type.." don`t use CULL_FACE_DISABLE!");
+	elseif(type == GL.CULL_FACE_BACK) then
+		core.meterial.setCullface(m,GL.CULL_FACE_FRONT);
+	elseif(type == GL.CULL_FACE_FRONT)then
+		core.meterial.setCullface(m,GL.CULL_FACE_BACK);
+	end
 end
 --获取其材质句柄
 function NUnit:getMaterial()

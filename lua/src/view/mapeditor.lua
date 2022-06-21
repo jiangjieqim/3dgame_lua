@@ -1,8 +1,8 @@
 MapEditor = {};
 MapEditor.__index = MapEditor;
----Ôö¼ÓÒ»¸öfpsÏÔÊ¾title
+---ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½fpsï¿½ï¿½Ê¾title
 local function f_showfps(cam)
-	core.setfps(12);--24
+	core.setFps(12);--24
 	---@type FpsView
 	local fps = core.plugin:load("view/FpsView");
 	fps:show(cam);
@@ -14,7 +14,7 @@ end
 local function f_init(self)
     local sw,sh = core.screen_size();
     -- print(sh/2);
-    ---xÖáÆ«ÒÆ
+    ---xï¿½ï¿½Æ«ï¿½ï¿½
     local offsetx = 100;
 
     local h = sh - 1;
@@ -27,14 +27,14 @@ local function f_init(self)
     renderfbo:mouseEnable(true);
     renderfbo:set_pos(h+offsetx+1,0);
 
-    ---ÉèÖÃ½á¹¹ÌåÊý¾Ý
+    ---ï¿½ï¿½ï¿½Ã½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     self.editorfbo = editorfbo;
     self.renderfbo = renderfbo;
 
     return self;
 end
 
----¾²Ì¬º¯Êý,¼ÓÔØÒ»¸ö²âÊÔÄ£ÐÍ
+---ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
 function MapEditor:LoadModel()
     local url="\\resource\\md2\\triangle.md2";--bauul,triangle
 	local mat = "//resource//material//bauul.mat";
@@ -47,8 +47,8 @@ function MapEditor:LoadModel()
 	_model:load_collide('\\resource\\obj\\box.obj',true);
     return _model;
 end
----¾²Ì¬º¯Êý,¼ÓÔØÒ»¸ö²âÊÔµÄ2dSprite½çÃæ
----@param cam µ±Ç°µÄcam¾ä±ú
+---ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½2dSpriteï¿½ï¿½ï¿½ï¿½
+---@param cam ï¿½ï¿½Ç°ï¿½ï¿½camï¿½ï¿½ï¿½
 function MapEditor:Add_img(cam,x,y,w,h)
     -- body
     local url = "smallbtn.png";
@@ -65,7 +65,7 @@ function MapEditor:Add_img(cam,x,y,w,h)
     return _img;
 end
 
----µØÍ¼±à¼­Æ÷
+---ï¿½ï¿½Í¼ï¿½à¼­ï¿½ï¿½
 function MapEditor:new()
     local me = {};
     setmetatable(me, MapEditor);

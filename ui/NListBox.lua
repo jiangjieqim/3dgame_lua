@@ -143,8 +143,9 @@ function NListBox:new(x,y,size,w)
 	--local w,h = label:get_size();
 	
 	--print(w,h);
-	
+	---@class Shape
 	local bg = Shape:new(w,h);
+	bg:setcolor(0,0,0);
 	bg:set_pos(x,y);
 	self.bg = bg;
 	bg:mouseEnable(true);
@@ -157,6 +158,7 @@ function NListBox:new(x,y,size,w)
 	return self;
 end
 
+--添加一个列表中的node
 function NListBox:addItem(str)
 	local list = self;
 	if(list.data==nil)then
@@ -173,6 +175,7 @@ function NListBox:dispose()
 	bg:dispose();
 	func_clearTableItem(self);
 end
+--绑定回调函数
 --p:参数
 function NListBox:bind(func,p)
 	self.callBack = func;

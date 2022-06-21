@@ -33,7 +33,7 @@ e1:showfps();
 --]]
 
 local function test1()
-    core.setfps(30);
+    core.setFps(30);
 
     local function f_showFBO(w,h)
         local url="\\resource\\md2\\bauul.md2";--bauul,triangle

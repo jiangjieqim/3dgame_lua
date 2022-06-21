@@ -370,8 +370,11 @@ function ScrollView:dispose()
 end
 
 ---案例1
+---fbotex.ps 着色器用来关闭透明通道
 function ScrollViewCase1(offsetx,offsety)
 	
+	local itemW = 90;
+
 	--节点销毁回调
 	local function f_dispose(node)
 		if(node.tf) then
@@ -390,7 +393,7 @@ function ScrollViewCase1(offsetx,offsety)
 	local function f_create(renderlist)
 		local x = 0;
 		local y = 0;
-		local w = 90;
+		local w = itemW;--item宽度
 		local h = 30;
 		local url = "smallbtn.png";
 		
@@ -434,7 +437,7 @@ function ScrollViewCase1(offsetx,offsety)
 	end
 	--###############################################
 	---@type ScrollView
-	local sv = ScrollView:new(offsetx or 0,offsety or 0,100,120);
+	local sv = ScrollView:new(offsetx or 0,offsety or 0,itemW+5,120);
 
 	---注册函数
 	sv:bind(f_create,

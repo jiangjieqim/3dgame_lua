@@ -19,7 +19,7 @@ function Fps:update()
     local label = self.gameObject;
     -- local w,h = label:get_size();
     
-    label:set_text(string.format("%s %d",core.get_fps(0),core.get_time()/1000));
+    label:set_text(string.format("%s %d",core.getFps(0),core.get_time()/1000));
     
     -- print("fps is update!!!");
 end

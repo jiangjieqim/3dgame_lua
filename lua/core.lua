@@ -173,6 +173,12 @@ end
 function material.setCullface(m,v)
 	tmat_cullface(m,v);
 end
+
+---设置背面状态
+function material.tmat_get_cullface(m)
+	return tmat_get_cullface(m);
+end
+
 ---设置Material的渲染状态
 ---@param v "1:取消渲染,0开启渲染"
 function material.disable(m,v)
@@ -332,47 +338,65 @@ local function f_split(input,delmiter)
     return arr;
 end
 
---[[
-	根据一个配置加载生成一个数据对象
---]]
-function func_load_material(url)
+local function f_parse_mat_xml(xml)
+	--取第一个索引中的材质配置
+	local node = xml:get_index(0);--xml_get_node_by_index(xml,0);
+	local shader = xml_get_str(node,"shader");
+	-- func_print("解析材质:"..url..':'..shader);
+	local ps =  xml_get_str(node,"ps");
 	
-	local suffix = m.get_suffix(url);
-	--print(s);
-	local _material;
-	local xml = Xml:new();--xml_load(url);
-	xml:load(url);
-	if(suffix == "mat") then
+	if(shader == nil) then
+		func_error("shader is nil,"..url);
+	else			
+		if(shader == "") then
+			func_error(url);
+		end
+		
+		local _material = tmat_create_empty(shader);
 
-		--取第一个索引中的材质配置
-		local node = xml:get_index(0);--xml_get_node_by_index(xml,0);
-		local shader = xml_get_str(node,"shader");
-		func_print("解析材质:"..url..':'..shader);
-
-		if(shader == nil) then
-			func_error("shader is nil,"..url);
-		else			
-			if(shader == "") then
-				func_error(url);
-			end
-			
-			_material = tmat_create_empty(shader);
-
-			--添加贴图到材质对象	tex0~~tex7
-			for i = 0,7,1 do
-				local texName = "tex"..(i);	
-				local _url = xml_get_str(node,texName);
-				if(_url ~= nil) then
-					tmat_pushTexUrl(_material,_url);
-				end
+		--添加贴图到材质对象	tex0~~tex7
+		for i = 0,7,1 do
+			local texName = "tex"..(i);	
+			local _url = xml_get_str(node,texName);
+			if(_url ~= nil) then
+				tmat_pushTexUrl(_material,_url);
 			end
 		end
+		return _material;
 	end
-	
---	xml_del(xml);
-	xml:dispose();
+end
+
+
+	-- 根据一个配置加载生成一个数据对象
+	-- url:
+	-- 1.可以是一个mat链接如
+	-- "\\resource\\material\\wall.mat"
+
+	-- 2.也可以是具体的配置如
+	-- [[<mat shader="simple;vboDiffuse" tex0="\resource\texture\bump2.tga"/>]]
+
+function func_load_material(url)
+	local i = string.find(url,"<");
+	-- print(a);
+	local xml;
+	local _material;
+	if(i == nil) then
+		-- url为链接的时候
+		xml = Xml:new();
+		xml:load(url);
+	elseif(i == 1)then
+		-- url为具体配置的时候
+		xml = Xml:new();
+		xml:loadstr(url);
+	end
+
+	if(xml~=nil) then
+		_material =	f_parse_mat_xml(xml);
+		xml:dispose();
+	end
 	return _material;
 end
+
 
 --删除table下面的元素(遍历所有的表元素引用)
 function func_clearTableItem(point)
@@ -717,7 +741,7 @@ end
 
 ---返回当前的FPS  
 ---radix(默认1) 0:去小数点 1:保留1位 2:保留2位  
-function m.get_fps(radix)
+function m.getFps(radix)
 	radix=radix or 1;
 	local v = math.pow(10,radix);
 	return math.floor(1000 / core.delayTime() * v) / v;
@@ -906,7 +930,7 @@ local function setDelayMs(ms)
 end
 ---设置FPS
 ---@param v frame percent second
-function m.setfps(v)
+function m.setFps(v)
 	func_print(string.format("设置fps=%d",v));
 	local a = math.ceil(1000/v);
 	-- print("a = "..a);
@@ -1089,7 +1113,7 @@ function core.init(atals_url)
 	evt_on(engine,core.ex_event.EVENT_ENGINE_RENDER_3D,f_render,self);
 
 	-- evt_on(core.engine,core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
-	core.setBackgroundColor(0.1,0.1,0.1);
+	core.setBackgroundColor(0.3,0.3,0.3);
 
 
 	local function getCam2d()

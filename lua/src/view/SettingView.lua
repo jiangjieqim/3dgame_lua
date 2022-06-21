@@ -14,7 +14,7 @@ end
 local function f_scale_handle(progress,self)
     local fps = math.ceil(progress*59) + 1;
     self.nskin:find("info_label"):set_text(fps);
-    core.setfps(fps);
+    core.setFps(fps);
 end
 
 local function init(self)

@@ -21,11 +21,15 @@ core.init("//resource//texture//1");
 local cam = core.cam;
 
 require("BauulAvatar");
+require("FloorMouse");
+
 require("QuatDev");
 --print(string.format("version = [%s]",_VERSION));
 
 
 require("utils/kittools");
+
+local floorMouse = FloorMouse:new();
 ----------------------------------------------------------------------
 local Main = {
 
@@ -59,7 +63,7 @@ function Main:init()
     -- local fps = require("view/FpsView");
     -- fps:show(nil,nil,nil,"FPS:%s");
 
-    core.setfps(20);
+    core.setFps(30);
     --############################################################
     -- local box = UnitBase:new();
     -- box:loadvbo("\\resource\\obj\\teapot.obj","\\resource\\material\\bauul2.mat");
@@ -67,14 +71,62 @@ function Main:init()
     -- core.meterial.setCullface(box:getMaterial(),GL.CULL_FACE_DISABLE);
     -- core.add(box);
     local box = BauulAvatar:new();
-    box:init(BauulAvatar.Res.Teapot,{x=3,z=0,y=0,scale=2.0})
+    box:init({res=BauulAvatar.Res.Teapot,x=3,z=0,y=0,scale=2.0});
     box:setColor(1);
-    print("box.p",box.p,tostring(box));
+    -- print("box.p",box.p,tostring(box));
 
     local avatar= BauulAvatar:new();
-    avatar:init(BauulAvatar.Res.Box);
-    print("box.p",box.p,tostring(box));
-    cam:setTarget(box);
+    avatar:init({res=BauulAvatar.Res.Bauul,scale=0.1});
+    -- print("box.p",box.p,tostring(box));
+    cam:setTarget(avatar);
+
+
+
+    local monster = BauulAvatar:new();
+    -- monster:init({res=BauulAvatar.Res.Gobin,scale=0.1});
+    monster:init({res=BauulAvatar.Res.Box});
+
+
+    -- local move2;
+
+    -- local function move1()
+    --     monster:move(-10,0,0,0,10,move2);
+    -- end
+    -- move2=function()
+    --     monster:move(0,0,0,0,10,move1);
+    -- end
+    -- move1();
+    -- local a = false;
+    core.frameloop(2000,function()
+    --    a = not a;
+    --    print(a); 
+    --    if(a == true)then
+        -- monster:move(-10,0,0,0,10);
+    --    else
+        -- monster:move(0,0,0,0,10);
+    --    end 
+        local px,py,pz = monster:get_pos();
+        
+        if(px == -20 and pz == 0) then
+            monster:move(0,0,0,0,10);
+        elseif(px == 0 and pz == 0) then
+            monster:move(-20,0,0,0,10);
+        -- elseif(px == 0 and pz == 0) then
+            -- monster:move(-20,0,0,0,10);
+        else 
+            print("err!",px,py,pz);
+            -- func_error(1);
+            -- monster:set_position(0,0,0);
+            -- if(math.random() <= 0.5) then
+            --     monster:move(0,0,0,0,10);
+            -- else
+            --     monster:move(-20,0,0,0,10);
+            -- end
+        end
+        -- print(">>>",core.get_time());
+    end)
+
+
 
 
 --[[
@@ -125,22 +177,34 @@ function Main:init()
 
 
 
-
+    --地板
     local _plane = UnitBase:new();
     _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\horse.mat",100);
+    -- _plane:set_position(0,-10,0);
     -- _plane:double_face();
     -- _plane:drawPloygonLine(true);
-    _plane:load_collide("\\resource\\obj\\plane.obj",true);
+    _plane:load_collide("\\resource\\obj\\plane.obj");
     -- n:reverse_face(true);
     -- n:load_collide("\\resource\\obj\\plane.obj",true);
     -- n:bindRayPick(f_bindRayClick);
     core.add(_plane);
 
 
-
-
-
-
+    local function addShowPlane()
+        local _plane = UnitBase:new();
+        _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\wall.mat",100);
+        _plane:set_position(0,-1,0);
+        _plane:double_face();
+        -- _plane:drawPloygonLine(true);
+        -- _plane:load_collide("\\resource\\obj\\plane.obj",true);
+        -- n:reverse_face(true);
+        -- n:load_collide("\\resource\\obj\\plane.obj",true);
+        -- n:bindRayPick(f_bindRayClick);
+        core.add(_plane);
+        return _plane;
+    end
+    
+    local showMap=addShowPlane();
 
     local v = 0;
     local dir = Vec3:new(1,1,0);
@@ -185,8 +249,10 @@ function Main:init()
     --    print(x,y,z);
         
         if(avatar) then
-            -- avatar:move(x,y,z,0,10);
-
+            avatar:move(x,y,z,0,10);
+            local sx,sy,sz = showMap:get_pos();
+            local cy = (y - sy)/2;
+            floorMouse:set_position(x,y-cy,z);
             -- cam:set_pos(0-x,-31.5-y,-41-z);
             
             -- core.setTimeout(1000,function ()
@@ -201,6 +267,8 @@ function Main:init()
         -- avatar:rx(curR);
         -- print(curR);
         --print("aaaaaaaaaa!!!!!");
+
+      
     end
 
    evt_on(_plane:get_p(),core.ex_event.LUA_EVENT_RAY_PICK,onTouchClick);
@@ -216,6 +284,13 @@ function Main:init()
     nskin:load("\\resource\\ui\\crl.xml");
     local btn =nskin:find("infoBtn");
     local label1 =nskin:find("label1");
+
+    ScrollViewCase1(100,100);
+
+
+    
+
+
     btn:bind_click(function()
         -- print("fps:"..core.get_fps()..core.get_drawcall());
         -- local x,y,z = cam:get_rotate();
@@ -237,7 +312,7 @@ function Main:init()
         local x,y,z = cam:get_pos();
         local rx,ry,rz = cam:get_rotate();
         local s1 = "";
-        local fps = core.get_fps();
+        local fps = core.getFps();
         if(avatar) then
             local px,py,pz = avatar:get_pos();
             s1 = string.format("avatarPos %.2f,%.2f,%.2f",px,py,pz);
@@ -255,6 +330,14 @@ function Main:init()
                 avatar:setStatus(BauulAvatar.EStatus.Run);
             else
                 avatar:setStatus(BauulAvatar.EStatus.Stand);
+            end
+        end
+
+        if(monster)then
+            if(monster:isMoving()) then
+                monster:setStatus(BauulAvatar.EStatus.Run);
+            else
+                monster:setStatus(BauulAvatar.EStatus.Stand);
             end
         end
 
@@ -354,9 +437,6 @@ function Main:init()
     local function speckey(key)
         -- print("speckey",key);
         
-   
-     
-
         if(key == core.KeyEvent.GLUT_KEY_LEFT) then
             curTheta = curTheta +speed;
             update();
@@ -367,12 +447,17 @@ function Main:init()
         end
         
     end
-    -- local function onLookAtEvt()
-    --     curTheta = curTheta +speed;
-    --     update();
-    -- end
-    -- core.frameloop(16.6,onLookAtEvt);
+    local function onLookAtEvt()
 
+        curTheta = curTheta +speed;
+        update();
+    end
+    core.frameloop(1000/20,onLookAtEvt);
+
+    core.callLater(function ()
+        print('delay:',core.delayTime()); 
+        
+    end)
 
     kit.keyLis(bkey,speckey);
     
