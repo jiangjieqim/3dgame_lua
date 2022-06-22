@@ -102,7 +102,7 @@ function Camera:setParent(v)
 	end
 	cam(self.p,"cam_setParent",v.p);
 end
----设置target对象
+---设置target对象,之后执行core.cam:refresh()
 function Camera:setTarget(v)
 	if(v.p == nil)then
 		func_error("check v.p!");

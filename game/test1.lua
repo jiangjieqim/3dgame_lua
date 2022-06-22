@@ -30,6 +30,59 @@ require("QuatDev");
 require("utils/kittools");
 
 local floorMouse = FloorMouse:new();
+---渲染地板
+-- shader_updateVal(_mater,"lx",0.0);
+
+local function addShowPlane()
+    local ps = [[
+        #version 110
+        uniform sampler2D texture1;//界面贴图
+        varying vec2 out_texcoord;
+        void main(void){
+            // float uvSacle = 20.0;//纹理缩放
+            //vec2 texcoord = vec2(out_texcoord.x * _mUvScale,out_texcoord.y * _mUvScale);
+            vec4 finalColor=texture2D(texture1, out_texcoord);
+            
+            
+            //finalColor = texture2D(texture1, mod(out_texcoord, vec2(3.0, 9.0)) * vec2(0.75, 0.5625));
+
+            if(finalColor.r == 1.0 && finalColor.g == 0.0 && finalColor.b == 1.0){
+                discard;//丢弃紫色的像素
+            }
+            gl_FragColor = finalColor;
+        }
+    ]];
+
+    local vs=[[
+        #version 110
+        attribute vec3 _Position;
+        attribute vec2 _TexCoord;
+        varying vec2 out_texcoord;
+        uniform mat4 _mat1;
+        uniform float _mUvScale;
+        void main(){
+            _mUvScale;
+            out_texcoord =vec2(_TexCoord.x * _mUvScale,_TexCoord.y*_mUvScale);
+            // out_texcoord.x = out_texcoord.x/2;
+            // out_texcoord.y = out_texcoord.y/2;
+
+            gl_Position = _mat1*vec4(_Position, 1.0);
+        }
+    ]];
+    local p = core.p3d_create(vs,ps);
+    
+    local _mater = tmat_create_empty();
+    core.p3d_set(_mater,p);
+    shader_updateVal(_mater,"_mUvScale",20);
+    tmat_pushTexUrl(_mater,"\\resource\\texture\\box.tga");
+    local floor = UnitBase:new();
+    floor:loadvbo("\\resource\\obj\\plane.obj",_mater,100);
+    floor:set_position(0,-1,0);
+    -- _plane:double_face();
+    floor:reverse_face();
+    core.add(floor);
+    return floor;
+end
 ----------------------------------------------------------------------
 local Main = {
 
@@ -190,19 +243,7 @@ function Main:init()
     core.add(_plane);
 
 
-    local function addShowPlane()
-        local _plane = UnitBase:new();
-        _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\wall.mat",100);
-        _plane:set_position(0,-1,0);
-        _plane:double_face();
-        -- _plane:drawPloygonLine(true);
-        -- _plane:load_collide("\\resource\\obj\\plane.obj",true);
-        -- n:reverse_face(true);
-        -- n:load_collide("\\resource\\obj\\plane.obj",true);
-        -- n:bindRayPick(f_bindRayClick);
-        core.add(_plane);
-        return _plane;
-    end
+    
     
     local showMap=addShowPlane();
 
@@ -287,9 +328,7 @@ function Main:init()
 
     ScrollViewCase1(100,100);
 
-
-    
-
+    local namemap = nskin.namemap;
 
     btn:bind_click(function()
         -- print("fps:"..core.get_fps()..core.get_drawcall());
@@ -351,8 +390,12 @@ function Main:init()
     -- 
     core.frameloop(16.6,frenderUi);
     local eg = self:quat();
+    -- local floorMat = floorMouse:getMaterial();
+    local _mUvScale = 1;
     local function scHandler(v)
-        --print(v);
+        -- print(v);
+        _mUvScale = v;
+        shader_updateVal(showMap:getMaterial(),"_mUvScale",20+_mUvScale*10);
         -- v = v * 0.5;
         -- local x, y, z,w=self:quat_slerp(0,1,0,	 0,0,1, v);
         -- print(x, y, z,w);
@@ -370,8 +413,9 @@ function Main:init()
     -- qua:print();6
 
 
+    local namemap = nskin.namemap;
 
-    local sc=nskin:find('sc1');
+    local sc=namemap['sc1'];
     sc:bindCallback(scHandler);
 
     -- local function frender3()

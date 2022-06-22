@@ -14,6 +14,10 @@ function FloorMouse:new()
         varying vec2 out_texcoord;
         void main(void){
             vec4 finalColor=texture2D(texture1, out_texcoord);
+            
+            
+            //finalColor = texture2D(texture1, mod(out_texcoord, vec2(3.0, 9.0)) * vec2(0.75, 0.5625));
+
             if(finalColor.r == 1.0 && finalColor.g == 0.0 && finalColor.b == 1.0){
                 discard;//¶ªÆú×ÏÉ«µÄÏñËØ
             }
@@ -30,6 +34,9 @@ function FloorMouse:new()
 
         void main(){
             out_texcoord = _TexCoord;
+            // out_texcoord.x = out_texcoord.x/2;
+            // out_texcoord.y = out_texcoord.y/2;
+
             gl_Position = _mat1*vec4(_Position, 1.0);
         }
     ]];

@@ -162,6 +162,12 @@ function material.set(p,m)
 	setMaterial(p,m);
 end
 
+---为材质设置alpha透明度
+function material.setAlpha(m,alpha)
+	tmat_set_alpha(m,alpha);
+    shader_updateVal(m,"mAlpha",alpha);
+end
+
 ---设置多边形的渲染模式
 ---@param m "Matereal"
 ---@param v "GL.GL_FILL,GL.GL_LINE,GL_POINT"
