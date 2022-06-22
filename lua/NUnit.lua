@@ -52,7 +52,7 @@ NUnit.__index = NUnit;
 function NUnit:new()
 	local s = {};
 	setmetatable(s, NUnit);
-	print("NUnit",s);
+	-- print("NUnit",s);
 
 	return s;
 end

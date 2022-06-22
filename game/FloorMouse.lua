@@ -46,7 +46,7 @@ function FloorMouse:new()
     core.p3d_set(_mater,p);
     tmat_pushTexUrl(_mater,"\\resource\\texture\\floor_mouse.bmp");
     -- local mat = [[<mat shader="simple;vboDiffuse" tex0="\resource\texture\floor_mouse.bmp"/>]];
-    s:loadvbo( "\\resource\\obj\\plane.obj",_mater,2.5);
+    s:loadvbo( "\\resource\\obj\\plane.obj",_mater,4);
     s:reverse_face();
     core.add(s);
     

@@ -22,7 +22,7 @@ setmetatable(UnitBase, NUnit);
 function UnitBase:new()
     local s = NUnit:new();
     setmetatable(s,UnitBase);
-    print("UnitBase",s);
+    -- print("UnitBase",s);
     s._ismoving = false;
     return s;
 end

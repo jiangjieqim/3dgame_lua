@@ -21,11 +21,11 @@ core.init("//resource//texture//1");
 local cam = core.cam;
 
 require("BauulAvatar");
+require("Npc");
 require("FloorMouse");
 
 require("QuatDev");
 --print(string.format("version = [%s]",_VERSION));
-
 
 require("utils/kittools");
 
@@ -106,6 +106,30 @@ end
 function Main:print()
     
 end
+---cam中键缩放
+function Main:camControl(avatar)
+    cam:setParent(avatar);
+    local function f_onMouseChange(data)
+        local x,y,z = cam:get_pos();
+        local speed = 4;
+        local tx = y+data*speed
+        local tz = z+data*speed;
+
+        if(tx >= -5 or tx <= -40) then
+            return;
+            
+        end
+        
+        cam:set_pos(0,tx,tz);
+        -- if(data == -1) then
+            
+        -- else
+
+        -- end
+    end
+
+    evt_on(core.engine,core.ex_event.MOUSE_MID_EVENT,f_onMouseChange);
+end
 
 function Main:init()
     
@@ -131,23 +155,20 @@ function Main:init()
     local avatar= BauulAvatar:new();
     avatar:init({res=BauulAvatar.Res.Bauul,scale=0.1});
     -- print("box.p",box.p,tostring(box));
-    cam:setTarget(avatar);
+    self:camControl(avatar);
 
 
 
     local monster = BauulAvatar:new();
     -- monster:init({res=BauulAvatar.Res.Gobin,scale=0.1});
     monster:init({res=BauulAvatar.Res.Box});
+    -- monster:init({res=BauulAvatar.Res.Bauul,scale=0.1});
 
+    local npc =Npc:new();
+    -- npc:init(20,0,-20);
+    npc:init({res=BauulAvatar.Res.Bauul,scale=0.1,x=20,y=0,z=-20});
+    npc:ai(avatar);
 
-    -- local move2;
-
-    -- local function move1()
-    --     monster:move(-10,0,0,0,10,move2);
-    -- end
-    -- move2=function()
-    --     monster:move(0,0,0,0,10,move1);
-    -- end
     -- move1();
     -- local a = false;
     core.frameloop(2000,function()
@@ -438,7 +459,7 @@ function Main:init()
         end
     end
 
-    cam:set_rotate(-math.pi/8,0,0);
+    cam:set_rotate(-math.pi/4,0,0);
     cam:set_pos(0,-40,-40);
     local speed = math.pi/180;
     local function update()

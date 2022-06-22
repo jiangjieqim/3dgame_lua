@@ -5,6 +5,7 @@ BauulAvatar = {
 BauulAvatar.EStatus = {
     Stand = 1,
     Run = 2,
+    Jump = 3,
 }
 BauulAvatar.Res = {
     ---恶魔
@@ -46,6 +47,9 @@ function BauulAvatar:setStatus(v)
                 anim:play("run");
             elseif(v == BauulAvatar.EStatus.Stand)then
                 anim:play("stand");
+            elseif(v == BauulAvatar.EStatus.Jump)then
+                anim:play("jump");
+            
             end
         end
         self._status = v;
@@ -144,5 +148,5 @@ function BauulAvatar:addRotateBox()
 end
 
 function BauulAvatar:dispose()
-
+    core.super(self,"dispose");
 end
