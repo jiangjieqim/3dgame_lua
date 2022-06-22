@@ -12,15 +12,15 @@ function FloorMouse:new()
         #version 110
         uniform sampler2D texture1;//界面贴图
         varying vec2 out_texcoord;
+        uniform float mAlpha;
+
         void main(void){
             vec4 finalColor=texture2D(texture1, out_texcoord);
             
-            
-            //finalColor = texture2D(texture1, mod(out_texcoord, vec2(3.0, 9.0)) * vec2(0.75, 0.5625));
-
             if(finalColor.r == 1.0 && finalColor.g == 0.0 && finalColor.b == 1.0){
                 discard;//丢弃紫色的像素
             }
+            finalColor.a = mAlpha;//设置alpha
             gl_FragColor = finalColor;
         }
     ]];
@@ -60,6 +60,10 @@ function FloorMouse:startRotate()
     local function frender()
         v=v + core.delayTime()/512;
         self:rotate_vec(v,dir.x,dir.y,dir.z);
+
+        local alpha = (math.sin(v)+1)/2;--  0-1
+        core.meterial.setAlpha( self:getMaterial(),alpha);
+
     end
 
     core.frameloop(16.6,frender);
