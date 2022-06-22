@@ -123,10 +123,10 @@ local function f_onFocusChange(data,self)
 	--print(data,param);
 	if(data == 1) then
 		-- print("进入焦点");
-		-- evt_on(self.timer,core.ex_event.TIMER,f_timer,self);
+		-- evt_on(self.timer,core.ex_event.EVENT_TIMER,f_timer,self);
 	else
 		-- print("离开焦点");
-		-- evt_off(self.timer,core.ex_event.TIMER,f_timer);
+		-- evt_off(self.timer,core.ex_event.EVENT_TIMER,f_timer);
 		-- self.img:visible(false);
 	end
 end
@@ -177,7 +177,7 @@ function Input:dispose()
 	evt_off(self._in,CUST_LUA_EVENT_SPRITE_FOCUS_CHANGE,f_onFocusChange);
 	evt_off(self._in,CUST_LUA_EVENT_INPUT_CHANGE,f_onInputChange);
 
-	-- evt_off(self.timer,core.ex_event.TIMER,f_timer);
+	-- evt_off(self.timer,core.ex_event.EVENT_TIMER,f_timer);
 	-- timelater_remove(self.timer);
 
 	self.img:dispose();

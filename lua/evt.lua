@@ -1,5 +1,5 @@
 --local evtlist = {};
-local _evtDebug-- = true;--是否开启事件日志
+local _evtDebug-- = true;--�?否开�?事件日志
 ---@type NStack
 local list = NStack:new();--事件列表
 
@@ -17,7 +17,7 @@ local function f_each(node,p)
 --]]
 	if(node and node.obj == p.obj and node.id == p.id and node.func == p.func) then
 		p.find = true;
-		func_error("重复的事件,事件id = "..p.id);
+		func_error("重�?�的事件,事件id = "..p.id);
 		return true;
 	end
 end
@@ -44,7 +44,7 @@ local function f_find_dispath_obj(node,p)
 	end
 end
 --[[
---是否是table字符串
+--�?否是table字�?�串
 local function is_table_str(value)
 	-- print("cnt:"..#value);
 	local theType = type(value);
@@ -70,14 +70,14 @@ end
 
 
 --[[
-    params:默认不传递参数
+    params:默�?�不传递参�?
 
     local function f_resize(evtData,self)
-        print(c_data);--来自evt_dispatch中的	local data;--数据
+        print(c_data);--来自evt_dispatch�?�?	local data;--数据
     end
 ]]--
 
---将table转化为一个Number值(其实是table的地址引用)
+--将table�?化为一个Number�?(其实是table的地址引用)
 local function f_cv(obj)
 	-- func_error(111);
 
@@ -87,7 +87,7 @@ local function f_cv(obj)
 	elseif(theType == "table") then
 		local a = obj.address;
 		if(a == nil) then
-			func_error(tostring(obj).."未找到address字段!");
+			func_error(tostring(obj).."�?找到address字�??!");
 			return 0;
 		end
 		return a;
@@ -101,21 +101,21 @@ local function f_cv(obj)
 	-- 	func_error("================******************************************>"..n);
 		
 
-	-- 	func_print("evt_on==>"..tostring(obj).." 转化为Number:"..string.format("%0x",n));
+	-- 	func_print("evt_on==>"..tostring(obj).." �?化为Number:"..string.format("%0x",n));
 	-- 	return n;
 	-- end
 	-- return obj;
 end
 
---根据id转化为事件名
+--根据id�?化为事件�?
 local function getEvtStr(id)
 	return core.get_event_str(id);
 end
---- @param once true或false.是否只监听一次
+--- @param once true或false.�?否只监听一�?
 function evt_on(obj,id,func,params,once)
 	
 	if(id == nil) then
-		func_print('id=nil');
+		func_error('id=nil');
 		return;
 	end
 
@@ -168,8 +168,8 @@ function evt_once(obj,id,func,params)
 	evt_on(obj,id,func,params,true);
 end
 
----是否有该事件 obj:对象引用,  <br>id:事件id,func:函数引用
----@param obj 对象引用值
+---�?否有该事�? obj:对象引用,  <br>id:事件id,func:函数引用
+---@param obj 对象引用�?
 ---@param id 事件id
 ---@param func 函数引用
 function evt_has(obj,id,func)
@@ -202,7 +202,7 @@ function evt_off(obj,id,func)
 	end
 --[[
 	if(evt_has(obj,id,func)==false)then
-		local str = string.format("evt_has移除[%d]事件[%d]失败! 事件不存在",obj,id);
+		local str = string.format("evt_has移除[%d]事件[%d]失败! 事件不存�?",obj,id);
 		func_print(str);
 		return;
 	end
@@ -240,7 +240,7 @@ function evt_off(obj,id,func)
 			func_print(str);
 		end
 		list:del(findobj.node);
-		--func_print("del之后的事件"..id.."数量"..list:len());
+		--func_print("del之后的事�?"..id.."数量"..list:len());
 		ok = true;
 		
 	else
@@ -284,7 +284,7 @@ end
 --全局事件
 function evt_dispatch(...)
 	 --id,data,obj
-	local obj; --指向的对象
+	local obj; --指向的�?�象
 	local id;  --事件id
 	local data;--数据
 --	obj ,id,data = f_parse({...});

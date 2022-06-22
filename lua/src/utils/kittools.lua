@@ -173,4 +173,12 @@ kit.showAxis = function(len)
     f_craeteAxis(0,0,len);
 end
 
+--使用time毫秒播放一个飘动的文本
+kit.playText =  function(str,time)
+    local plug = core.plugin;
+    local label = plug:load("view/FlyLabel");
+    local sx,sy = core.screen_size();
+    label:set_label(str,time or 1000,sy*0.25);
+end
+
 return kit;

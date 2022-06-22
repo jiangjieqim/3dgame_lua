@@ -261,7 +261,7 @@ core.cam:set_pos(0,-1,-5.5);
 -- func_print("a");
 
 -- local timer = timelater_new(10);
--- evt_on(timer,core.ex_event.TIMER,function (data)
+-- evt_on(timer,core.ex_event.EVENT_TIMER,function (data)
 -- 	-- print('en***',data);
 -- 	timelater_remove(timer);
 -- end);
