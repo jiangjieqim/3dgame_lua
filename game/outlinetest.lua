@@ -27,10 +27,9 @@ function outLinetest(x,y,z,scale)
         uniform float lz;
         uniform mat4 perspective_matrix;
         uniform mat4 base_matrix;
-        uniform float offset;
+        uniform float offset;   //描边偏移
 
         void main(){
-            //float offset = 0.02;//描边偏移
             vec3 LightPosition = vec3(lx,ly,lz);
             out_texcoord = _TexCoord.st;
 
@@ -223,7 +222,7 @@ nskin:load(
         <ui name="1" type="NPanel" line="0"  center="1" width="200" height="300" x="10" y="10"/>
         <ui name="ck0" type="CheckBox" x="0" y="0" label="bump" func="f_callBack_ck0" parent="1"/>
         <ui name="cklight" type="CheckBox" x="0" y="20" label="light" func="f_callBack_cklight" parent="1"/>
-        <ui name="lineck" type="CheckBox" x="0" y="40" label="lineck" func="f_callBack_lineck" parent="1"/>
+        <ui name="lineck" type="CheckBox" x="0" y="40" label="outline" func="f_callBack_lineck" parent="1"/>
         <ui name="sc1" type="NScrollBar" x="0" y="60" parent="1"/>
         <ui name="gray" type="CheckBox" x="0" y="80" label="gray" func="f_callBack_gray" parent="1"/>
 ]]);
@@ -239,11 +238,12 @@ sc:bindCallback(scHandler);
 ---@type Vec3
 local dir = Vec3:new(1,1,0);
 dir:normalize();
-local v = 0;
+-- local v = 0;
 local function frender()
     --旋转
-    v=v + core.delayTime()/2048;
+    -- v=v + core.delayTime()/2048;
     --print(v);
+    local v = core.get_time() / 10000;
     n:rotate_vec(v,dir.x,dir.y,dir.z);
     -- shader_updateVal(_mater,"base_matrix",n:base_matrix());
     updateMatirx();
