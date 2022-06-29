@@ -27,9 +27,10 @@ function outLinetest(x,y,z,scale)
         uniform float lz;
         uniform mat4 perspective_matrix;
         uniform mat4 base_matrix;
+        uniform float offset;
 
         void main(){
-            float offset = 0.02;//描边偏移
+            //float offset = 0.02;//描边偏移
             vec3 LightPosition = vec3(lx,ly,lz);
             out_texcoord = _TexCoord.st;
 
@@ -120,6 +121,7 @@ uniform float cklight;
 varying float diff;
 varying vec2 out_texcoord;
 varying vec3 vLightDir;
+uniform float gray;//灰度开关
 
 
 layout( location = 0 ) out vec4 FragColor;
@@ -144,6 +146,15 @@ void main(void){
     }else{
         FragColor = finalColor * lamberFactor;
     }
+
+    if(gray == 1.0){
+        //  灰度图像是R、G、B三个分量相同的一种特殊的彩色图像。所以灰度化即计算灰度值的过程，这里只介绍最常用的加权平均法。
+        //  YUV空间的彩色图像，其Y的分量的物理意义本身就是像素点的亮度，由该值反映亮度等级，
+        //  因此可根据RGB和YUV颜色空间的变化关系建立亮度Y与R、G、B三个颜色分量的对应：Y=0.3R+0.59G+0.11B，以这个亮度值表达图像的灰度值。
+	    
+        float v = dot(finalColor.rgb,vec3(0.3,0.59,0.11));
+	    FragColor = vec4(v,v,v,1.0);
+    }
 }
 ]];
 
@@ -165,6 +176,7 @@ tmat_pushTexUrl(_mater,"\\resource\\texture\\bump2.tga");
 tmat_pushTexUrl(_mater,"\\resource\\texture\\wall.tga");
 local _renderTex = 1;
 local _cklight = 1;
+local _graySel = 0;
 
 local function f_updateMatrix(_mater)
     shader_updateVal(_mater,"perspective_matrix",core.cam:perctive());--??????
@@ -174,6 +186,7 @@ local function f_updateMatrix(_mater)
     shader_updateVal(_mater,"pvm_matrix",n:pvm_matrix());
     shader_updateVal(_mater,"renderTex",_renderTex);
     shader_updateVal(_mater,"cklight",_cklight);
+    shader_updateVal(_mater,"gray",_graySel);
 end
 
 local function updateMatirx()
@@ -190,6 +203,13 @@ nskin.f_callBack_ck0 = function(_selected)
     _renderTex= v;
     updateMatirx();
 end
+nskin.f_callBack_gray = function(_selected)
+    local v = _selected and 1 or 0;
+    _graySel = v;
+    updateMatirx();
+end
+
+
 nskin.f_callBack_lineck = function(_selected)
     local v = _selected and 1 or 0;
     core.meterial.disable(_mater1,v);
@@ -204,8 +224,17 @@ nskin:load(
         <ui name="ck0" type="CheckBox" x="0" y="0" label="bump" func="f_callBack_ck0" parent="1"/>
         <ui name="cklight" type="CheckBox" x="0" y="20" label="light" func="f_callBack_cklight" parent="1"/>
         <ui name="lineck" type="CheckBox" x="0" y="40" label="lineck" func="f_callBack_lineck" parent="1"/>
+        <ui name="sc1" type="NScrollBar" x="0" y="60" parent="1"/>
+        <ui name="gray" type="CheckBox" x="0" y="80" label="gray" func="f_callBack_gray" parent="1"/>
 ]]);
-
+local namemap = nskin.namemap;
+local sc=namemap['sc1'];
+-- shader_updateVal(_mater,"_mUvScale",20);
+shader_updateVal(_mater1,"offset",0.02);
+local function scHandler(v)
+    shader_updateVal(_mater1,"offset",0.02+0.1*v);
+end
+sc:bindCallback(scHandler);
 ----------------------------------------
 ---@type Vec3
 local dir = Vec3:new(1,1,0);

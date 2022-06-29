@@ -33,6 +33,9 @@ local floorMouse = FloorMouse:new();
 ---渲染地板
 -- shader_updateVal(_mater,"lx",0.0);
 
+
+-- require("outlineball");
+
 local function addShowPlane()
     local ps = [[
         #version 110
@@ -117,7 +120,7 @@ function Main:camControl(avatar)
 
         if(tx >= -5 or tx <= -40) then
             return;
-            
+
         end
         
         cam:set_pos(0,tx,tz);
@@ -165,9 +168,13 @@ function Main:init()
     -- monster:init({res=BauulAvatar.Res.Bauul,scale=0.1});
 
     local npc =Npc:new();
-    -- npc:init(20,0,-20);
-    npc:init({res=BauulAvatar.Res.Bauul,scale=0.1,x=20,y=0,z=-20});
+    npc:init({res=BauulAvatar.Res.Bauul,scale=0.1,x=10,y=0,z=-10});
     npc:ai(avatar);
+
+    -- lightTest();
+    require("outlinetest");
+    outLinetest(6,6,6,3);
+
 
     -- move1();
     -- local a = false;
