@@ -24,7 +24,7 @@ function FlyLabel:new()
     
     --evt_once(nskin,ENGINE_EVENT_COMPLETE,f_cpmleteHandler);
 	nskin:load([[<ui name="1" type="NPanel" drag="1" center="1" width="200" height="20"/>
-<ui name="info_label" label="1" type="NLabel" parent="1"/>
+<ui name="info_label" label="1" width="200" height="200" type="NLabel" parent="1"/>
 ]]);
 	return self;
 end

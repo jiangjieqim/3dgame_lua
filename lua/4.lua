@@ -106,7 +106,7 @@ local function f_updateMatrix(_mater)
     shader_updateVal(_mater,"modelView_matrix",core.cam:model());
     shader_updateVal(_mater,"normal_matrix",core.cam:normal());
     shader_updateVal(_mater,"base_matrix",n:base_matrix());
-    shader_updateVal(_mater,"pvm_matrix",n:pvm_matrix());
+    -- shader_updateVal(_mater,"pvm_matrix",n:pvm_matrix());
     shader_updateVal(_mater,"renderTex",_renderTex);
     shader_updateVal(_mater,"cklight",_cklight);
     print("==============>!!!");
