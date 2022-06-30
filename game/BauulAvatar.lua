@@ -38,6 +38,10 @@ function BauulAvatar:init(p)
     end
 end
 
+function BauulAvatar:getStatus()
+    return self._status;
+end
+
 --设置状态机
 function BauulAvatar:setStatus(v)
     if(self._status ~= v) then

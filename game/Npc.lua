@@ -14,6 +14,7 @@ function Npc:new()
 end
 
 function Npc:ai(avatar)
+
     local lis;
     local npc = self;
     local x,y,z = npc:get_pos();
@@ -29,10 +30,21 @@ function Npc:ai(avatar)
         if(len <= checkLen) then
             -- print("open ui");
             npc:look_at(x1,y1,z1);
-            self:setStatus(BauulAvatar.EStatus.Jump);
             
+            -- print("status:",self:getStatus());
+            if(self:getStatus() == BauulAvatar.EStatus.Stand) then
+                kit.playText("you In!",4000);
+            end
+            
+            self:setStatus(BauulAvatar.EStatus.Jump);
             -- self:dispose();
+            -- doSometing();
+            
         else
+            if(self:getStatus() == BauulAvatar.EStatus.Jump) then
+                kit.playText("you Out!",4000);
+            end
+
             self:setStatus(BauulAvatar.EStatus.Stand);
         end
     end

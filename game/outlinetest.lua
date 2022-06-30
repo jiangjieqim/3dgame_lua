@@ -56,7 +56,7 @@ function outLinetest(x,y,z,scale)
         layout( location = 0 ) out vec4 FragColor;
 
         void main(void){
-            FragColor = vec4(1.0,1.0,1.0,1.0);
+            FragColor = vec4(1.0,0.0,1.0,1.0);
         }
         ]];
 
@@ -208,7 +208,6 @@ nskin.f_callBack_gray = function(_selected)
     updateMatirx();
 end
 
-
 nskin.f_callBack_lineck = function(_selected)
     local v = _selected and 1 or 0;
     core.meterial.disable(_mater1,v);
@@ -248,7 +247,7 @@ local function frender()
     -- shader_updateVal(_mater,"base_matrix",n:base_matrix());
     updateMatirx();
 end
-core.setTimeout(1,frender,nil,true);
+-- core.setTimeout(1,frender,nil,true);
 --将旋转的面包圈对象加到舞台
 core.add(n);
 

@@ -171,9 +171,7 @@ function Main:init()
     npc:init({res=BauulAvatar.Res.Bauul,scale=0.1,x=10,y=0,z=-10});
     npc:ai(avatar);
 
-    -- lightTest();
-    require("outlinetest");
-    outLinetest(6,6,6,3);
+    
 
 
     -- move1();
@@ -533,6 +531,14 @@ function Main:init()
 
     kit.keyLis(bkey,speckey);
     
+
+     -- lightTest();
+     require("outlinetest");
+     outLinetest(6,6,6,3);
+     require("toontest");
+     toontest(6,6,18,3);
+     
+    --  require("fboviewTest");
 end
 
 function Main:quat()
