@@ -91,7 +91,8 @@ setmetatable(NLabel, Base);--设置NLabel继承自Base
 ---创建一个文本对象
 ---@param cam Camera引用
 ---@param bgcolor 是否设置文本背景的颜色
-function NLabel:new(w,h,renderlist,bgcolor)
+---@param fontSize 字号
+function NLabel:new(w,h,renderlist,bgcolor,fontSize)
 	local obj = Base:new();
     setmetatable(obj, NLabel);
     -- self:f1();   --这里去元表NLabel里找到方法f1调用
@@ -101,7 +102,8 @@ function NLabel:new(w,h,renderlist,bgcolor)
         obj.bg = Shape:new(w,h,nil,renderlist);
         obj.bg:setcolor(0,0,0);
     end
-    obj.tf = ftext_create(w,h,13,12,renderlist);
+    local size = fontSize or 13;
+    obj.tf = ftext_create(w,h,size,size,renderlist);
 	return obj;
 end
 -- function NLabel:f1()

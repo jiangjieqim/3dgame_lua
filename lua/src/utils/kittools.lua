@@ -166,11 +166,11 @@ local function f_craeteAxis(x,y,z)
 end
 --- 创建红绿蓝的箭头
 --- len线段的长度
-kit.showAxis = function(len)   
+kit.showAxis = function(len,x,y,z)   
     len = len or 1;
-    f_craeteAxis(len,0,0);
-    f_craeteAxis(0,len,0);
-    f_craeteAxis(0,0,len);
+    f_craeteAxis(len + (x or 0),0,0);
+    f_craeteAxis(0,len + (y or 0),0);
+    f_craeteAxis(0,0,len + (z or 0));
 end
 
 --使用time毫秒播放一个飘动的文本

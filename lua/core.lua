@@ -153,6 +153,32 @@ core.KeyEvent = {
 	GLUT_KEY_INSERT		=	108,
 }
 
+
+--alert common
+local _alert;
+function core.alert(str,color)
+	if(NSkin == nil) then
+		print("alert:"..str);
+		return;
+	end
+	if(_alert == nil) then
+		_alert = {};
+		local nskin = NSkin:new();
+		nskin:load(
+			[[
+	<ui name="1" type="NPanel" drag="1" center="1" width="512" height="256" line="0" set_click_close="1"/>
+	<ui name="label1" type="NLabel" fontSize="16" label="desc" x="0" parent="1" width="512" height="512"/>
+	]]);
+		_alert.skin = nskin;
+	end
+	local skin = _alert.skin;
+	local m = skin.namemap;
+	--- @class NLabel
+	local label = m["label1"];
+	label:set_text(str);
+	skin:get_panel():setBgColor(0,0,0);
+end
+
 ---材质接口
 local material = {}
 core.meterial = material;
@@ -258,6 +284,7 @@ UI_TYPE = {
 	NPanel = 15,
 	---16
 	NButton = 16,
+	Nfbo = 17,-- Fbo type
 };
 
 
@@ -290,6 +317,7 @@ function func_getNameByUIType(t)
 		[u.NLabel] = "NLabel",
 		[u.NPanel] = "NPanel",
 		[u.NButton] = "NButton",
+		[u.Nfbo] = "Nfbo",
 	}
 	return a[t];
 end
@@ -490,8 +518,11 @@ function func_error(msg,func,noAssert)
 	-- if(DEBUG == 0) then
 	-- 	print(debug.traceback());--当没有设置输出日志的时候,控制台默认输出日志.
 	-- end
-	print(msg..s);
-	print(debug.traceback());
+	local s1 = msg..s;
+	-- print(s1);
+	local s2= string.format("%s\n%s",s1,debug.traceback());
+	core.alert(s2);
+	print(s2);
 
 	if(noAssert)  then
 		
@@ -614,8 +645,8 @@ function func_addnode(parent,n,x,y)
 			or _type == UI_TYPE.NLabel
 			or _type == UI_TYPE.NButton
 			or _type == UI_TYPE.CheckBox
-			or _type == UI_TYPE.Input
-
+			or _type == UI_TYPE.Input 
+			or _type == UI_TYPE.Nfbo
 	) then
 		local c = n:get_container();
 		if(c == nil) then
@@ -625,7 +656,7 @@ function func_addnode(parent,n,x,y)
 		--print(c);
 		func_addchild(parent,c,x,y);	
 	else
-		func_error(string.format("type = %s未实现",tostring(_type)));
+		func_error(string.format("type = %s do not imlment",tostring(_type)));	--未实现
 	end
 end
 

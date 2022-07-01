@@ -31,6 +31,7 @@ end
 
 --print(fbo.ptr);
 --**************************************************
+--其实是用Sprite用来绘制Fbo对象的
 FboRender = {
 	-- ptr,cam3d,cam2d,tex,
 
@@ -50,6 +51,8 @@ function FboRender:new(tw,th)
 
 	local fbo = Base:new();
 	setmetatable(fbo, FboRender);
+	self:settype(core.UI_TYPE.Nfbo);
+
 	w = w or 128;
 	h = h or 128;
 	local ptr,cam3d,cam2d,tex,renderlist = fbo_init(tw,th);--构建fbo对象
@@ -89,6 +92,13 @@ end
 function FboRender:dispose()
 	--print(debug.traceback());
 --还需要将添加进来的渲染对象删除掉
+
+	local len = fbo_get_cnt(self.ptr);
+	-- print(len);
+	if(len > 0)then
+		func_error("please remove rendernode from renderlist !");
+	end
+
 	core.del(self.spr,self._sprRenderlist);
 
 	fbo_dispose(self.ptr);
