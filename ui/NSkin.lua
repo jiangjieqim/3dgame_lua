@@ -333,7 +333,10 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		--shape:set_size(20,20);
 		--shape:set_height(75);
 		
-		
+		local line = xml_get_float(node,"line");
+		if(line == 1) then
+			shape:drawPloygonLine(true);
+		end
 		shape:setname(name);
 		child = shape;
 	elseif(_type == "NScrollBar")then
