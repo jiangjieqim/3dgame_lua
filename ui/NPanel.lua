@@ -9,18 +9,26 @@ NPanel = {
 NPanel.__index = NPanel;
 setmetatable(NPanel, Base);
 
-function NPanel:new(w,h)
+function NPanel:new(w,h,r,g,b)
 	w = w or 150;
 	h = h or 100;
 	local self = Base:new();
 	setmetatable(self, NPanel);
 	
 	local bg = Shape:new(w,h);
-	bg:setcolor(0.2,0.2,0.2);
+	bg:setcolor(r or 0.2,g or 0.2,b or 0.2);
 	self.bg = bg;
 	
 	self:settype(core.UI_TYPE.NPanel);--15
 	return self;
+end
+---设置鼠标可以点击状态
+function NPanel:mouseEnable(v)
+	self.bg:mouseEnable(v);
+end
+
+function NPanel:setBgColor(r,g,b)
+	self.bg:setcolor(r,g,b);
 end
 
 function NPanel:drawPloygonLine(v)
@@ -87,6 +95,7 @@ function NPanel:enable_center(v)
 end
 
 function NPanel:visible(v)
+	self:mouseEnable(v);
 	self.bg:visible(v);
 end
 
@@ -99,28 +108,25 @@ end
 
 function NPanel:dispose()
 	local bg = self.bg;
-	--self:set_click_close(false);
+	self:set_clickCallBack();
 	-- print("NPanel:dispose()");
 	self:enable_center(false);
 	--func_error(0);
 	bg:dispose();
-	func_clearTableItem(self);
-
+	func_clearTableItem(self); 
 end
 
---[[local function f_click(name,self)
-	self:visible(false);
-end--]]
 --设置点击任意位置关闭NPanel
---[[function NPanel:set_click_close(v)
+function NPanel:set_clickCallBack(f_click)
 	local bg = self.bg;
-	bg:mouseEnable(v);
-	if(v) then
+	if(f_click) then
+		bg:mouseEnable(true);
 		bg:on(EVENT_ENGINE_SPRITE_CLICK,f_click,self);
 	else
+		bg:mouseEnable(false);
 		bg:off(EVENT_ENGINE_SPRITE_CLICK,f_click);
 	end
-end--]]
+end
 
 --[[
 

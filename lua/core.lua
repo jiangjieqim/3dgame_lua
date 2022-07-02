@@ -5,8 +5,9 @@ local m = core;
 
 ---ui组件类
 core.ui = {};
----1:性能优化模式 0:关闭
-core.optimization = 0;
+---1:性能优化模式,会将md2替换成box 0:关闭
+core.optimization = 1;
+
 local FUNC_KEY = {
 	---移除对象
 	FUNC_PTR_REMOVE = 1,
@@ -461,6 +462,10 @@ function func_print(s,c)
 		--向控制台输出有颜色的文本日志
 		log_print(string.format("%c%c%c%clua: %s\n",0xa8,0x84,0xa8,0x84,s),c);
 	end
+end
+---输出警告信息
+function func_warn(s)
+	func_print(s,"0xff0000");
 end
 ---程序异常的时候做一次输出,或者打印堆栈
 function func_error(msg,func,noAssert)
@@ -1113,7 +1118,8 @@ end
 ---game_init("//resource//texture//1");
 function core.init(atals_url)
 	if(core.engine)then
-		print("warning,engine is already initialise!!!");
+		func_warn("warning,engine is already initialise!!!");
+		return;
 	end
 	core.debug(1);
 	--构造一个图集

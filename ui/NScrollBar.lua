@@ -4,13 +4,12 @@ local DIRECTION_HORIZONTAL = 0	--水平,横
 local DIRECTION_VERTICAL   = 1 	--垂直,竖
 
 NScrollBar = {
+	-- bg,--可滚动的背景(Image)
+	-- btn,--滚动交互小按钮
 	
-	bg,--可滚动的背景(Image)
-	btn,--滚动交互小按钮
-	
-	--回调及回调参数
-	callBack,
-	callBackParam,
+	-- --回调及回调参数
+	-- callBack,
+	-- callBackParam,
 };
 
 NScrollBar.__index = NScrollBar;
@@ -97,7 +96,9 @@ function NScrollBar:new(x,y,cw,ch)
 	self:settype(core.UI_TYPE.NScrollBar);--12
 
 	setmetatable(self, NScrollBar);
-	
+	if(cw == 0) then cw = nil end
+	if(ch == 0) then ch = nil end
+
 	--设置默认的宽高
 	cw = cw or 100;
 	ch = ch or 15;
@@ -132,8 +133,7 @@ function NScrollBar:new(x,y,cw,ch)
 	self.btn = btn;
 	
 	bg:addChild(btn:get_container());
-	
-	
+
 	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick,self);
 	btn:on(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move,self);
 	

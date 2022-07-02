@@ -35,6 +35,7 @@ local function func_dispose(n)
 		or _type == UI_TYPE.Skin
 		or _type == UI_TYPE.NLabel
 		or _type == UI_TYPE.NButton
+		or _type == UI_TYPE.Nfbo
 										)then
 		
 		n:dispose();--删除组件
@@ -169,9 +170,19 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 	elseif(_type == "NPanel") then
 		local width = xml_get_float(node,"width");
 		local height = xml_get_float(node,"height");
+
+		local bgColor = xml_get_str(node,"bgColor");
+		local r,g,b;
+		if(bgColor)then
+			local ls = func_split(bgColor,",");
+			r = tonumber(ls[1]);
+			g = tonumber(ls[2]);
+			b = tonumber(ls[3]);
+		end
 		---@type NPanel
-		local np = NPanel:new(width,height);
+		local np = NPanel:new(width,height,r,g,b);
 		np:setname(name);
+		np:mouseEnable(true);
 		local center = xml_get_float(node,"center");
 		if(center == 1) then 
 			np:enable_center(true);
@@ -184,11 +195,16 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		if(line == 1)then
 			np:drawPloygonLine(true);
 		end
+		-- if(xml_get_float(node,"set_click_close") == 1)then
+		-- 	np:set_click_close(true);
+		-- end
+
 		---是否进行渲染
 		-- local disable_render = xml_get_float(node,"disable_render");
 		-- if(disable_render == 1) then
 		-- 	np:visible(false);
 		-- end
+
 		
 		stack_push(list,np);
 
@@ -206,8 +222,9 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		if(width == 0) then	width = nil;end
 
 		if(height == 0) then height = nil end;
-
-		local label = NLabel:new(width,height);
+		local fontSize =  xml_get_float(node,"fontSize");
+		if(fontSize==0)then fontSize = nil end
+		local label = NLabel:new(width,height,nil,nil,fontSize);
 
 		label:set_text(str or "label");
 		
@@ -339,12 +356,24 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		end
 		shape:setname(name);
 		child = shape;
+	elseif(_type == "Nfbo")then
+		local w = xml_get_float(node,"w");
+		local h = xml_get_float(node,"h");
+		local fbo = FboRender:new(w,h);
+		fbo:setname(name);
+		child = fbo;
 	elseif(_type == "NScrollBar")then
 		--[[
 			<ui name="scale" type="NScrollBar" x="0" y="0" parent="1"/>
 ]]
-		local nb = NScrollBar:new();	
+		local nb = NScrollBar:new(0,0,xml_get_float(node,"w"),
+									  xml_get_float(node,"h"));	
 		--nb:set_pos(x,y);
+
+		local func = xml_get_str(node,"func");
+		if(skin[func]~=nil) then
+			nb:bindCallback(skin[func]);
+		end
 		nb:setname(name);
 		child = nb;
 	elseif(_type == "NListBox")then
@@ -369,9 +398,11 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		if(parent == nil) then
 			func_error("parent is nil!");
 		end
-		
-		func_addnode(parent,child,x,y);
-		
+		-- if(_type == "Nfbo")then
+			-- func_addnode(parent,child:get_container(),x,y);
+		-- else
+			func_addnode(parent,child,x,y);
+		-- end
 		--print("name:",name,child);
 		if(name) then
 			if(skin.namemap == nil) then
@@ -523,13 +554,14 @@ local function f_node_visible(n,v)
 		or _type == UI_TYPE.Shape
 		or _type == UI_TYPE.Input
 		or _type == UI_TYPE.Image
+		or _type == UI_TYPE.Nfbo
 		) then
 		
 		n:visible(v);
 	elseif(_type == UI_TYPE.Button) then
 		btn_visible(n,v);
 	else
-		func_error("未实现类型:".._type);
+		func_error("has not actualize:".._type);
 	end
 end
 --设置显示隐藏皮肤

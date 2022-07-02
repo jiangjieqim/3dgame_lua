@@ -113,10 +113,14 @@ kit.debugView = function()
     require("view/DebugView"):new();
 end
 
-
-
 local n;
+local isKeyInit = 0;
 kit.keyLis = function(call,f_onSpecKey)
+    if(isKeyInit == 1)then
+        func_warn("keyLis is init!");
+        return;
+    end
+    isKeyInit = 1;
     local function f_onkey(data)
         local key = tonumber(data);
         func_print(string.format(">>>>>>>>>>>>>>>>>>>>> key = %s", key));
@@ -150,7 +154,6 @@ kit.keyLis = function(call,f_onSpecKey)
     if(f_onSpecKey~=nil)then
         evt_on(ex,core.ex_event.EVENT_ENGINE_SPEC_KEYBOARD,f_onSpecKey);
     end
-    
 end
 
 --创建箭头

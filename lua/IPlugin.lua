@@ -23,7 +23,7 @@ end
 --[[
 	视图类型的插件继承此类
 ]]
----@param centerFlag 是否居中显示
+---@param centerFlag 是否居显示
 ---@param nskin 皮肤句柄
 ---@param data 数据
 ---@param mode 打开的方式
