@@ -102,10 +102,16 @@ function NLabel:new(w,h,renderlist,bgcolor,fontSize)
         obj.bg = Shape:new(w,h,nil,renderlist);
         obj.bg:setcolor(0,0,0);
     end
-    local size = fontSize or 13;
-    obj.tf = ftext_create(w,h,size,size,renderlist);
+
+    if( fontSize )then
+        local size = fontSize or 13;
+            obj.tf = ftext_create(w,h,size,size+1,renderlist);
+        else
+            obj.tf = ftext_create(w,h,13,12,renderlist);
+        end
 	return obj;
 end
+
 -- function NLabel:f1()
 --     print('f1');
 -- end

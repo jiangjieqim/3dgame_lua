@@ -14,7 +14,7 @@ function Alert:new()
     nskin:load(
         [[
 <ui name="1" type="NPanel" drag="1" center="1" width="512" height="256" line="0" set_click_close="1"/>
-<ui name="label1" type="NLabel" label="desc" x="0" parent="1" width="512" height="256"/>
+<ui name="label1" type="NLabel" label="desc" x="0" parent="1" width="512" height="512"/>
 ]]);
     self.nskin = nskin;
     self.list = NStack:new();
@@ -38,8 +38,9 @@ function Alert:showText(str)
 	--- @class NLabel
 	local label = m["label1"];
     local n = self.list:len();
-	label:set_text("["..n.."]"..str);
+	label:set_text("["..n.."]\n"..str);
 	skin:visible(true);
+    skin:get_panel():center();
 end
 function Alert:show(str)
     if(self.nskin:is_visible())then

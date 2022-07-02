@@ -52,9 +52,9 @@ end
 --动作管理器句柄
 ---@type Animator
 function UnitBase:get_anim()
-    if(self.anim==nil) then
-        func_error('self.anim is nil!');
-    end
+    -- if(self.anim==nil) then
+        -- func_error('self.anim is nil!');
+    -- end
     return self.anim;
 end
 

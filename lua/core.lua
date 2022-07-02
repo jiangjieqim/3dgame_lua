@@ -5,7 +5,8 @@ local m = core;
 
 ---ui组件类
 core.ui = {};
-
+---1:性能优化模式 0:关闭
+core.optimization = 0;
 local FUNC_KEY = {
 	---移除对象
 	FUNC_PTR_REMOVE = 1,
@@ -153,32 +154,16 @@ core.KeyEvent = {
 	GLUT_KEY_INSERT		=	108,
 }
 
-
+require("alert")
 --alert common
+---@class Alert
 local _alert;
-function core.alert(str,color)
-	if(NSkin == nil) then
-		print("alert:"..str);
-		return;
-	end
+function core.alert(str)
 	if(_alert == nil) then
-		_alert = {};
-		local nskin = NSkin:new();
-		nskin:load(
-			[[
-	<ui name="1" type="NPanel" drag="1" center="1" width="512" height="256" line="0" set_click_close="1"/>
-	<ui name="label1" type="NLabel" fontSize="16" label="desc" x="0" parent="1" width="512" height="512"/>
-	]]);
-		_alert.skin = nskin;
+		_alert = Alert:new();
 	end
-	local skin = _alert.skin;
-	local m = skin.namemap;
-	--- @class NLabel
-	local label = m["label1"];
-	label:set_text(str);
-	skin:get_panel():setBgColor(0,0,0);
+	_alert:show(str);
 end
-
 ---材质接口
 local material = {}
 core.meterial = material;
@@ -1127,6 +1112,9 @@ end
 --- @param atals_url 主图集
 ---game_init("//resource//texture//1");
 function core.init(atals_url)
+	if(core.engine)then
+		print("warning,engine is already initialise!!!");
+	end
 	core.debug(1);
 	--构造一个图集
     -- core.atals = atals_load("//resource//texture//","1");
