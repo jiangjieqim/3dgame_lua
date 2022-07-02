@@ -1,8 +1,8 @@
 Camera = {
-	---cameraå¥æŸ„
+	---camera¾ä±ú
 	-- p,
 
-	---å˜æ¢çŸ©é˜µ
+	---±ä»»¾ØÕó
 	-- transform,	
 };
 
@@ -23,14 +23,14 @@ function Camera:perctive()
 	return cam(self.p,"perctive");
 end
 
---ModelViewæ¨¡å‹è§†å›¾çŸ©é˜µ
+--ModelViewÄ£ĞÍÊÓÍ¼¾ØÕó
 function Camera:model()
 	return cam(self.p,"model");
 end
 function Camera:normal()
 	return cam(self.p,"normal");
 end
---è®¾ç½®cameraçš„3dåæ ‡
+--ÉèÖÃcameraµÄ3d×ø±ê
 function Camera:set_pos(x,y,z)
 	-- print(x,y,z);
 	cam(self.p,"set_xyz",x or 0,y or 0,z or 0);
@@ -40,27 +40,27 @@ end
 function Camera:get_pos()
 	return cam(self.p,"get_xyz");
 end
----è·å–è§’ä½ç§»
+---»ñÈ¡½ÇÎ»ÒÆ
 function Camera:get_rotate()
 	return cam(self.p,"get_rotate");
 end
 
---é‡ç½®camera
+--ÖØÖÃcamera
 function Camera:reset()
 	cam(self.p,"reset");
 end
 
---è·å–cameraçš„Cå±‚çš„å¥æŸ„
+--»ñÈ¡cameraµÄC²ãµÄ¾ä±ú
 function Camera:get_p()
 	return self.p;
 end
 
---åˆ·æ–°modelçŸ©é˜µ
+--Ë¢ĞÂmodel¾ØÕó
 function Camera:refresh()
 	cam(self.p,"refresh");
 end
 
---è®¾ç½®cameraçš„rxçš„å€¼
+--ÉèÖÃcameraµÄrxµÄÖµ
 function Camera:rx(v)
 	-- print(self.p,"rx",v);
 	cam(self.p,"rx",v);
@@ -84,28 +84,33 @@ function Camera:set_rotate(rx,ry,rz)
 	self:refresh();
 end
 
---é”€æ¯cam
+--Ïú»Ùcam
 function Camera:dispose()
 	func_clearTableItem(self);
 end
 
---ç»‘å®šä¸€ä¸ªå¯¹è±¡åˆ°cam
+--°ó¶¨Ò»¸ö¶ÔÏóµ½cam
 function Camera:bind(o)
-	func_error("æœªå®ç°!Camera:bind(o)");
+	func_error("Î´ÊµÏÖ!Camera:bind(o)");
 end
 
----è®¾ç½®çˆ¶å¯¹è±¡  
----v:ç»§æ‰¿è‡ªstruct HeadInfo*çš„å¯¹è±¡
+---ÉèÖÃ¸¸¶ÔÏó  
+---v:¼Ì³Ğ×Ôstruct HeadInfo*µÄ¶ÔÏó
 function Camera:setParent(v)
 	if(v.p == nil)then
 		func_error("check v.p!");
 	end
 	cam(self.p,"cam_setParent",v.p);
 end
----è®¾ç½®targetå¯¹è±¡,ä¹‹åæ‰§è¡Œcore.cam:refresh()
+---ÉèÖÃtarget¶ÔÏó,Ö®ºóÖ´ĞĞcore.cam:refresh()
 function Camera:setTarget(v)
-	if(v.p == nil)then
-		func_error("check v.p!");
+	if(v == nil) then
+		cam(self.p,"cam_setTarget");
+	else
+		if(v.p == nil)then
+			func_error("check v.p!");
+		end
+		cam(self.p,"cam_setTarget",v.p);
 	end
-	cam(self.p,"cam_setTarget",v.p);
+	self:refresh();
 end

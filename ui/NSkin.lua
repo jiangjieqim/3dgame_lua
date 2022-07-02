@@ -418,6 +418,10 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 	--print("====>",parent);
 end
 
+function NSkin:getNameMap()
+	return self.namemap;
+end
+
 --[[
 
 	myParent,offsetx,offsety

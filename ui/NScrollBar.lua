@@ -152,6 +152,12 @@ function NScrollBar:get_container()
 	local bg = self.bg;
 	return bg:get_container();
 end
+---…Ë÷√Œƒ±æ
+function NScrollBar:set_text(label)
+	if(self.label)then
+		self.label:set_text(label);
+	end
+end
 
 function NScrollBar:dispose()
 	local bg = self.bg;
