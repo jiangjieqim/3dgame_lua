@@ -6,6 +6,7 @@ local DIRECTION_VERTICAL   = 1 	--垂直,竖
 NScrollBar = {
 	-- bg,--可滚动的背景(Image)
 	-- btn,--滚动交互小按钮
+	-- label,-- NLabel
 	
 	-- --回调及回调参数
 	-- callBack,
@@ -91,7 +92,7 @@ function NScrollBar:visible(v)
 	bg:visible(v);
 	btn:visible(v);
 end
-function NScrollBar:new(x,y,cw,ch)
+function NScrollBar:new(x,y,cw,ch,label)
 	local self = Base:new();
 	self:settype(core.UI_TYPE.NScrollBar);--12
 
@@ -133,6 +134,12 @@ function NScrollBar:new(x,y,cw,ch)
 	self.btn = btn;
 	
 	bg:addChild(btn:get_container());
+	
+	if(label)then
+		self.label = NLabel:new(64,64);
+		self.label:set_text(label);
+		bg:addChild(self.label:get_container(),cw,0);
+	end
 
 	bg:on(EVENT_ENGINE_SPRITE_CLICK,f_scrollBarClick,self);
 	btn:on(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move,self);
@@ -154,6 +161,8 @@ function NScrollBar:dispose()
 	
 	btn:off(EVENT_ENGINE_SPRITE_CLICK_MOVE,f_luaDrag_move);
 	btn:dispose();
-	
+	if(self.label) then
+		self.label:dispose();
+	end
 	func_clearTableItem(self);
 end

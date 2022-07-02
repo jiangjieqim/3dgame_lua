@@ -366,14 +366,15 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		--[[
 			<ui name="scale" type="NScrollBar" x="0" y="0" parent="1"/>
 ]]
+		local label = xml_get_str(node,"label");
 		local nb = NScrollBar:new(0,0,xml_get_float(node,"w"),
-									  xml_get_float(node,"h"));	
-		--nb:set_pos(x,y);
-
+									  xml_get_float(node,"h"),label);
 		local func = xml_get_str(node,"func");
 		if(skin[func]~=nil) then
 			nb:bindCallback(skin[func]);
 		end
+		
+
 		nb:setname(name);
 		child = nb;
 	elseif(_type == "NListBox")then
