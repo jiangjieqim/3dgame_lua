@@ -40,9 +40,6 @@ local floorMouse = FloorMouse:new();
 ---‰÷»æµÿ∞Â
 -- shader_updateVal(_mater,"lx",0.0);
 
-
--- require("outlineball");
-
 local function addShowPlane()
     local ps = [[
         #version 110
@@ -166,12 +163,13 @@ function Main:init()
 
     local avatar= BauulAvatar:new();
     avatar:init({res=BauulAvatar.Res.Bauul,scale=0.1});
-    -- print("box.p",box.p,tostring(box));
-    -- self:camControl(avatar);
-    -- cam:setParent(avatar);
+    self:camControl(avatar);
+
 
     print("avatar name:",tostring(avatar:get_name()));
-    cam:setTarget(avatar);
+    cam:setParent(avatar);
+    -- cam:setTarget(avatar);
+
 
     local monster = BauulAvatar:new();
     -- monster:init({res=BauulAvatar.Res.Gobin,scale=0.1});
