@@ -11,6 +11,9 @@ NScrollBar = {
 	-- --回调及回调参数
 	-- callBack,
 	-- callBackParam,
+
+	--当前的进度
+	-- progress	
 };
 
 NScrollBar.__index = NScrollBar;
@@ -71,10 +74,15 @@ local function f_luaDrag_move(progress,self)
 	-- if(progress == nil) then
 	-- 	func_error("progress = nil!");
 	-- end
+	self.progress = progress;
 	if(self.callBack) then
 		--print(progress,self);
 		self.callBack(progress,self.callBackParam);
 	end
+end
+
+function NScrollBar:getProgressValue()
+	return self.progress or 0;
 end
 
 local function f_scrollBarClick(name,self)

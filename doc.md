@@ -82,3 +82,11 @@ print(dbg);--[EMMY]lua version: 51
     "consoleCoding": "utf8"
 },
 ```
+# 法线向量
+```
+//_base_m_invert 模型矩阵的逆的转置
+//_Normal(vec3)法线
+normal =  normalize(vec3(_base_m_invert * vec4(_Normal,1.0)));       
+vec4 v4 =  _base_m_invert * vec4(_Position,1.0);
+vLightDir = normalize(vec3(LightPosition - vec3(v4.x,v4.y,v4.z)));
+```

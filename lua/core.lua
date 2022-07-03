@@ -6,7 +6,8 @@ local m = core;
 ---ui组件类
 core.ui = {};
 ---1:性能优化模式,会将md2替换成box 0:关闭
-core.optimization = 1;
+core.optimization = 0;
+core.light = {x=0,y=0,z=0};
 
 local FUNC_KEY = {
 	---移除对象
@@ -430,6 +431,12 @@ function func_clearTableItem(point)
 	-- end
 end
 
+function func_set_position(o,x,y,z)
+	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
+end
+function func_get_position(o)
+	return get_attr(o,"xyz");
+end
 ---遍历打印表
 function func_printTable(t)
 	func_print(">>>>> start print table: "..tostring(t),0xff00ff)

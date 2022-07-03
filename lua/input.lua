@@ -143,12 +143,12 @@ function Input:get_size()
 	return w,14;
 end
 
-function Input:new()
+function Input:new(w)
 	local self = Base:new();
 	self:settype(core.UI_TYPE.Input);--9
 	setmetatable(self,Input);
 	
-	local _in = input_create();
+	local _in = input_create(w);
 
 	self._in = _in;
 	-- self:add_bg(bg);
@@ -193,4 +193,8 @@ end
 
 function Input:set_pos(x,y)
 	input_set_pos(self._in,x,y);
+end
+---Êä³öÎÄ±¾
+function Input:input_getText()
+	return input_get_str(self._in);
 end

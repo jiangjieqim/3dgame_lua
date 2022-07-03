@@ -21,20 +21,28 @@ BauulAvatar.Res = {
 BauulAvatar.__index = BauulAvatar;
 setmetatable(BauulAvatar , UnitBase);
 
----isBox是否时候一个立方盒子
+---isBox是否时候一个立方盒子  
+---attribute:  
+---_status 状态  
 function BauulAvatar:new()
     local s = UnitBase:new();
     setmetatable(s,BauulAvatar);
     return s;
 end
+
 --- 注意:在new里面不要使用self对象
 --- 用外部对象调用init对象
 function BauulAvatar:init(p)
     -- self:addRotateBox();
     if(p~=nil) then
-        self:create(p.res or BauulAvatar.Res.Box);
+        local _l = p.renderlist;
+        if(core.optimization == 1)then
+            self:create(BauulAvatar.Res.Box,_l);
+        else
+            self:create(p.res or BauulAvatar.Res.Box,_l);
+            self:scale(p.scale or 1);
+        end
         self:set_position(p.x or 0,p.y or 0,p.z or 0);
-        self:scale(p.scale or 1);
     end
 end
 
@@ -47,13 +55,14 @@ function BauulAvatar:setStatus(v)
     if(self._status ~= v) then
         if(self:has_anim())then
             local anim = self:get_anim();
-            if(v == BauulAvatar.EStatus.Run)then
-                anim:play("run");
-            elseif(v == BauulAvatar.EStatus.Stand)then
-                anim:play("stand");
-            elseif(v == BauulAvatar.EStatus.Jump)then
-                anim:play("jump");
-            
+            if(anim) then
+                if(v == BauulAvatar.EStatus.Run)then
+                    anim:play("run");
+                elseif(v == BauulAvatar.EStatus.Stand)then
+                    anim:play("stand");
+                elseif(v == BauulAvatar.EStatus.Jump)then
+                    anim:play("jump");
+                end
             end
         end
         self._status = v;
@@ -75,12 +84,14 @@ function BauulAvatar:createObj(res)
     self:drawPloygonLine(true);
     self:double_face();
 end
-function BauulAvatar:create(res)
+function BauulAvatar:create(res,renderlist)
     -- local avatar = self;
 
     local url;
     local mat;
     local scale = 1;
+
+    -- res = BauulAvatar.Res.Box;
     if(res == BauulAvatar.Res.Box) then
         self:createObj("box");
     elseif(res == BauulAvatar.Res.Teapot) then
@@ -111,8 +122,7 @@ function BauulAvatar:create(res)
         end
         self:setStatus(BauulAvatar.EStatus.Stand);
     end
-    core.add(self);
-
+    core.add(self,renderlist);
 end
 
 --增加一个环绕的球

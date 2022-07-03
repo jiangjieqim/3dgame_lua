@@ -261,6 +261,11 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 			btn:setRotateZ(rotatez);
 		end
 		
+		local func = xml_get_str(node,"func");
+		if(skin[func]~=nil) then
+			btn:bind_click(skin[func]);
+		end
+
 		child = btn;
 	elseif(_type == "ScrollBar") then
 		local sc = scrollBar_new();
@@ -288,7 +293,6 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		local func = xml_get_str(node,"func");
 		if(skin[func]~=nil) then
 			ck:bind(skin[func]);
-		else
 		end
 		--print("is nil!",func,type(skin[func]),skin[func]);
 
@@ -317,7 +321,9 @@ local function f_create_by_node(skin,node,myParent,offsetx,offsety)
 		child = lb;
 		
 	elseif(_type == "Input") then
-		local _in = Input:new();
+		local w = xml_get_float(node,"w");
+		if(w == 0) then w = nil end
+		local _in = Input:new(w);
 		_in:setname(name);
         
 		child = _in;

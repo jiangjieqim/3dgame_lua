@@ -1,11 +1,11 @@
 local core = core;
 ------------------------------------------------------
---åˆ‡æ¢çŠ¶æ€
---è¿”å›true or false
+--ÇĞ»»×´Ì¬
+--·µ»Øtrue or false
 ------------------------------------------------------
 local function f_changeFlags(_o,_flag)
 	if(_o==nil) then
-		func_error("switchFlags ç›®æ ‡å¯¹è±¡ = nil")
+		func_error("switchFlags Ä¿±ê¶ÔÏó = nil")
 		return;
 	end;
 	
@@ -17,20 +17,16 @@ local function f_changeFlags(_o,_flag)
 		else
 			setv(_o,_flag);
 		end
-		--print('å¯¹è±¡'..string.format("%#x",_o).."è®¾ç½®æ ‡ç¤º".._flag.."çŠ¶æ€ä¸º:"..getv(_o,_flag) );
+		--print('¶ÔÏó'..string.format("%#x",_o).."ÉèÖÃ±êÊ¾".._flag.."×´Ì¬Îª:"..getv(_o,_flag) );
 	end
 	return getv(_o,_flag) == 1;
-end
-
-local function func_set_position(o,x,y,z)
-	change_attr(o,"set_position",string.format("%f,%f,%f",x,y,z));
 end
 
 -- local function func_get_scale(o)
 -- 	return get_attr(o,"scale");
 -- end
 
---è®¾ç½®åæ ‡
+--ÉèÖÃ×ø±ê
 local function func_set_x(o,x)
 	change_attr(o,"x",x)
 end
@@ -48,7 +44,7 @@ NUnit = {
 };
 NUnit.__index = NUnit;
 
---- s.p èŠ‚ç‚¹å¼•ç”¨åœ°å€
+--- s.p ½ÚµãÒıÓÃµØÖ·
 function NUnit:new()
 	local s = {};
 	setmetatable(s, NUnit);
@@ -57,7 +53,7 @@ function NUnit:new()
 	return s;
 end
 function NUnit:setRenderList(_list)
-	--func_error("æœªå®ç°setRenderList()æ¥å£.");
+	--func_error("Î´ÊµÏÖsetRenderList()½Ó¿Ú.");
 	self._renderlist = _list;
 end
 function NUnit:dispose()
@@ -65,25 +61,25 @@ function NUnit:dispose()
 	-- print("NUnit:dispose()");
 end
 
---è·å–æ¨¡å‹çš„ç±»å‹
+--»ñÈ¡Ä£ĞÍµÄÀàĞÍ
 function NUnit:get_type()
 	return core.get_type(self.p);
 end
 
---è®¾ç½®å½“å‰çš„å¯¹è±¡çš„cam
+--ÉèÖÃµ±Ç°µÄ¶ÔÏóµÄcam
 function NUnit:setCam(cam)
 	func_error("setCam now!!!"..tostring(cam));
-	-- set_cam(self.p,cam);--ä½¿ç”¨æŒ‡å®šçš„cam
+	-- set_cam(self.p,cam);--Ê¹ÓÃÖ¸¶¨µÄcam
 end
 
---è·å–å¥æŸ„
+--»ñÈ¡¾ä±ú
 function NUnit:get_p()
 	if(self.p == nil) then
-		func_error("self.p is not initialise!");--æœªåˆå§‹åŒ–
+		func_error("self.p is not initialise!");--Î´³õÊ¼»¯
 	end
     return self.p;
 end
----pæ˜¯å¦ä¸ºnil
+---pÊÇ·ñÎªnil
 function NUnit:p_isNil()
 	if(self.p == nil)then
 		return true;
@@ -93,9 +89,9 @@ end
 
 function NUnit:visible(v)
 	if(v) then
-		setv(self.p,FLAGS_VISIBLE);--æ˜¾ç¤º
+		setv(self.p,FLAGS_VISIBLE);--ÏÔÊ¾
 	else	
-		resetv(self.p,FLAGS_VISIBLE);--éšè—
+		resetv(self.p,FLAGS_VISIBLE);--Òş²Ø
 	end
 end
 
@@ -108,7 +104,7 @@ function NUnit:f_set_flag(flag,v)
 	end
 end
 
---åè½¬é¢æ¸²æŸ“
+--·´×ªÃæäÖÈ¾
 function NUnit:reverse_face()
 	local m = self:getMaterial();
 	local type = core.meterial.tmat_get_cullface(m);
@@ -120,19 +116,19 @@ function NUnit:reverse_face()
 		core.meterial.setCullface(m,GL.CULL_FACE_BACK);
 	end
 end
---è·å–å…¶æè´¨å¥æŸ„
+--»ñÈ¡Æä²ÄÖÊ¾ä±ú
 function NUnit:getMaterial()
     if(self.material == nil) then
         func_error("self.material=nil!");
     end
     return self.material;
 end
----åŒé¢æ˜¾ç¤º(å–æ¶ˆå‰”é™¤èƒŒé¢)
+---Ë«ÃæÏÔÊ¾(È¡ÏûÌŞ³ı±³Ãæ)
 function NUnit:double_face()
 	core.meterial.setCullface(self:getMaterial(),GL.CULL_FACE_DISABLE);
 end
 
----è®¾ç½®ä¸ºçº¿æ¡†æ¸²æŸ“
+---ÉèÖÃÎªÏß¿òäÖÈ¾
 function NUnit:drawPloygonLine(v)
 	local m = self:getMaterial();
 	local value;
@@ -145,7 +141,7 @@ function NUnit:drawPloygonLine(v)
 end
 
 
---èƒŒé¢å‰”é™¤
+--±³ÃæÌŞ³ı
 -- function NUnit:cullFace(v)
 	-- self:f_set_flag(FLAGS_DISABLE_CULL_FACE,v);
 -- end
@@ -153,8 +149,8 @@ end
 function NUnit:is_visible()
 	return getv(self.p,FLAGS_VISIBLE) == 1;
 end
----è®¾ç½®ç¼©æ”¾æ¯”ç‡
----@param value ç¼©æ”¾å€¼0~1.0
+---ÉèÖÃËõ·Å±ÈÂÊ
+---@param value Ëõ·ÅÖµ0~1.0
 function NUnit:scale(value)
 	-- print(value);
     change_attr(self.p,"scale",value);
@@ -174,25 +170,25 @@ function NUnit:get_scale()
 	-- return func_get_scale(self.p);
 	return get_attr(self.p,"scale");
 end
---è·å–è½´è§’åº¦,è¯¥å€¼æ˜¯math.piçš„å€æ•°
+--»ñÈ¡Öá½Ç¶È,¸ÃÖµÊÇmath.piµÄ±¶Êı
 function NUnit:get_angle()
 	return get_attr(self.p,"angle");
 end
 
---è·å–rx,ry,rzçš„å€¼
+--»ñÈ¡rx,ry,rzµÄÖµ
 function NUnit:get_rotate()
 	--return get_attr(self.p,"rotate");
-	func_error("æœªå®ç°!");
+	func_error("Î´ÊµÏÖ!");
 end
 
---è·å–å…¶x,y,zåæ ‡
+--»ñÈ¡Æäx,y,z×ø±ê
 function NUnit:get_pos()
-	local x,y,z =  get_attr(self.p,"xyz");
+	local x,y,z = func_get_position(self.p); --get_attr(self.p,"xyz");
 	return x,y,z;
 end
 
---ç»•è‡ªå®šä¹‰è½´æ—‹è½¬ræ¬§æ‹‰è§’
---normal æ˜¯å¦å•ä½åŒ–å‘é‡
+--ÈÆ×Ô¶¨ÒåÖáĞı×ªrÅ·À­½Ç
+--normal ÊÇ·ñµ¥Î»»¯ÏòÁ¿
 function NUnit:rotate_vec(r,x,y,z)
 --[[	if(normal) then
 		local x1,y1,z1 = vec3Normalize(x,y,z);
@@ -201,7 +197,7 @@ function NUnit:rotate_vec(r,x,y,z)
 	end--]]
 	change_attr(self.p,"rotate_vec",x,y,z,r);
 end
---- è®¾ç½®åˆå§‹åŒ–è½´åç§»,å½“éœ€è¦è‡ªå®šä¹‰ä¸€ä¸ªè½´ä¸ºåŸºè½´çš„æ—¶å€™ï¼Œå¯ä»¥ä½¿ç”¨è¯¥æ¥å£ã€‚
+--- ÉèÖÃ³õÊ¼»¯ÖáÆ«ÒÆ,µ±ĞèÒª×Ô¶¨ÒåÒ»¸öÖáÎª»ùÖáµÄÊ±ºò£¬¿ÉÒÔÊ¹ÓÃ¸Ã½Ó¿Ú¡£
 function NUnit:iAxis(r,x,y,z)
 	change_attr(self.p,"iAxis",x,y,z,r);
 end
@@ -235,17 +231,17 @@ function NUnit:set_position(x,y,z)
     func_set_position(self.p,x,y,z);
 end
 
---è·å–å¯¹è±¡å
+--»ñÈ¡¶ÔÏóÃû
 function NUnit:get_name()
     return get_attr(self.p,"get_name")
 end
 
-----è®¾ç½®å¯¹è±¡çš„å…³é”®å¸§å¸§ç‡
+----ÉèÖÃ¶ÔÏóµÄ¹Ø¼üÖ¡Ö¡ÂÊ
 function NUnit:set_fps(v)
 	change_attr(self.p,"fps",tostring(v))
 end
 
---åˆ‡æ¢flag
+--ÇĞ»»flag
 function NUnit:changeFlag(flag)
 	f_changeFlags(self.p,flag);
 end

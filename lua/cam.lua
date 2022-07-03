@@ -100,17 +100,32 @@ function Camera:setParent(v)
 	if(v.p == nil)then
 		func_error("check v.p!");
 	end
-	cam(self.p,"cam_setParent",v.p);
+	-- cam(self.p,"cam_setParent",v.p);
+	self:setParentPoint(v.p);
 end
+
+function Camera:setParentPoint(ptr)
+	cam(self.p,"cam_setParent",ptr);
+end
+
+function Camera:setTargetPoint(value)
+	cam(self.p,"cam_setTarget",value);
+	self:refresh();
+end
+
 ---设置target对象,之后执行core.cam:refresh()
 function Camera:setTarget(v)
 	if(v == nil) then
 		cam(self.p,"cam_setTarget");
 	else
 		if(v.p == nil)then
-			func_error("check v.p!");
+			func_error("check p!");
 		end
-		cam(self.p,"cam_setTarget",v.p);
+
+		-- if(v.p == nil)then
+		-- 	func_error("check v.p!");
+		-- end
+		-- cam(self.p,"cam_setTarget",v.p);
+		self:setTargetPoint(v.p);
 	end
-	self:refresh();
 end

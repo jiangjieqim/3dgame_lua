@@ -146,7 +146,7 @@ kit.keyLis = function(call,f_onSpecKey)
         if(call~=nil) then
             call(key);
         else
-            print("call is nil!");
+        --    print("call is nil!");
         end
     end
     local ex = core.engine;
@@ -184,4 +184,5 @@ kit.playText =  function(str,time)
     label:set_label(str,time or 1000,sy*0.25);
 end
 
+kit.showAxis(5);
 return kit;

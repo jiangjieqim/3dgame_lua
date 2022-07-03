@@ -6,7 +6,7 @@ local function debugEmmy()
 
     -- print(dbg);--[EMMY]lua version: 51
     dbg.tcpListen("localhost", 9966);
-    -- dbg.waitIDE();--ç­‰å¾…EmmyLua New Debugï¿½??åŠ¨æ‰§è¡Œide
+    -- dbg.waitIDE();--µÈ´ıEmmyLua New Debug???¶¯Ö´ĞĞide
 end
 
 -- debugEmmy();
@@ -20,6 +20,8 @@ core.init("//resource//texture//1");
 
 local cam = core.cam;
 
+require("lightpanel");
+
 require("BauulAvatar");
 require("Npc");
 require("FloorMouse");
@@ -29,8 +31,13 @@ require("QuatDev");
 
 require("utils/kittools");
 
+
+local camx = 0;
+local camy = -20;
+local camz = -20;
+
 local floorMouse = FloorMouse:new();
----æ¸²æŸ“åœ°æ¿
+---äÖÈ¾µØ°å
 -- shader_updateVal(_mater,"lx",0.0);
 
 
@@ -39,10 +46,10 @@ local floorMouse = FloorMouse:new();
 local function addShowPlane()
     local ps = [[
         #version 110
-        uniform sampler2D texture1;//ç•Œé¢è´´å›¾
+        uniform sampler2D texture1;//½çÃæÌùÍ¼
         varying vec2 out_texcoord;
         void main(void){
-            // float uvSacle = 20.0;//çº¹ç†ç¼©æ”¾
+            // float uvSacle = 20.0;//ÎÆÀíËõ·Å
             //vec2 texcoord = vec2(out_texcoord.x * _mUvScale,out_texcoord.y * _mUvScale);
             vec4 finalColor=texture2D(texture1, out_texcoord);
             
@@ -50,7 +57,7 @@ local function addShowPlane()
             //finalColor = texture2D(texture1, mod(out_texcoord, vec2(3.0, 9.0)) * vec2(0.75, 0.5625));
 
             if(finalColor.r == 1.0 && finalColor.g == 0.0 && finalColor.b == 1.0){
-                discard;//ä¸¢å¼ƒç´«è‰²çš„åƒç´ 
+                discard;//¶ªÆú×ÏÉ«µÄÏñËØ
             }
             gl_FragColor = finalColor;
         }
@@ -86,8 +93,11 @@ local function addShowPlane()
     core.add(floor);
     return floor;
 end
+
 ----------------------------------------------------------------------
+
 local Main = {
+    
 
 }
 Main.__index = Main;
@@ -109,9 +119,9 @@ end
 function Main:print()
     
 end
----camä¸­é”®ç¼©æ”¾
+---camÖĞ¼üËõ·Å
 function Main:camControl(avatar)
-    cam:setParent(avatar);
+    -- cam:setParent(avatar);
     local function f_onMouseChange(data)
         local x,y,z = cam:get_pos();
         local speed = 4;
@@ -136,9 +146,8 @@ end
 
 function Main:init()
     
-    kit.showAxis(5);
 
-    --æ·»åŠ ä¸€ä¸ªFPSæ˜¾ç¤º
+    --Ìí¼ÓÒ»¸öFPSÏÔÊ¾
 
     -- local fps = require("view/FpsView");
     -- fps:show(nil,nil,nil,"FPS:%s");
@@ -158,9 +167,11 @@ function Main:init()
     local avatar= BauulAvatar:new();
     avatar:init({res=BauulAvatar.Res.Bauul,scale=0.1});
     -- print("box.p",box.p,tostring(box));
-    self:camControl(avatar);
+    -- self:camControl(avatar);
+    -- cam:setParent(avatar);
 
-
+    print("avatar name:",tostring(avatar:get_name()));
+    cam:setTarget(avatar);
 
     local monster = BauulAvatar:new();
     -- monster:init({res=BauulAvatar.Res.Gobin,scale=0.1});
@@ -194,13 +205,7 @@ function Main:init()
             -- monster:move(-20,0,0,0,10);
         else 
             print("err!",px,py,pz);
-            -- func_error(1);
-            -- monster:set_position(0,0,0);
-            -- if(math.random() <= 0.5) then
-            --     monster:move(0,0,0,0,10);
-            -- else
-            --     monster:move(-20,0,0,0,10);
-            -- end
+        
         end
         -- print(">>>",core.get_time());
     end)
@@ -208,58 +213,12 @@ function Main:init()
 
 
 
---[[
-    local mat = "\\resource\\material\\shape.mat";
-    local n = UnitBase:new();
-    n:loadvbo("\\resource\\obj\\torus1.obj",mat);--teapot   torus
-    print("n.p",n.p,tostring(n));
-    local n1 = UnitBase:new();
-    n1:loadvbo("\\resource\\obj\\torus1.obj",mat);--teapot   torus
-    -- line = true;
-    print("n1.p",n1.p,tostring(n1));
-    print("n.p",n.p,tostring(n));
-    core.add(n);
-    core.add(n1);
-]]
-
-    -- self.box:setColor(1,0,0);
-    -- local boxName = self.box:get_name();
-    -- print("name:",boxName);-- 3èŒ¶å£¶
-
-    -- local v = 0;
-    -- local p1;
-    -- -- local p2 = 1;
-    -- local function frender2()
-    --     --æ—‹è½¬
-    --     v=v + core.delayTime()/2048;
-    --     box:rotate_vec(v,0,1,0);
-    --     -- print(v);
-    --     if(v >= 8) then
-    --         core.clearTimeout(p1);
-    --     end
-    -- end
-    -- -- 
-    -- p1 = core.frameloop(1,frender2);
-    --############################################################
-
-
-    -- cam:rx(math.pi/2);
-    -- local n = UnitBase:new();
-    -- n:loadvbo("\\resource\\md2\\bauul.md2","\\resource\\material\\bauul.mat");
-    -- core.add(n);
-
-   
 
 
 
-
-
-
-
-    --åœ°æ¿
+    --µØ°å
     local _plane = UnitBase:new();
     _plane:loadvbo("\\resource\\obj\\plane.obj","\\resource\\material\\horse.mat",100);
-    -- _plane:set_position(0,-10,0);
     -- _plane:double_face();
     -- _plane:drawPloygonLine(true);
     _plane:load_collide("\\resource\\obj\\plane.obj");
@@ -277,7 +236,7 @@ function Main:init()
     local dir = Vec3:new(1,1,0);
 
     local function frender()
-        --æ—‹è½¬
+        --Ğı×ª
         v=v + core.delayTime()/20480;
         --print(v);
         _plane:rotate_vec(v,dir.x,dir.y,dir.z);
@@ -347,12 +306,15 @@ function Main:init()
     -- print(self['init']);
     -- print(self.name)
     -- self:print();
+    
+    
     local nskin = NSkin:new();
+    
     nskin:load("\\resource\\ui\\crl.xml");
     local btn =nskin:find("infoBtn");
     local label1 =nskin:find("label1");
-
-    ScrollViewCase1(100,100);
+    
+    ScrollViewCase1(550,30);
 
     local namemap = nskin.namemap;
 
@@ -368,8 +330,6 @@ function Main:init()
         -- end
         -- cam:refresh();
 
-
-        
     end);
     -- func_printTable(core);
 
@@ -380,7 +340,9 @@ function Main:init()
         local fps = core.getFps();
         if(avatar) then
             local px,py,pz = avatar:get_pos();
-            s1 = string.format("avatarPos %.2f,%.2f,%.2f",px,py,pz);
+            local xMouse,yMouse,midDirection =  core.get_mouse_status();
+
+            s1 = string.format("avatarPos %.2f,%.2f,%.2f mouse  %.2f,%.2f,%.2f",px,py,pz,xMouse,yMouse,midDirection);
             -- cam:set_pos(0-px,-31.5-py,-41-pz);
         -- core.setTimeout(1000,function ()
         --     cam:refresh();
@@ -415,24 +377,17 @@ function Main:init()
 
     -- 
     core.frameloop(16.6,frenderUi);
-    local eg = self:quat();
+    -- local eg = self:quat();
     -- local floorMat = floorMouse:getMaterial();
     local _mUvScale = 1;
     local function scHandler(v)
         -- print(v);
         _mUvScale = v;
         shader_updateVal(showMap:getMaterial(),"_mUvScale",20+_mUvScale*10);
-        -- v = v * 0.5;
-        -- local x, y, z,w=self:quat_slerp(0,1,0,	 0,0,1, v);
-        -- print(x, y, z,w);
-        
-        -- eg:mod(1,vec3_mult(x,y,z,20));
-
-        -- cam:set_rotate(0,math.pi  * v * 2,0);
     end
     -- print("aa:",vec3_between(0,1,0  ,0,-0.6,1));
-    --æ±‚ä¸¤ä¸ªå‘é‡çš„å‰ä¹˜
-    --åˆ‡å‰²å‘é‡
+    --ÇóÁ½¸öÏòÁ¿µÄ²æ³Ë
+    --ÇĞ¸îÏòÁ¿
     local qua = quatDev(0,1,0,0,0,1);
     -- local qua = QuatDev:new(0,0,1,0,1,0);
 
@@ -451,21 +406,21 @@ function Main:init()
 
 
     local curTheta = 0;
-    local function bkey(key) 
-        print("***********"..key);
-        if(key == core.KeyEvent.KEY_Q) then
-            -- p1 = p1 +  math.pi/8;
-            -- cam:rz(p1);
-            -- cam:refresh();
+    -- local function bkey(key) 
+    --     print("***********"..key);
+    --     if(key == core.KeyEvent.KEY_Q) then
+    --         -- p1 = p1 +  math.pi/8;
+    --         -- cam:rz(p1);
+    --         -- cam:refresh();
 
-        elseif(key == core.KeyEvent.KEY_W) then
-            -- p1 = p1 -  math.pi/8;
-            -- cam:rz(p1);
-        end
-    end
+    --     elseif(key == core.KeyEvent.KEY_W) then
+    --         -- p1 = p1 -  math.pi/8;
+    --         -- cam:rz(p1);
+    --     end
+    -- end
 
     cam:set_rotate(-math.pi/4,0,0);
-    cam:set_pos(0,-40,-40);
+    cam:set_pos(camx,camy,camz);
     local speed = math.pi/180;
     local function update()
         local ax = 0;
@@ -489,19 +444,6 @@ function Main:init()
         
         box:set_position(x,0,z);
 
-        -- -- local cx,cy,cz = avatar:get_pos();
-        -- box:look_at(0,0,0);
-        -- -- box:rz(math.pi/4);
-        -- print(x,y,z,string.format("%.2f",box:get_angle()/math.pi));
-
-        -- -math.pi/8
-        -- cam:set_rotate(0,-box:get_angle(),0);
-        --   x,y,z = vec3_mult(x,y,z,10);
-
-        -- print(x,y,z);
-        -- cam:set_pos(0,-31.5,-41);
-        -- cam:set_pos(x,y-10,z);
-        -- cam:set_rotate(-math.pi/8,0,0);
         cam:refresh();
     end
     local function speckey(key)
@@ -529,21 +471,16 @@ function Main:init()
         
     end)
 
-    kit.keyLis(bkey,speckey);
+    kit.keyLis(nil,speckey);
     
-
-     -- lightTest();
-     require("outlinetest");
-     outLinetest(6,6,6,3);
-     require("toontest");
-     toontest(6,6,18,3);
-     
-    --  require("fboviewTest");
+    require("outlinetest");
+    require("toontest");
+    require("fboviewTest");
 end
 
 function Main:quat()
     local size = 20;
-    -- 	--æ—‹è½¬çš„å‘é‡
+    -- 	--Ğı×ªµÄÏòÁ¿
 	-- local tg = LineNode:new(2);
 	-- tg:setcolor(0,1,0);
 	-- tg:push(0,0,0);
@@ -551,7 +488,7 @@ function Main:quat()
 	-- tg:graphics_end();
     -- core.add(tg);
 
-    --ç›®æ ‡å‘é‡
+    --Ä¿±êÏòÁ¿
 	local eg = LineNode:new(2);
 	eg:setcolor(0,1,1);
 	eg:push(0,0,0);
@@ -569,10 +506,10 @@ function Main:quat_slerp(x0, y0, z0, x1, y1,z1, v)
         -- local x3,y3,z3 = getMid(x0, y0, z0, x1, y1,z1);
         -- x3,y3,z3=vec3_normal(x3,y3,z3);
         
-        -- mid:mod(1,x3,y3,z3);--è®¾ç½®é‡ç‚¹çš„åæ ‡
+        -- mid:mod(1,x3,y3,z3);--ÉèÖÃÖØµãµÄ×ø±ê
     return quat("Quat_slerp", x0, y0,z0, x1, y1,z1, v);
 end
----åœ°æ¿
+---µØ°å
 function Main:addPlane()
     local p = UnitBase:new();
     local scale = 100;
@@ -586,4 +523,3 @@ end
 
 local main = Main:new();
 main:init();
--- main:quat();

@@ -34,6 +34,7 @@ function Npc:ai(avatar)
             -- print("status:",self:getStatus());
             if(self:getStatus() == BauulAvatar.EStatus.Stand) then
                 kit.playText("you In!",4000);
+                -- core.alert("In ...");
             end
             
             self:setStatus(BauulAvatar.EStatus.Jump);
@@ -43,6 +44,7 @@ function Npc:ai(avatar)
         else
             if(self:getStatus() == BauulAvatar.EStatus.Jump) then
                 kit.playText("you Out!",4000);
+                -- core.alert("Out ...");
             end
 
             self:setStatus(BauulAvatar.EStatus.Stand);

@@ -25,16 +25,17 @@ function lightTest()
     void main(){
     
         vec3 LightPosition = vec3(lx,ly,lz);
+        
         out_texcoord = _TexCoord.st;
     
         vec4 vEyeNormal = normal_matrix*vec4(_Normal,1.0);//法线向量
     
         vec4 v4 = modelView_matrix*vec4(_Position,1.0);
+
         vLightDir = normalize(vec3(LightPosition - vec3(v4.x,v4.y,v4.z)));
     
         diff = max(0.0,dot(vec3(vEyeNormal.x,vEyeNormal.y,vEyeNormal.z),vLightDir));
-        //vec3 v3 = vec3(vEyeNormal.x,vEyeNormal.y,vEyeNormal.z);
-        //v3 = normalize(v3)/2;
+
         gl_Position = perspective_matrix * modelView_matrix * base_matrix *vec4(_Position, 1.0);
     
         //gl_Position = pvm_matrix *vec4(_Position, 1.0);
@@ -64,12 +65,7 @@ function lightTest()
         if(renderTex == 0.0){
             lamberFactor = 1.0;
         }
-        if (lamberFactor > 0.0){
-            
-        }else{
-            //lamberFactor
-        }
-    
+        
         if(cklight == 1.0){
             FragColor = finalColor * diff * lamberFactor;
         }else{
