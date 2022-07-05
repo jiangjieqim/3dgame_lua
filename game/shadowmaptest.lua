@@ -20,19 +20,8 @@ local config = {
 
     ---zdepth Texure hander
      shodowTex = 0;
-    ---π‚’’cam
-     lightCam = nil;
-     fborenderlist = nil;
-
-
-     ---model1 teapot x y z
-     m1x=0;
-     m1y=2;
-     m1z=0;
-     m1Scale = 1;
-     m1url = "teapot";--teapot
-
-
+    ---π‚’’cam3d,renderlist
+     renderlist = nil;
 
     m1 = {
         x=0;
@@ -41,13 +30,6 @@ local config = {
         scale = 1;
         url = "teapot";--teapot
     };
-
-     ---model2 plane
-     m2x = 0;
-     m2y = 0;
-     m2z = 0;
-     m2Scale =1;
-     m2url = "box";
 
      m2 = {
         x = 0;
@@ -104,7 +86,7 @@ local function createModel(obj,renderlist,cam3d)
     local url = obj.url;
     -- local cam3d;
     if(renderlist == nil) then
-        cam3d = core.cam;
+     --   cam3d = core.cam;
     end
     local vs,ps,n;
 
@@ -173,7 +155,7 @@ vs = [[
             shader_updateVal(_mater,"perspective_matrix",cam3d:perctive());
             shader_updateVal(_mater,"modelView_matrix",cam3d:model());
             shader_updateVal(_mater,"base_matrix",n:base_matrix());
-            local lightCam = config.lightCam;            
+            local lightCam = config.cam3d;            
             shader_updateVal(_mater,"normal_matrix",lightCam:normal());
 
             shader_updateVal(_mater,"light_perspective_matrix",lightCam:perctive());
@@ -254,13 +236,21 @@ vs = [[
     return n;
 end
 
-
+local function createSenceByType(shodow)
+    local cam3d = core.cam;
+    local renderlist;
+    if(shodow)then
+        cam3d = config.cam3d;
+        renderlist =  config.renderlist;
+    end
+    local _model = createModel(config.m1,renderlist,cam3d);
+    cam3d:setTarget(_model);
+    createModel(config.m2,renderlist,cam3d);
+end
 -- createModel(config.m2url,config.m2x,config.m2y,config.m2z,fbo1.renderlist,cam3d,config.m2Scale);
 
 
 local function fboView()
-
-    local _model;
 
     local nskin = NSkin:new();
     nskin:load(
@@ -281,19 +271,18 @@ local function fboView()
         --print(v,-2,v);
     end
 
-    config.fborenderlist = fbo1.renderlist;
+    config.renderlist = fbo1.renderlist;
+    config.cam3d = cam3d;
 
     
     cam3d:set_pos(config.lx,config.ly,config.lz);
     -- evt_on(core.engine,core.ex_event.EVENT_CAM_REFRESH,updateMatirx);
     core.frameloop(1000/30,updateMatirx);
 
-    _model = createModel(config.m1,fbo1.renderlist,cam3d);
+    
+    createSenceByType(true);
 
-    cam3d:setTarget(_model);
-    config.lightCam = cam3d;
-    -- createModel("teapot",0,0,0,fbo1.renderlist,cam3d);
-    createModel(config.m2,fbo1.renderlist,cam3d);
+
     -- _model:dispose();
     -- nskin:dispose();
     -- core.alert("asdsadhaAAs");
@@ -313,12 +302,13 @@ local function fboView()
 end
 
 local function normalCreate()
-    local cam3d = core.cam;
-    local _model = createModel(config.m1);
-    cam3d:setTarget(_model);
-    -- createModel("teapot",0,0,0,nil,cam3d,nil,1);
-    createModel(config.m2);
-    cam3d:set_pos(config.camx,config.camy,config.camz);
+    createSenceByType();
+    -- local cam3d = core.cam;
+    -- local _model = createModel(config.m1);
+    -- cam3d:setTarget(_model);
+    -- createModel(config.m2);
+    -- cam3d:set_pos(config.camx,config.camy,config.camz);
+
 end
 local function createSence()
     -- addPlane();
