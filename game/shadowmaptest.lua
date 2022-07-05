@@ -23,6 +23,8 @@ local config = {
     ---光照cam3d,renderlist
      renderlist = nil;
 
+    nskin = nil;
+
     m1 = {
         x=0;
         y=2;
@@ -236,6 +238,7 @@ vs = [[
     return n;
 end
 
+---构建场景
 local function createSenceByType(shodow)
     local cam3d = core.cam;
     local renderlist;
@@ -247,9 +250,6 @@ local function createSenceByType(shodow)
     cam3d:setTarget(_model);
     createModel(config.m2,renderlist,cam3d);
 end
--- createModel(config.m2url,config.m2x,config.m2y,config.m2z,fbo1.renderlist,cam3d,config.m2Scale);
-
-
 local function fboView()
 
     local nskin = NSkin:new();
@@ -261,7 +261,7 @@ local function fboView()
 <ui name="sc1" type="NScrollBar" x="0" y="256" parent="1"/>
 ]]
 );
--- 
+    config.nskin = nskin;
     local fbo1 = nskin.namemap["fbo1"];
     
     local cam3d = Camera:new(fbo1:get_3dcam());
@@ -289,27 +289,10 @@ local function fboView()
     
     -- nskin:visible(false);
 
-    core.frameloop(1,function()
-       --print(math.random()); 
-       local v = nskin.namemap["sc1"]:getProgressValue();
-
-       local cam1 = cam3d;
-       cam1 = core.cam;
-       cam1:set_pos(config.lx,config.ly,config.lz + math.sin(core.get_time()/1024) * 2 + v);
-    end)
-
+   
     return fbo1;
 end
 
-local function normalCreate()
-    createSenceByType();
-    -- local cam3d = core.cam;
-    -- local _model = createModel(config.m1);
-    -- cam3d:setTarget(_model);
-    -- createModel(config.m2);
-    -- cam3d:set_pos(config.camx,config.camy,config.camz);
-
-end
 local function createSence()
     -- addPlane();
     -- addBox(0,0.5,0);
@@ -317,10 +300,18 @@ local function createSence()
     local fbo = fboView();
     -- print('***********',fbo:get_tex());
     config.shodowTex = fbo:get_tex();
-    normalCreate();
+    createSenceByType();
 end
 
 createSence();
+
+
+core.frameloop(1,function()
+    local v = config.nskin.namemap["sc1"]:getProgressValue();
+    local cam1 = config.cam3d;
+    cam1 = core.cam;
+    cam1:set_pos(config.lx,config.ly,config.lz + math.sin(core.get_time()/1024) * 5 + v);
+end)
 
 -- tmat_pushTex(_mater,tex);
 
