@@ -4,13 +4,13 @@ local config = {
     -- scale = 1,
     isInit = 0,
     curTarget = 0,--当前的对象句柄
-    curName = "";
+    curName = "",
     camx = 0,
     camy = -20,
-    camz = -20;
+    camz = -20,
 
-    ---选取的对象坐标
-    -- ox=0;oy=0;oz=0;
+    ---光源BauulAvatar
+    lightBox = nil,
 }
 local cam = core.cam;
 local function fcv(v,s)
@@ -63,7 +63,9 @@ local function cmd(str)
         func_print("set cam pos "..str);
         return;
     end
-
+    local s = string.format("light pos %.1f %.1f %.1f ",
+                            config.lightBox:get_pos());
+    func_print(s);
 end
 
 local function lightpanel()
@@ -115,7 +117,7 @@ local function lightpanel()
     nskin:load(uistr);
     local lightBox = BauulAvatar:new();lightBox:init({res=BauulAvatar.Res.Box});
     lightBox:setColor(0,1,0);
-
+    config.lightBox = lightBox;
     local linenode = LineNode:new(2);
     linenode:setcolor(1,0,1);
     linenode:push(0,0,0);

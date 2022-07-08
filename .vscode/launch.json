@@ -5,16 +5,62 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "launch",
+            "name": "fbo",
             "type": "lua",
             "request": "launch",
             "stopOnEntry": false,//是否在入口断点
 
             "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
-            "runtimeArgs": "-lua game/test1.lua",
+            "runtimeArgs": "-lua game/fboviewTest.lua -winpos 1 -log 1",
             "consoleCoding": "utf8"
+            //alphatest     test1
         },
-    
+
+        {
+            "name": "test1",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": false,//是否在入口断点
+
+            "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "runtimeArgs": "-lua game/test1.lua -winpos 1 -log 1",
+            "consoleCoding": "utf8"
+            //alphatest     test1
+        },
+        {
+            "name": "toontest",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": false,//是否在入口断点
+
+            "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "runtimeArgs": "-lua game/toontest.lua -winpos 1 -log 1",
+            "consoleCoding": "utf8"
+            //alphatest     test1
+        },
+        {
+            "name": "outlinetest",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": false,//是否在入口断点
+
+            "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "runtimeArgs": "-lua game/outlinetest.lua -winpos 8 -log 1",
+            "consoleCoding": "utf8"
+            //alphatest     test1
+        },
+        
+        {
+            "name": "shadowmaptest",
+            "type": "lua",
+            "request": "launch",
+            "stopOnEntry": false,//是否在入口断点
+
+            "runtimeExecutable": "D:/github/3dgame_ev_1_0_0/debug/test.exe",
+            "runtimeArgs": "-lua game/shadowmaptest.lua -winpos 1 -log 1",
+            "consoleCoding": "utf8"
+            //alphatest     test1
+        },
 /*
         {
             "type": "emmylua_attach",

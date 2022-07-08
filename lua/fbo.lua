@@ -89,6 +89,16 @@ function FboRender:get_renderlist()
 	return self.renderlist;
 end
 
+---获取Fbo的cam3d句柄
+function FboRender:get_3dcam()
+	return fbo_get_3dcam(self.ptr);
+end
+
+---获取纹理句柄
+function FboRender:get_tex()
+	return fbo_get_tex(self.ptr);
+end
+
 function FboRender:dispose()
 	--print(debug.traceback());
 --还需要将添加进来的渲染对象删除掉

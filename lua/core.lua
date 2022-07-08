@@ -7,6 +7,7 @@ local m = core;
 core.ui = {};
 ---1:性能优化模式,会将md2替换成box 0:关闭
 core.optimization = 0;
+
 core.light = {x=0,y=0,z=0};
 
 local FUNC_KEY = {
@@ -460,7 +461,8 @@ function func_printTable(t)
 	func_print(">>>>> end print table:   ["..tostring(t).."] cnt = "..cnt,0xff00ff)
 end
 
---打印一个有颜色的日志到控制台
+---打印一个有颜色的日志到控制台  
+---s文本 c颜色
 function func_print(s,c)
 	if(DEBUG == 1)then
 		c = c or 0xffff00

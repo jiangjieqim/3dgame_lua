@@ -9,14 +9,14 @@ kit.keyLis();
 local cam = core.cam;
 local config = {
     --- real cam position 
-     camx =  -3,
-     camy = -3,
-     camz = -3,
+    --  camx =  -3,
+    --  camy = -3,
+    --  camz = -3,
 
      ---light position
-     lx = -3;
-     ly = -3;
-     lz = -3;
+     lx = 2;
+     ly = -2;
+     lz = 2;
 
     ---zdepth Texure hander
      shodowTex = 0;
@@ -24,45 +24,7 @@ local config = {
      renderlist = nil;
 
     nskin = nil;
-
-    m1 = {
-        x=0;
-        y=2;
-        z=0;
-        scale = 1;
-        url = "teapot";--teapot
-    };
-
-     m2 = {
-        x = 0;
-        y = 0;
-        z = 0;
-        scale =1;
-        url = "bplane";
-    }
-
 }
-
-local function addBox(x,y,z)
-    local p = UnitBase:new();
-    local scale = 1;
-    p:loadvbo("\\resource\\obj\\box.obj",
-    "\\resource\\material\\bauul.mat",scale);
-    p:set_position(x or 0,y or 0,z or 0);
-    -- core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
-    core.meterial.setCullface(p:getMaterial(),GL.CULL_FACE_DISABLE);
-    core.add(p);
-end
-local function addPlane()
-    local p = UnitBase:new();
-    local scale = 100;
-    p:loadvbo("\\resource\\obj\\plane.obj",
-    "\\resource\\material\\bauul2.mat",scale);
-    p:set_position(0,0,0);
-    -- core.meterial.setPolyMode(box:getMaterial(),GL.GL_LINE);
-    core.meterial.setCullface(p:getMaterial(),GL.CULL_FACE_DISABLE);
-    core.add(p);
-end
 
 local function createBase(vs,ps,url,x,y,z,scale)
     local p = core.p3d_create(vs,ps);
@@ -112,9 +74,11 @@ vs = [[
     
     void main(){
         out_texcoord = _TexCoord.st;
-        mat4 t = (light_perspective_matrix * light_modelView_matrix );
-        t = normal_matrix;
-        v_PositionFromLight = (t) * vec4(_Position,1.0); // 以光源为观察点的坐标
+        mat4 t = light_perspective_matrix * light_modelView_matrix;
+        //t = normal_matrix;
+        //t =  transpose(inverse(t));
+        
+        v_PositionFromLight = t * vec4(_Position,1.0); // 以光源为观察点的坐标
         gl_Position = perspective_matrix * modelView_matrix * base_matrix * vec4(_Position, 1.0);
     }
     ]];
@@ -140,7 +104,7 @@ vs = [[
         float depth = rgbaDepth.r; // 拿到深度纹理中对应坐标存储的深度
         //float visibility = (shadowCoord.z > depth) ? 0.3 : 1.0; // 判断片元是否在阴影中
     
-        float visibility = (shadowCoord.z > depth + 0.15) ? 1.0 : 0.5; // 控制阈值大小:0.15 -> 0.01
+        float visibility = (shadowCoord.z > depth + 0.01) ? 0.5 : 1.0; // 控制阈值大小:0.15 -> 0.01
     
         vec4 v_Color = texture2D(texture2, out_texcoord);
     
@@ -150,7 +114,7 @@ vs = [[
     }
     ]]
 
-    n = createBase(vs,ps,url,x,y,z,scale);
+        n = createBase(vs,ps,url,x,y,z,scale);
 
         tmat_pushTex(n:getMaterial(),config.shodowTex);
         local function f_updateMatrix(_mater)
@@ -184,17 +148,20 @@ vs = [[
         
         void main(){
             out_texcoord = _TexCoord.st;
-            position = modelView_matrix * vec4(_Position,1.0);
+            position =   modelView_matrix * vec4(_Position,1.0);
             gl_Position = perspective_matrix * modelView_matrix * base_matrix * vec4(_Position, 1.0);
         }
         ]];
         
         
         ps = [[
+        
         #version 430
         //  https://www.csdn.net/tags/OtDaQg5sNTUxMjctYmxvZwO0O0OO0O0O.html
         //  https://blog.csdn.net/master_cui/article/details/119219771
         //  https://juejin.cn/post/6940078211967483911
+        //  https://www.kancloud.cn/kancloud/opengl-tutorials/77867
+        // https://www.jianshu.com/p/9f767f952bb0
         
         uniform sampler2D texture1;
         varying vec2 out_texcoord;
@@ -203,15 +170,16 @@ vs = [[
         uniform float zNear;
         uniform float fov;
         
-        uniform float rgb;
+        //    uniform float rgb;
         
         varying vec4 position;  
         
         void main(void){
-            float zDiff = zFar - zNear;  
+            float zDiff = zFar - zNear;
             float interpolatedDepth = (position.w / position.z) * zFar * zNear / zDiff + 0.5 * (zFar + zNear) / zDiff + 0.5;  
             FragColor = vec4(vec3(pow(interpolatedDepth, fov)), 1.0);  
         }
+
         ]]
         
         
@@ -240,24 +208,43 @@ end
 
 ---构建场景
 local function createSenceByType(shodow)
+    
+    local m1 = {
+        x=0;
+        y=2;
+        z=0;
+        scale = 1;
+        url = "teapot";--teapot
+    };
+
+    local m2 = {
+        x = 0;
+        y = 0;
+        z = 0;
+        scale = 5;
+        url = "bplane";
+    }
     local cam3d = core.cam;
     local renderlist;
     if(shodow)then
         cam3d = config.cam3d;
         renderlist =  config.renderlist;
     end
-    local _model = createModel(config.m1,renderlist,cam3d);
-    cam3d:setTarget(_model);
-    createModel(config.m2,renderlist,cam3d);
+    local _m1 = createModel(m1,renderlist,cam3d);
+    local _m2 = createModel(m2,renderlist,cam3d);
+    -- m2:rotate_vec(-math.pi  / 8,0,1,0);
+    -- createModel({x = 0;y = -2;z = 0;scale =12;url = "plane";},renderlist,cam3d);
+    
+    cam3d:setTarget(_m1);
 end
 local function fboView()
 
     local nskin = NSkin:new();
     nskin:load(
 [[
-<ui name="1" type="NPanel" drag="1" center="0" x="0" y="0" width="256" height="700" line="1"/>
-<ui name="bg" type="Shape" x="0" y="0" w="128" h="128 r="1" g="0" b="1" line="0" parent="1"/>
-<ui name="fbo1" type="Nfbo" x="0" y="0" w="128" h="128" parent="1"/>
+<ui name="1" type="NPanel" drag="1" center="0" x="0" y="0" width="256" height="256" line="1"/>
+<ui name="bg" type="Shape" x="0" y="0" w="256" h="256" r="1" g="0" b="1" line="0" parent="1"/>
+<ui name="fbo1" type="Nfbo" x="0" y="0" w="256" h="256" parent="1"/>
 <ui name="sc1" type="NScrollBar" x="0" y="256" parent="1"/>
 ]]
 );
@@ -310,7 +297,14 @@ core.frameloop(1,function()
     local v = config.nskin.namemap["sc1"]:getProgressValue();
     local cam1 = config.cam3d;
     cam1 = core.cam;
-    cam1:set_pos(config.lx,config.ly,config.lz + math.sin(core.get_time()/1024) * 5 + v);
+
+    local a = math.sin(core.get_time()/512)*4;
+    -- a = (v-0.5) * 5;
+    -- a = 0;
+    
+    cam1:set_pos(config.lx,config.ly + v * -100,config.lz);
+
+    -- core.cam:set_pos(config.lx,config.ly,config.lz);
 end)
 
 -- tmat_pushTex(_mater,tex);

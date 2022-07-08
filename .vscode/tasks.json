@@ -4,12 +4,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "启动test.exe",
+            "label": "fboviewTest",
             "type": "shell",
-            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe -lua 1.lua",
-            // "command":"../3dgame_ev_1_0_0/debug/test.exe",
-            // "command":"echo ${env:path}",
-            // "command":"node buildlaunch.js",
+            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe -lua game/fboviewTest.lua",
+            "problemMatcher": [
+            ],
+        },
+        {
+            "label": "test1",
+            "type": "shell",
+            "command": "D:/github/3dgame_ev_1_0_0/debug/test.exe -lua game/test1.lua",
             "problemMatcher": [
             ],
         },
